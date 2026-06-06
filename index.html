@@ -1,102 +1,179 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>فروشگاه بزرگ تیوان</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: url('background.jpg') center center/cover no-repeat fixed;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه بزرگ تیوان | لوکس و خاص</title>
+    <!-- Import Font (Vazirmatn is great for Persian web) -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #800020; /* زرشکی لوکس */
+            --secondary-color: #2F4F4F; /* طوسی تیره */
+            --accent-color: #A52A2A; /* زرشکی روشن‌تر برای دکمه‌ها */
+            --text-light: #f5f5f5;
+            --bg-dark: #1a1a1a; /* مشکی مایل به طوسی */
+        }
 
-    .overlay {
-      background: rgba(0, 0, 0, 0.55);
-      width: 100%;
-      height: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
 
-    .content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 30px 20px;
-      max-width: 500px;
-      width: 90%;
-    }
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2f4f4f 100%);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
+        /* انیمیشن ورود */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    h2 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      color: #ffd700;
-    }
+        .container {
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px); /* افکت شیشه‌ای */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
 
-    .info {
-      font-size: 18px;
-      margin: 10px 0;
-      line-height: 1.8;
-    }
+        .logo-area {
+            width: 100px;
+            height: 100px;
+            background: var(--primary-color);
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            box-shadow: 0 0 20px var(--primary-color);
+            border: 3px solid rgba(255,255,255,0.2);
+        }
 
-    .buttons {
-      margin-top: 25px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
 
-    .btn {
-      display: block;
-      padding: 14px 18px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-    }
+        .sale-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 14px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(128, 0, 32, 0.4);
+        }
 
-    .instagram {
-      background: #E1306C;
-    }
+        .info-section {
+            margin-bottom: 35px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #ccc;
+        }
 
-    .call {
-      background: #2ecc71;
-    }
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
 
-    .map {
-      background: #3498db;
-    }
-  </style>
+        /* دکمه‌های مدرن */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        .btn-call {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-map {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            filter: brightness(1.2);
+        }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+    </style>
 </head>
 <body>
-  <div class="overlay"></div>
 
-  <div class="content">
-    <h1>فروشگاه بزرگ تیوان</h1>
-    <h2>حراج ۵۰٪ کالکشن بهاره</h2>
+    <div class="container">
+        <div class="logo-area">✨</div>
+        
+        <h1>فروشگاه بزرگ تیوان</h1>
+        <div class="sale-badge">حراج ۵۰٪ کالکشن بهاره</div>
 
-    <div class="info">📍 نظرغربی - جنب بانک ملی</div>
-    <div class="info">📞 ۰۹xx xxx xxxx</div>
-    <div class="info">📷 @tivanstore</div>
+        <div class="info-section">
+            <div class="info-item">
+                <span>📍</span>
+                <span>نظرغربی - جنب بانک ملی</span>
+            </div>
+            <div class="info-item">
+                <span>📞</span>
+                <span>۰۹۱۲ XXX XXXX</span>
+            </div>
+            <div class="info-item">
+                <span>📸</span>
+                <span>@tivanstore</span>
+            </div>
+        </div>
 
-    <div class="buttons">
-      <a class="btn instagram" href="https://instagram.com/tivanstore" target="_blank">ورود به اینستاگرام</a>
-      <a class="btn call" href="tel:09xxxxxxxxx">تماس با فروشگاه</a>
-      <a class="btn map" href="https://maps.google.com/?q=نظرغربی+جنب+بانک+ملی" target="_blank">مسیر‌یابی</a>
+        <!-- دکمه‌ها -->
+        <a href="https://instagram.com/tivanstore" class="btn btn-instagram">مشاهده در اینستاگرام</a>
+        <a href="tel:09120000000" class="btn btn-call">تماس مستقیم با فروشگاه</a>
+        <a href="https://maps.google.com/?q=نظرغربی+جنب+بانک+ملی" class="btn btn-map">مسیریابی در نقشه</a>
+
+        <div class="footer-text">
+            © 2026 Tivan Store | Designed for Excellence
+        </div>
     </div>
-  </div>
+
 </body>
 </html>
