@@ -19,7 +19,6 @@
             justify-content: center;
             min-height: 100vh;
             background-color: #ffffff;
-            /* استفاده از فونت وزیر */
             font-family: 'Vazirmatn', sans-serif;
             overflow: hidden;
         }
@@ -45,19 +44,35 @@
             display: block;
         }
 
+        /* فاصله لوگو و متن‌ها کمی بیشتر شد */
         .info-container {
-            margin-top: -80px; 
+            margin-top: -60px; 
             opacity: 0;
             animation: fadeIn 1s ease forwards 2.5s; 
-            line-height: 1.8; /* کمی کمتر برای ظاهر مدرن‌تر */
+            line-height: 1.8;
         }
 
-        /* استایل اصلاح شده متن‌ها برای خوانایی بهتر */
         .info-item { 
             font-size: 15px; 
             color: #444; 
             margin-bottom: 8px; 
             font-weight: 400;
+        }
+
+        /* ردیف اینستاگرام */
+        .instagram-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            direction: ltr; /* برای اینکه آیکن و متن درست کنار هم بیایند */
+        }
+
+        .instagram-icon {
+            width: 18px;
+            height: 18px;
+            display: block;
         }
 
         .button-group {
@@ -72,11 +87,11 @@
             border: 1.5px solid #333;
             background: transparent;
             cursor: pointer;
-            font-family: 'Vazirmatn', sans-serif; /* اعمال فونت روی دکمه‌ها */
+            font-family: 'Vazirmatn', sans-serif;
             font-size: 14px;
             font-weight: 500;
             transition: all 0.3s ease;
-            border-radius: 5px; /* کمی گرد کردن گوشه‌ها برای ظاهر مدرن */
+            border-radius: 5px;
         }
 
         .btn:hover { 
@@ -103,9 +118,13 @@
         </div>
 
         <div class="info-container">
-            <div class="info-item">آدرس فروشگاه: اصفهان - خیابان نظر غربی - سه راه نظر - جنب بانک ملی</div>
-            <div class="info-item">تلفن فروشگاه: 03136264237</div>
-            <div class="info-item">اینستاگرام: instagram.com/tivan.shop</div>
+            <div class="info-item">آدرس فروشگاه : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
+            <div class="info-item">تلفن فروشگاه : 03136264237</div>
+
+            <div class="instagram-row">
+                <img class="instagram-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                <div class="info-item" style="margin-bottom: 0;">instagram.com/tivan.shop</div>
+            </div>
             
             <div class="button-group">
                 <button class="btn">فرم همکاری</button>
