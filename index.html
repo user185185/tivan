@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فروشگاه بزرگ تیوان</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: url('background.jpg') center center/cover no-repeat fixed;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.55);
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 30px 20px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #ffd700;
+    }
+
+    .info {
+      font-size: 18px;
+      margin: 10px 0;
+      line-height: 1.8;
+    }
+
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      display: block;
+      padding: 14px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .instagram {
+      background: #E1306C;
+    }
+
+    .call {
+      background: #2ecc71;
+    }
+
+    .map {
+      background: #3498db;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="content">
+    <h1>فروشگاه بزرگ تیوان</h1>
+    <h2>حراج ۵۰٪ کالکشن بهاره</h2>
+
+    <div class="info">📍 نظرغربی - جنب بانک ملی</div>
+    <div class="info">📞 ۰۹xx xxx xxxx</div>
+    <div class="info">📷 @tivanstore</div>
+
+    <div class="buttons">
+      <a class="btn instagram" href="https://instagram.com/tivanstore" target="_blank">ورود به اینستاگرام</a>
+      <a class="btn call" href="tel:09xxxxxxxxx">تماس با فروشگاه</a>
+      <a class="btn map" href="https://maps.google.com/?q=نظرغربی+جنب+بانک+ملی" target="_blank">مسیر‌یابی</a>
+    </div>
+  </div>
+</body>
+</html>
