@@ -3,224 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فروشگاه بزرگ تیوان | VIP Experience</title>
+    <!-- عنوان سایت در تب مرورگر -->
+    <title>فروشگاه پوشاک تیوان</title>
     
-    <!-- Font Awesome برای آیکون‌ها -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Vazirmatn Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap" rel="stylesheet">
-
     <style>
-        :root {
-            --burgundy: #800020;
-            --dark-gray: #2c2c2c;
-            --light-gray: #4a4a4a;
-            --glass: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
-        }
-
-        * {
+        /* تنظیمات پایه برای نمایش صحیح در موبایل و دسکتاپ */
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Vazirmatn', sans-serif;
-        }
-
-        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* پس‌زمینه طوسی با پترن ظریف */
-            background-color: #1a1a1a;
-            background-image: 
-                radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 40px 40px; /* پترن نقاط ریز لوکس */
-            color: white;
-            overflow: hidden;
+            background-color: #ffffff; /* فعلاً سفید ساده برای دیدن وضوح لوگو */
+            font-family: 'Tahoma', sans-serif; /* فعلاً فونت سیستمی */
         }
 
-        /* لایه متحرک برای ایجاد حس عمق (Parallax effect) */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--burgundy);
-            filter: blur(120px);
-            border-radius: 50%;
-            z-index: -1;
-            top: 10%;
-            left: 10%;
-            opacity: 0.4;
-            animation: move 10s infinite alternate;
-        }
-
-        @keyframes move {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100px, 100px); }
-        }
-
-        .glass-card {
-            width: 90%;
-            max-width: 380px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.5);
-            animation: cardAppear 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        @keyframes cardAppear {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .brand-logo {
-            font-size: 50px;
+        /* کانتینر لوگو */
+        .logo-wrapper {
+            width: 200px; /* اندازه لوگو را اینجا می‌توانید بزرگ یا کوچک کنید */
+            height: auto;
             margin-bottom: 15px;
+            transition: transform 0.3s ease; /* یک افکت نرم برای بعداً */
+        }
+
+        .logo-wrapper img {
+            width: 100%;
+            height: auto;
             display: block;
-            filter: drop-shadow(0 0 10px var(--burgundy));
         }
 
-        h1 {
+        /* استایل نام فروشگاه */
+        .store-title {
             font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
+            color: #333;
+            font-weight: bold;
+            letter-spacing: -0.5px;
         }
 
-        .subtitle {
-            color: #aaa;
-            font-size: 14px;
-            margin-bottom: 25px;
+        /* افکت کوچک برای جذابیت در موبایل */
+        .logo-wrapper:active {
+            transform: scale(0.95);
         }
-
-        .sale-tag {
-            background: var(--burgundy);
-            color: white;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            display: inline-block;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(128, 0, 32, 0.5);
-        }
-
-        /* بخش اطلاعات با آیکون‌های کوچک */
-        .info-box {
-            margin-bottom: 40px;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 15px;
-            color: #e0e0e0;
-            font-size: 15px;
-        }
-
-        .info-row i {
-            color: var(--burgundy);
-            width: 20px;
-        }
-
-        /* دکمه‌های گرد و شیک (Icon Buttons) */
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-        }
-
-        .icon-btn {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            font-size: 28px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .btn-insta {
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: white;
-        }
-
-        .btn-call {
-            background: var(--burgundy);
-            color: white;
-        }
-
-        .btn-map {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: white;
-        }
-
-        .icon-btn:hover {
-            transform: translateY(-10px) scale(1.1);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 11px;
-            color: rgba(255,255,255,0.3);
-            letter-spacing: 1px;
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="glass-card">
-        <span class="brand-logo">💎</span>
-        <h1>فروشگاه بزرگ تیوان</h1>
-        <p class="subtitle">تجربه خرید لوکس و متفاوت</p>
-        
-        <div class="sale-tag">حراج ۵۰٪ کالکشن بهاره</div>
+    <!-- نمایش لوگوی آپلود شده شما -->
+    <div class="logo-wrapper">
+        <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
+    </div>
 
-        <div class="info-box">
-            <div class="info-row">
-                <i class="fa-solid fa-location-dot"></i>
-                <span>نظرغربی - جنب بانک ملی</span>
-            </div>
-            <div class="info-row">
-                <i class="fa-solid fa-phone"></i>
-                <span>۰۹۱۲ XXX XXXX</span>
-            </div>
-        </div>
-
-        <div class="action-buttons">
-            <!-- دکمه اینستاگرام با لوگوی اصلی -->
-            <a href="https://instagram.com/tivanstore" class="icon-btn btn-insta" title="اینستاگرام">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
-
-            <!-- دکمه تماس با آیکون گوشی آیفون/مدرن -->
-            <a href="tel:09120000000" class="icon-btn btn-call" title="تماس با ما">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-            </a>
-
-            <!-- دکمه نقشه -->
-            <a href="https://maps.google.com/?q=نظرغربی+جنب+بانک+ملی" class="icon-btn btn-map" title="مسیریابی">
-                <i class="fa-solid fa-map-location-dot"></i>
-            </a>
-        </div>
-
-        <div class="footer">
-            TIVAN STORE &bull; PREMIUM BRANDING
-        </div>
+    <!-- نمایش نام فروشگاه -->
+    <div class="store-title">
+        فروشگاه پوشاک تیوان
     </div>
 
 </body>
