@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- آیکون تب مرورگر -->
     <link rel="icon" type="image/png" href="logo-title-red.png">
-    
     <title>فروشگاه تیوان</title>
     
     <style>
@@ -44,19 +41,41 @@
             display: block;
         }
 
+        /* استایل اطلاعات و دکمه‌ها */
+        .info-container {
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 2.5s; /* ظاهر شدن بعد از انیمیشن لوگو */
+            line-height: 2;
+        }
+
+        .info-item { font-size: 14px; color: #555; margin-bottom: 5px; }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 1px solid #333;
+            background: transparent;
+            cursor: pointer;
+            font-family: 'Tahoma', sans-serif;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #333; color: #fff; }
+
         @keyframes introAnimation {
-            0% {
-                opacity: 0;
-                transform: scale(0.2);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(-220px);
-            }
+            0% { opacity: 0; transform: scale(0.2); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1) translateY(-220px); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -65,6 +84,18 @@
     <div class="main-container">
         <div class="logo-wrapper">
             <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
+        </div>
+
+        <!-- اطلاعات جدید -->
+        <div class="info-container">
+            <div class="info-item">آدرس فروشگاه : اصفهان - خیابان نظر غربی - سه راه نظر - جنب بانک ملی</div>
+            <div class="info-item">تلفن فروشگاه : 03136264237</div>
+            <div class="info-item">آدرس اینستاگرام : instagram.com/tivan.shop</div>
+            
+            <div class="button-group">
+                <button class="btn">استخدام</button>
+                <button class="btn">دیدن عکس‌های فروشگاه</button>
+            </div>
         </div>
     </div>
 
