@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- این خط باعث می‌شود لوگو بالای تب مرورگر نمایش داده شود -->
+    <!-- آیکون تب مرورگر -->
     <link rel="icon" type="image/png" href="logo-title-red.png">
     
     <title>فروشگاه پوشاک تیوان</title>
@@ -18,14 +18,28 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #ffffff;
+            background-color: #ffffff; /* فعلاً سفید، در مرحله بعد به طوسی تغییر می‌دهیم */
             font-family: 'Tahoma', sans-serif;
+            overflow: hidden; /* برای جلوگیری از اسکرول شدن حین انیمیشن */
         }
 
+        /* کانتینر اصلی که همه چیز در آن قرار دارد */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* استایل لوگو و انیمیشن آن */
         .logo-wrapper {
-            width: 200px;
+            width: 120px; /* اندازه شروع */
             height: auto;
-            margin-bottom: 15px;
+            opacity: 0; /* در ابتدا مخفی باشد */
+            
+            /* تعریف انیمیشن: نام / مدت زمان / نوع حرکت / تاخیر / تکرار نشود */
+            animation: introAnimation 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         .logo-wrapper img {
@@ -34,21 +48,60 @@
             display: block;
         }
 
+        /* استایل نام فروشگاه */
         .store-title {
             font-size: 24px;
             color: #333;
             font-weight: bold;
+            margin-top: 15px;
+            opacity: 0; /* در ابتدا مخفی باشد */
+            
+            /* انیمیشن برای ظاهر شدن اسم (کمی بعد از لوگو) */
+            animation: titleAppear 1s ease-out 2s forwards;
         }
+
+        /* --- تعریف حرکت‌ها (Keyframes) --- */
+
+        @keyframes introAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0.2); /* خیلی کوچک شروع شود */
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2); /* وسط صفحه بزرگ شود */
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(-100px); /* برود بالا و به اندازه نرمال برسد */
+            }
+        }
+
+        @keyframes titleAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px); /* از پایین به سمت بالا بیاید */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="logo-wrapper">
-        <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
-    </div>
+    <div class="main-container">
+        <!-- بخش لوگو -->
+        <div class="logo-wrapper">
+            <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
+        </div>
 
-    <div class="store-title">
-        فروشگاه پوشاک تیوان
+        <!-- بخش نام فروشگاه -->
+        <div class="store-title">
+            فروشگاه پوشاک تیوان
+        </div>
     </div>
 
 </body>
