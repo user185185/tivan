@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- بخش استایل‌ها (CSS) --- */
         body {
             margin: 0;
             padding: 0;
@@ -58,33 +59,44 @@
             font-weight: 400;
         }
 
-        /* استایل ردیف اینستاگرام که حالا لینک است */
+        /* استایل لینک تلفن */
+        .phone-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            direction: ltr;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        /* استایل لینک اینستاگرام */
         .instagram-link {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             margin-bottom: 8px;
-            direction: ltr; /* برای نظم آیکون و متن انگلیسی */
-            text-decoration: none; /* حذف خط زیر لینک */
-            transition: transform 0.2s ease; /* برای افکت کوچک هنگام لمس */
+            direction: ltr;
+            text-decoration: none;
+            transition: transform 0.2s ease;
         }
 
-        .instagram-link:hover {
-            transform: scale(1.02); /* خیلی ریز بزرگ می‌شود وقتی روش می‌روید */
+        /* افکت هنگام نگه داشتن موس روی لینک‌ها */
+        .phone-link:hover, .instagram-link:hover {
+            transform: scale(1.03);
         }
 
-        .instagram-icon {
+        .phone-icon, .instagram-icon {
             width: 18px;
             height: 18px;
             display: block;
         }
 
-        /* استایل متن داخل لینک برای اینکه رنگش سیاه بماند و زیرش خط نیاید */
-        .instagram-text {
+        .phone-text, .instagram-text {
             font-size: 15px;
             color: #444;
-            margin-bottom: 0;
             font-weight: 400;
         }
 
@@ -132,9 +144,14 @@
 
         <div class="info-container">
             <div class="info-item">آدرس فروشگاه : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
-            <div class="info-item">تلفن فروشگاه : 03136264237</div>
+            
+            <!-- لینک تماس مستقیم -->
+            <a href="tel:03136264237" class="phone-link">
+                <img class="phone-icon" src="https://cdn-icons-png.flaticon.com/512/455/455705.png" alt="Phone">
+                <div class="phone-text">03136264237</div>
+            </a>
 
-            <!-- کل این بخش حالا یک لینک فعال است -->
+            <!-- لینک اینستاگرام -->
             <a href="https://instagram.com/tivan.shop" target="_blank" class="instagram-link">
                 <img class="instagram-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
                 <div class="instagram-text">instagram.com/tivan.shop</div>
