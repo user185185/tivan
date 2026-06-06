@@ -32,20 +32,24 @@
             width: 120px;
             height: auto;
             opacity: 0;
-            animation: introAnimation 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            /* انیمیشن اصلی شامل دو بخش است: حرکت و رنگی شدن */
+            animation: 
+                introAnimation 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards,
+                colorReveal 2s ease-in-out 1.5s forwards; /* شروع رنگی شدن از ثانیه ۱.۵ */
         }
 
         .logo-wrapper img {
             width: 100%;
             height: auto;
             display: block;
+            /* در ابتدا لوگو کاملاً سیاه و سفید است */
+            filter: grayscale(100%);
         }
 
-        /* استایل اطلاعات و دکمه‌ها */
         .info-container {
             margin-top: 20px;
             opacity: 0;
-            animation: fadeIn 1s ease forwards 2.5s; /* ظاهر شدن بعد از انیمیشن لوگو */
+            animation: fadeIn 1s ease forwards 2.5s;
             line-height: 2;
         }
 
@@ -68,10 +72,23 @@
         }
         .btn:hover { background: #333; color: #fff; }
 
+        /* --- انیمیشن‌ها --- */
+
+        /* ۱. انیمیشن حرکت به بالا (همان کد قبلی شما) */
         @keyframes introAnimation {
             0% { opacity: 0; transform: scale(0.2); }
             50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1) translateY(-150px); }
+            100% { opacity: 1; transform: scale(1) translateY(-220px); }
+        }
+
+        /* ۲. انیمیشن تبدیل سیاه و سفید به رنگی */
+        @keyframes colorReveal {
+            0% {
+                filter: grayscale(100%);
+            }
+            100% {
+                filter: grayscale(0%);
+            }
         }
 
         @keyframes fadeIn {
@@ -86,7 +103,6 @@
             <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
         </div>
 
-        <!-- اطلاعات جدید -->
         <div class="info-container">
             <div class="info-item">آدرس فروشگاه : اصفهان - خیابان نظر غربی - سه راه نظر - جنب بانک ملی</div>
             <div class="info-item">تلفن فروشگاه : 03136264237</div>
