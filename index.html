@@ -15,7 +15,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #ffffff;
+            background-color: #f9c891;
             font-family: 'Tahoma', sans-serif;
             overflow: hidden;
         }
@@ -32,24 +32,20 @@
             width: 120px;
             height: auto;
             opacity: 0;
-            /* انیمیشن اصلی شامل دو بخش است: حرکت و رنگی شدن */
-            animation: 
-                introAnimation 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards,
-                colorReveal 2s ease-in-out 1.5s forwards; /* شروع رنگی شدن از ثانیه ۱.۵ */
+            animation: introAnimation 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         .logo-wrapper img {
             width: 100%;
             height: auto;
             display: block;
-            /* در ابتدا لوگو کاملاً سیاه و سفید است */
-            filter: grayscale(100%);
         }
 
+        /* استایل اطلاعات و دکمه‌ها */
         .info-container {
             margin-top: 20px;
             opacity: 0;
-            animation: fadeIn 1s ease forwards 2.5s;
+            animation: fadeIn 1s ease forwards 2.5s; /* ظاهر شدن بعد از انیمیشن لوگو */
             line-height: 2;
         }
 
@@ -72,23 +68,10 @@
         }
         .btn:hover { background: #333; color: #fff; }
 
-        /* --- انیمیشن‌ها --- */
-
-        /* ۱. انیمیشن حرکت به بالا (همان کد قبلی شما) */
         @keyframes introAnimation {
             0% { opacity: 0; transform: scale(0.2); }
             50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1) translateY(-220px); }
-        }
-
-        /* ۲. انیمیشن تبدیل سیاه و سفید به رنگی */
-        @keyframes colorReveal {
-            0% {
-                filter: grayscale(100%);
-            }
-            100% {
-                filter: grayscale(0%);
-            }
+            100% { opacity: 1; transform: scale(1) translateY(-150px); }
         }
 
         @keyframes fadeIn {
@@ -103,14 +86,15 @@
             <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
         </div>
 
+        <!-- اطلاعات جدید -->
         <div class="info-container">
             <div class="info-item">آدرس فروشگاه : اصفهان - خیابان نظر غربی - سه راه نظر - جنب بانک ملی</div>
             <div class="info-item">تلفن فروشگاه : 03136264237</div>
-            <div class="info-item">آدرس اینستاگرام : instagram.com/tivan.shop</div>
+            <div class="info-item"> اینستاگرام : instagram.com/tivan.shop</div>
             
             <div class="button-group">
-                <button class="btn">استخدام</button>
-                <button class="btn">دیدن عکس‌های فروشگاه</button>
+                <button class="btn">فرم همکاری</button>
+                <button class="btn">گالری عکس ها</button>
             </div>
         </div>
     </div>
