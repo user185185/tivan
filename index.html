@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- عنوان سایت در تب مرورگر -->
+    
+    <!-- این خط باعث می‌شود لوگو بالای تب مرورگر نمایش داده شود -->
+    <link rel="icon" type="image/png" href="logo-title-red.png">
+    
     <title>فروشگاه پوشاک تیوان</title>
     
     <style>
-        /* تنظیمات پایه برای نمایش صحیح در موبایل و دسکتاپ */
         body {
             margin: 0;
             padding: 0;
@@ -16,16 +18,14 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #ffffff; /* فعلاً سفید ساده برای دیدن وضوح لوگو */
-            font-family: 'Tahoma', sans-serif; /* فعلاً فونت سیستمی */
+            background-color: #ffffff;
+            font-family: 'Tahoma', sans-serif;
         }
 
-        /* کانتینر لوگو */
         .logo-wrapper {
-            width: 200px; /* اندازه لوگو را اینجا می‌توانید بزرگ یا کوچک کنید */
+            width: 200px;
             height: auto;
             margin-bottom: 15px;
-            transition: transform 0.3s ease; /* یک افکت نرم برای بعداً */
         }
 
         .logo-wrapper img {
@@ -34,28 +34,19 @@
             display: block;
         }
 
-        /* استایل نام فروشگاه */
         .store-title {
             font-size: 24px;
             color: #333;
             font-weight: bold;
-            letter-spacing: -0.5px;
-        }
-
-        /* افکت کوچک برای جذابیت در موبایل */
-        .logo-wrapper:active {
-            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
 
-    <!-- نمایش لوگوی آپلود شده شما -->
     <div class="logo-wrapper">
         <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
     </div>
 
-    <!-- نمایش نام فروشگاه -->
     <div class="store-title">
         فروشگاه پوشاک تیوان
     </div>
