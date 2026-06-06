@@ -10,36 +10,43 @@
     <title>فروشگاه پوشاک تیوان</title>
     
     <style>
+        /* تعریف فونت (اگر فایل فونت را در پوشه پروژه داشته باشید) */
+        @font-face {
+            font-family: 'BNazanin';
+            src: url('BNazanin.ttf') format('truetype'); /* فرض بر این است که فایل فونت کنار کد هست */
+        }
+
         body {
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* تغییر از justify-content: center به flex-start برای اینکه محتوا از بالا شروع شود */
+            justify-content: flex-start; 
             min-height: 100vh;
-            background-color: #ffffff; /* فعلاً سفید، در مرحله بعد به طوسی تغییر می‌دهیم */
-            font-family: 'Tahoma', sans-serif;
-            overflow: hidden; /* برای جلوگیری از اسکرول شدن حین انیمیشن */
+            background-color: #ffffff; 
+            /* اولویت با فونت Nazanin، سپس فونت‌های سیستم */
+            font-family: 'BNazanin', 'B Nazanin', 'Tahoma', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* کانتینر اصلی که همه چیز در آن قرار دارد */
-        .main-container {
+        /* کانتینر اصلی */
+        .header-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            padding-top: 50px; /* فاصله از لبه بالای صفحه */
+            opacity: 0; /* برای شروع انیمیشن */
+            animation: fadeInHeader 1.5s ease-out 2.5s forwards; /* کمی تاخیر تا پایان انیمیشن لوگو */
         }
 
-        /* استایل لوگو و انیمیشن آن */
+        /* استایل لوگو */
         .logo-wrapper {
-            width: 120px; /* اندازه شروع */
+            width: 150px; /* اندازه نهایی لوگو در بالا */
             height: auto;
-            opacity: 0; /* در ابتدا مخفی باشد */
-            
-            /* تعریف انیمیشن: نام / مدت زمان / نوع حرکت / تاخیر / تکرار نشود */
-            animation: introAnimation 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            opacity: 0;
+            animation: logoIntro 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         .logo-wrapper img {
@@ -48,39 +55,40 @@
             display: block;
         }
 
-        /* استایل نام فروشگاه */
+        /* استایل متن */
         .store-title {
-            font-size: 24px;
+            font-size: 32px; /* کمی بزرگتر برای زیبایی */
             color: #333;
             font-weight: bold;
-            margin-top: 15px;
-            opacity: 0; /* در ابتدا مخفی باشد */
-            
-            /* انیمیشن برای ظاهر شدن اسم (کمی بعد از لوگو) */
-            animation: titleAppear 1s ease-out 2s forwards;
+            margin-top: 10px; /* فاصله دقیق زیر لوگو */
+            opacity: 0;
+            animation: titleAppear 1s ease-out 2.2s forwards;
         }
 
-        /* --- تعریف حرکت‌ها (Keyframes) --- */
+        /* --- انیمیشن‌ها --- */
 
-        @keyframes introAnimation {
+        /* انیمیشن لوگو: از مرکز کوچک به سمت بالا بزرگ */
+        @keyframes logoIntro {
             0% {
                 opacity: 0;
-                transform: scale(0.2); /* خیلی کوچک شروع شود */
+                transform: scale(0.2) translateY(0);
             }
             50% {
                 opacity: 1;
-                transform: scale(1.2); /* وسط صفحه بزرگ شود */
+                transform: scale(1.2) translateY(0);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) translateY(-100px); /* برود بالا و به اندازه نرمال برسد */
+                /* حرکت به سمت بالا (بسیار زیاد تا به بالای صفحه برسد) */
+                transform: scale(1) translateY(-150px); 
             }
         }
 
+        /* انیمیشن ظاهر شدن متن */
         @keyframes titleAppear {
             0% {
                 opacity: 0;
-                transform: translateY(20px); /* از پایین به سمت بالا بیاید */
+                transform: translateY(10px);
             }
             100% {
                 opacity: 1;
@@ -88,17 +96,22 @@
             }
         }
 
+        /* انیمیشن نهایی برای ثابت کردن کل کانتینر در بالا */
+        @keyframes fadeInHeader {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <!-- بخش لوگو -->
+    <!-- کانتینر اصلی که حالا نقش هدر را دارد -->
+    <div class="header-container">
         <div class="logo-wrapper">
             <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
         </div>
 
-        <!-- بخش نام فروشگاه -->
         <div class="store-title">
             فروشگاه پوشاک تیوان
         </div>
