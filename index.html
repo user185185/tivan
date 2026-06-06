@@ -20,56 +20,47 @@
             text-align: center;
         }
 
-        .main-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-        .logo-wrapper {
-            width: 120px;
-            opacity: 0;
-            animation: introAnimation 2s ease forwards;
-        }
-
+        .logo-wrapper { width: 150px; margin-bottom: 10px; }
         .logo-wrapper img { width: 100%; }
 
         .info-container {
-            margin-top: -40px;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 1.5s;
             padding: 0 20px;
-            max-width: 600px; /* کمی بیشتر برای جلوگیری از شکستن خط زودهنگام */
+            max-width: 600px;
+            direction: rtl;
         }
 
-        /* راه حل نهایی: استفاده از یک پاراگراف واحد برای نمایش پیوسته */
-        .address-text-wrapper {
-            font-size: 15px;
+        /* بخش آدرس و تلفن که مشکل داشت */
+        .address-text {
+            font-size: 16px;
             color: #333;
-            line-height: 1.8; /* فاصله خطوط برای خوانایی بهتر در موبایل */
-            margin-bottom: 15px;
+            line-height: 2;
+            margin-bottom: 10px;
+            /* این دو دستور باعث می‌شود شماره به ابتدای سطر نپرد */
+            unicode-bidi: isolate; 
         }
 
         .phone-link {
-            display: inline-flex; /* بسیار مهم: اجازه می‌دهد در خط قرار بگیرد */
+            display: inline-flex;
             align-items: center;
-            gap: 4px;
             text-decoration: none;
             color: #333;
             font-weight: 500;
-            vertical-align: middle; /* تنظیم تراز عمودی با متن */
+            white-space: nowrap;
+            margin-right: 8px; /* فاصله از متن آدرس */
         }
 
         .phone-svg { 
-            width: 16px; 
-            height: 16px; 
-            fill: #25D366;
-            display: inline-block;
+            width: 18px; 
+            height: 18px; 
+            fill: #25D366; 
+            margin-right: 6px; 
+            vertical-align: middle;
         }
 
         .instagram-link {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
@@ -78,13 +69,9 @@
             margin-bottom: 25px;
         }
 
-        .instagram-icon { width: 18px; }
+        .instagram-icon { width: 20px; }
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
+        .button-group { display: flex; gap: 15px; justify-content: center; }
 
         .btn {
             padding: 8px 20px;
@@ -97,33 +84,24 @@
         }
 
         .btn:hover { background: #333; color: #fff; }
-
-        @keyframes introAnimation {
-            0% { opacity: 0; transform: translateY(20px) scale(0.9); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes fadeIn { to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div class="main-container">
         <div class="logo-wrapper">
-            <!-- مطمئن شوید نام فایل لوگو درست است -->
             <img src="logo-title-red.png" alt="لوگوی تیوان">
         </div>
 
         <div class="info-container">
-            
-            <!-- ساختار جدید: همه چیز داخل یک div ساده برای پیوستگی متن -->
-            <div class="address-text-wrapper">
+            <!-- متن آدرس و تلفن به صورت یک پاراگراف واحد -->
+            <p class="address-text">
                 آدرس فروشگاه: اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی 
                 <a href="tel:03136264237" class="phone-link">
-                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79"/></svg>
-                    <span>03136264237</span>
+                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                    03136264237
                 </a>
-            </div>
+            </p>
 
             <a href="https://instagram.com/tivan.shop" target="_blank" class="instagram-link">
                 <img class="instagram-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
