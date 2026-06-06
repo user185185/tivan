@@ -44,7 +44,6 @@
             display: block;
         }
 
-        /* فاصله لوگو و متن‌ها کمی بیشتر شد */
         .info-container {
             margin-top: -60px; 
             opacity: 0;
@@ -59,20 +58,34 @@
             font-weight: 400;
         }
 
-        /* ردیف اینستاگرام */
-        .instagram-row {
+        /* استایل ردیف اینستاگرام که حالا لینک است */
+        .instagram-link {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             margin-bottom: 8px;
-            direction: ltr; /* برای اینکه آیکن و متن درست کنار هم بیایند */
+            direction: ltr; /* برای نظم آیکون و متن انگلیسی */
+            text-decoration: none; /* حذف خط زیر لینک */
+            transition: transform 0.2s ease; /* برای افکت کوچک هنگام لمس */
+        }
+
+        .instagram-link:hover {
+            transform: scale(1.02); /* خیلی ریز بزرگ می‌شود وقتی روش می‌روید */
         }
 
         .instagram-icon {
             width: 18px;
             height: 18px;
             display: block;
+        }
+
+        /* استایل متن داخل لینک برای اینکه رنگش سیاه بماند و زیرش خط نیاید */
+        .instagram-text {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 0;
+            font-weight: 400;
         }
 
         .button-group {
@@ -121,10 +134,11 @@
             <div class="info-item">آدرس فروشگاه : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
             <div class="info-item">تلفن فروشگاه : 03136264237</div>
 
-            <div class="instagram-row">
+            <!-- کل این بخش حالا یک لینک فعال است -->
+            <a href="https://instagram.com/tivan.shop" target="_blank" class="instagram-link">
                 <img class="instagram-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                <div class="info-item" style="margin-bottom: 0;">instagram.com/tivan.shop</div>
-            </div>
+                <div class="instagram-text">instagram.com/tivan.shop</div>
+            </a>
             
             <div class="button-group">
                 <button class="btn">فرم همکاری</button>
