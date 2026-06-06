@@ -13,119 +13,113 @@
             src: url('BNazanin.ttf') format('truetype');
         }
 
-        :root {
-            --primary-red: #8B0000; /* زرشکی لوکس */
-            --bg-gray: #f4f4f4;     /* طوسی بسیار روشن برای شروع */
-        }
-
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--bg-gray);
-            font-family: 'BNazanin', 'B Nazanin', 'Tahoma', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* --- ۱. لایه انیمیشن (فقط برای شروع کار) --- */
-        .intro-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            z-index: 9999;
-            pointer-events: none; /* باعث می‌شود مانع کلیک نشود */
-            animation: fadeOutOverlay 0.5s ease-out 3s forwards;
-        }
-
-        .intro-logo {
-            width: 100px; /* شروع کوچک در موبایل */
-            animation: cinematicLogo 3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-        }
-
-        @media (min-width: 768px) {
-            .intro-logo { width: 150px; } /* بزرگتر در کامپیوتر */
-        }
-
-        @keyframes cinematicLogo {
-            0% { transform: scale(0.2); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1) translateY(-120vh); opacity: 0; } 
-            /* حرکت به سمت بالا از کادر خارج می‌شود تا لایه اصلی ظاهر شود */
-        }
-
-        @keyframes fadeOutOverlay {
-            to { opacity: 0; visibility: hidden; }
-        }
-
-        /* --- ۲. محتوای اصلی (هدر واقعی) --- */
-        .main-header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 30px;
-            opacity: 0;
-            animation: fadeInMain 1s ease-out 3s forwards; /* بعد از اتمام انیمیشن ظاهر می‌شود */
+            justify-content: flex-start; 
+            min-height: 100vh;
+            background-color: #ffffff; 
+            font-family: 'BNazanin', 'B Nazanin', 'Tahoma', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* لوگوی اصلی که در بالا قرار می‌گیرد */
-        .header-logo {
-            width: 80px; /* کوچکتر برای هماهنگی بهتر */
-            transition: width 0.3s ease;
-        }
-
-        /* سایز لوگو در کامپیوتر */
-        @media (min-width: 768px) {
-            .header-logo { width: 110px; }
-        }
-
-        .header-logo img {
+        /* کانتینر اصلی هدر */
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px; /* فاصله از سقف صفحه */
             width: 100%;
+            opacity: 0;
+            animation: fadeInHeader 1s ease-out 2.5s forwards;
+        }
+
+        /* لوگو */
+        .logo-wrapper {
+            width: 100px; /* سایز پیش‌فرض برای موبایل */
+            height: auto;
+            opacity: 0;
+            animation: logoIntro 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* سایز لوگو در کامپیوتر و تبلت */
+        @media (min-width: 768px) {
+            .logo-wrapper {
+                width: 140px; 
+            }
+        }
+
+        .logo-wrapper img {
+            width: 100%;
+            height: auto;
             display: block;
         }
 
-        /* متن زیر لوگو */
+        /* متن زیر لوگو - چسبیده به لوگو */
         .store-title {
-            font-size: 18px; /* کوچکتر برای موبایل */
+            font-size: 18px; /* سایز برای موبایل */
             color: #333;
-            margin-top: 8px;
+            margin-top: 5px; /* فاصله بسیار کم برای چسبیدن به لوگو */
             font-weight: bold;
+            opacity: 0;
+            animation: titleAppear 1s ease-out 2.2s forwards;
         }
 
+        /* سایز متن در کامپیوتر و تبلت */
         @media (min-width: 768px) {
-            .store-title { font-size: 26px; } /* بزرگتر در کامپیوتر */
+            .store-title {
+                font-size: 26px;
+            }
         }
 
-        @keyframes fadeInMain {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- انیمیشن‌ها --- */
+
+        /* انیمیشن ورود لوگو (فقط بزرگ شدن، بدون جابه‌جایی خطرناک) */
+        @keyframes logoIntro {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* انیمیشن ظاهر شدن متن */
+        @keyframes titleAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* انیمیشن ظاهر شدن کل هدر */
+        @keyframes fadeInHeader {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
     </style>
 </head>
 <body>
 
-    <!-- لایه مخصوص انیمیشن سینمایی (این لایه وقتی تمام شود غیب می‌شود) -->
-    <div class="intro-overlay">
-        <div class="intro-logo">
-            <img src="logo-title-red.png" alt="Logo">
-        </div>
-    </div>
-
-    <!-- هدر اصلی که در بالا قرار می‌گیرد -->
-    <header class="main-header">
-        <div class="header-logo">
+    <div class="header-container">
+        <div class="logo-wrapper">
             <img src="logo-title-red.png" alt="لوگوی فروشگاه پوشاک تیوان">
         </div>
+
         <div class="store-title">
             فروشگاه پوشاک تیوان
         </div>
-    </header>
+    </div>
 
 </body>
 </html>
