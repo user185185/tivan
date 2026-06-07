@@ -17,7 +17,7 @@
             min-height: 100vh;
             background-color: #ffffff;
             font-family: 'Vazirmatn', sans-serif;
-            overflow: hidden; /* جلوگیری از اسکرول غیرضروری */
+            overflow: hidden;
         }
 
         .main-container {
@@ -31,7 +31,9 @@
 
         .logo-wrapper {
             width: 120px;
-            animation: moveLogo 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            /* شروع انیمیشن: لوگو غیب و بسیار کوچک است */
+            opacity: 0;
+            animation: appearInCenter 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
         .logo-wrapper img { width: 100%; display: block; }
 
@@ -41,12 +43,11 @@
             width: 100%;
             opacity: 0;
             margin-top: 20px;
-            animation: fadeIn 1s ease forwards 2s; /* متن بعد از اتمام انیمیشن لوگو ظاهر می‌شود */
+            animation: fadeIn 1s ease forwards 2s;
         }
 
         .info-item { font-size: 15px; color: #444; margin-bottom: 12px; }
 
-        /* اصلاح ساختار لینک‌ها برای جلوگیری از بهم‌ریختگی */
         .phone-link, .instagram-link {
             display: inline-flex;
             align-items: center;
@@ -83,10 +84,11 @@
         }
         .btn:hover { background: #333; color: #fff; }
 
-        @keyframes moveLogo {
-            0% { transform: scale(0.2); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1) translateY(-150px); }
+        /* انیمیشن جدید: ظهور و بزرگ شدن در مرکز */
+        @keyframes appearInCenter {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         @keyframes fadeIn {
