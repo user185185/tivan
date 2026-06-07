@@ -8,16 +8,22 @@
     <style>
         * { box-sizing: border-box; }
         html, body {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             font-family: 'Vazirmatn', sans-serif;
             overflow: hidden;
             background: #fff;
         }
 
-        .page { position: relative; width: 100%; height: 100vh; }
+        .page {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
 
-        /* لایه لوگو با بهینه‌سازی گرافیکی */
+        /* لوگوی مستقل */
         .logo-layer {
             position: fixed;
             top: 50%;
@@ -25,14 +31,16 @@
             width: 150px;
             z-index: 20;
             pointer-events: none;
-            /* فعال کردن پردازش سخت‌افزاری برای نرمی بیشتر */
-            will-change: transform;
-            animation: logoIntro 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            will-change: transform, opacity;
+            animation: logoIntro 2.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
 
-        .logo-layer img { width: 100%; display: block; }
+        .logo-layer img {
+            width: 100%;
+            display: block;
+        }
 
-        /* محتوای اصلی با تاخیر مناسب */
+        /* محتوای اصلی */
         .content {
             position: absolute;
             top: 0;
@@ -41,7 +49,7 @@
             justify-content: center;
             padding-top: 300px;
             opacity: 0;
-            animation: contentEnter 1s ease-out forwards 1.2s;
+            animation: contentEnter 1s ease-out forwards 2.35s;
         }
 
         .main-container {
@@ -50,9 +58,15 @@
             text-align: center;
         }
 
-        .info-item { font-size: 16px; color: #333; margin-bottom: 20px; line-height: 1.8; }
+        .info-item {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
 
-        .phone-link, .instagram-link {
+        .phone-link,
+        .instagram-link {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -62,9 +76,16 @@
             padding: 8px;
             direction: ltr;
             unicode-bidi: isolate;
+            white-space: nowrap;
         }
 
-        .button-group { margin-top: 30px; display: flex; gap: 15px; justify-content: center; }
+        .button-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
         .btn {
             padding: 10px 25px;
@@ -76,18 +97,80 @@
             transition: 0.3s;
         }
 
-        .btn:hover { background: #333; color: #fff; }
-
-        /* انیمیشن لوگو: ترکیب مستقیم برای حذف حالت پله‌ای */
-        @keyframes logoIntro {
-            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
-            100% { transform: translate(-50%, -210px) scale(0.85); opacity: 1; }
+        .btn:hover {
+            background: #333;
+            color: #fff;
         }
 
-        /* ورود نرم محتوا */
+        /* انیمیشن نرم‌تر لوگو */
+        @keyframes logoIntro {
+            0% {
+                transform: translate(-50%, -50%) scale(0.12);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.35;
+                transform: translate(-50%, -50%) scale(0.45);
+            }
+            45% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            65% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -210px) scale(0.85);
+            }
+        }
+
+        /* ورود نرم محتوا از پایین */
         @keyframes contentEnter {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-layer {
+                width: 120px;
+                animation: logoIntroMobile 2.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+            }
+
+            .content {
+                padding-top: 270px;
+                animation-delay: 2.35s;
+            }
+
+            @keyframes logoIntroMobile {
+                0% {
+                    transform: translate(-50%, -50%) scale(0.12);
+                    opacity: 0;
+                }
+                20% {
+                    opacity: 0.35;
+                    transform: translate(-50%, -50%) scale(0.42);
+                }
+                45% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+                65% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translate(-50%, -175px) scale(0.84);
+                }
+            }
         }
     </style>
 </head>
@@ -95,7 +178,6 @@
 
     <div class="page">
         <div class="logo-layer">
-            <!-- فایل تصویر در کنار فایل HTML قرار دارد -->
             <img src="image.png" alt="لوگوی تیوان">
         </div>
 
