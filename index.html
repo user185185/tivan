@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فروشگاه تیوان</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <style>
         * {
             box-sizing: border-box;
@@ -15,54 +14,51 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background-color: #ffffff;
+            background: #fff;
             font-family: 'Vazirmatn', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
+        }
+
+        .page {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* لوگوی مستقل */
+        .logo-layer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            z-index: 10;
+            pointer-events: none;
+            animation: logoMove 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            will-change: transform, opacity;
+        }
+
+        .logo-layer img {
+            width: 100%;
+            display: block;
+        }
+
+        /* محتوای اصلی */
+        .content {
+            min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            padding-top: 260px; /* فضای لازم برای لوگو */
+            opacity: 0;
+            animation: contentFade 0.8s ease forwards 2.2s;
         }
 
         .main-container {
             width: 100%;
             max-width: 500px;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-spacer {
-            height: 180px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .logo-wrapper {
-            width: 120px;
-            opacity: 0;
-            transform: scale(0);
-            animation: logoIntro 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: center center;
-            will-change: transform, opacity;
-        }
-
-        .logo-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .info-container {
-            width: 100%;
             text-align: center;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeIn 0.8s ease forwards 2.2s;
         }
 
         .info-item {
@@ -81,7 +77,7 @@
             gap: 8px;
             text-decoration: none;
             color: #444;
-            margin: 5px 0;
+            margin: 6px 0;
             padding: 5px 10px;
             transition: transform 0.25s ease;
             direction: ltr;
@@ -112,10 +108,9 @@
         .instagram-text {
             font-size: 15px;
             color: #444;
-            font-weight: 400;
+            white-space: nowrap;
             direction: ltr;
             unicode-bidi: isolate;
-            white-space: nowrap;
         }
 
         .button-group {
@@ -143,53 +138,58 @@
             color: #fff;
         }
 
-        @keyframes logoIntro {
+        /* انیمیشن لوگو: ظاهر شود، بزرگ شود، برود بالا */
+        @keyframes logoMove {
             0% {
                 opacity: 0;
-                transform: translateY(40px) scale(0);
+                transform: translate(-50%, -50%) scale(0);
             }
-            45% {
+            35% {
                 opacity: 1;
-                transform: translateY(0) scale(1.18);
+                transform: translate(-50%, -50%) scale(1.2);
             }
-            75% {
+            70% {
                 opacity: 1;
-                transform: translateY(-120px) scale(1.05);
+                transform: translate(-50%, -65%) scale(1.05);
             }
             100% {
                 opacity: 1;
-                transform: translateY(-150px) scale(1);
+                transform: translate(-50%, -150%) scale(1);
             }
         }
 
-        @keyframes fadeIn {
+        @keyframes contentFade {
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
         @media (max-width: 480px) {
-            .logo-wrapper {
+            .logo-layer {
                 width: 104px;
+                animation: logoMoveMobile 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
             }
 
-            @keyframes logoIntro {
+            .content {
+                padding-top: 220px;
+            }
+
+            @keyframes logoMoveMobile {
                 0% {
                     opacity: 0;
-                    transform: translateY(30px) scale(0);
+                    transform: translate(-50%, -50%) scale(0);
                 }
-                45% {
+                35% {
                     opacity: 1;
-                    transform: translateY(0) scale(1.15);
+                    transform: translate(-50%, -50%) scale(1.15);
                 }
-                75% {
+                70% {
                     opacity: 1;
-                    transform: translateY(-95px) scale(1.03);
+                    transform: translate(-50%, -62%) scale(1.03);
                 }
                 100% {
                     opacity: 1;
-                    transform: translateY(-115px) scale(1);
+                    transform: translate(-50%, -125%) scale(1);
                 }
             }
         }
@@ -197,33 +197,33 @@
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="logo-spacer">
-            <div class="logo-wrapper">
-                <img src="logo-title-red.png" alt="لوگوی فروشگاه تیوان">
-            </div>
+    <div class="page">
+        <div class="logo-layer">
+            <img src="logo-title-red.png" alt="لوگوی فروشگاه تیوان">
         </div>
 
-        <div class="info-container">
-            <div class="info-item">
-                آدرس فروشگاه: اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
-            </div>
+        <div class="content">
+            <div class="main-container">
+                <div class="info-item">
+                    آدرس فروشگاه: اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
+                </div>
 
-            <a href="tel:03136264237" class="phone-link">
-                <svg class="phone-svg" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-                </svg>
-                <span class="phone-text">03136264237</span>
-            </a>
+                <a href="tel:03136264237" class="phone-link">
+                    <svg class="phone-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+                    </svg>
+                    <span class="phone-text">03136264237</span>
+                </a>
 
-            <a href="https://instagram.com/tivan.shop" target="_blank" class="instagram-link" rel="noopener noreferrer">
-                <img class="instagram-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                <span class="instagram-text">instagram.com/tivan.shop</span>
-            </a>
+                <a href="https://instagram.com/tivan.shop" target="_blank" class="instagram-link" rel="noopener noreferrer">
+                    <img class="instagram-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                    <span class="instagram-text">instagram.com/tivan.shop</span>
+                </a>
 
-            <div class="button-group">
-                <button class="btn">فرم همکاری</button>
-                <button class="btn">گالری عکس‌ها</button>
+                <div class="button-group">
+                    <button class="btn">فرم همکاری</button>
+                    <button class="btn">گالری عکس‌ها</button>
+                </div>
             </div>
         </div>
     </div>
