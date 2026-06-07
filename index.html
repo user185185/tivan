@@ -17,6 +17,7 @@
             min-height: 100vh;
             background-color: #ffffff;
             font-family: 'Vazirmatn', sans-serif;
+            overflow: hidden; /* جلوگیری از اسکرول غیرضروری */
         }
 
         .main-container {
@@ -30,7 +31,7 @@
 
         .logo-wrapper {
             width: 120px;
-            animation: introAnimation 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveLogo 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
         .logo-wrapper img { width: 100%; display: block; }
 
@@ -39,12 +40,13 @@
             max-width: 450px;
             width: 100%;
             opacity: 0;
-            animation: fadeIn 1s ease forwards 1.5s;
+            margin-top: 20px;
+            animation: fadeIn 1s ease forwards 2s; /* متن بعد از اتمام انیمیشن لوگو ظاهر می‌شود */
         }
 
         .info-item { font-size: 15px; color: #444; margin-bottom: 12px; }
 
-        /* اصلاح اصلی در اینجا: inline-flex برای حفظ جریان متنی */
+        /* اصلاح ساختار لینک‌ها برای جلوگیری از بهم‌ریختگی */
         .phone-link, .instagram-link {
             display: inline-flex;
             align-items: center;
@@ -54,8 +56,9 @@
             color: #444;
             margin: 5px 0;
             padding: 5px 10px;
-            transition: 0.3s;
+            transition: transform 0.3s ease;
         }
+        .phone-link:hover, .instagram-link:hover { transform: scale(1.05); }
 
         .phone-svg { width: 20px; height: 20px; fill: #25D366; }
         .instagram-icon { width: 20px; height: 20px; }
@@ -74,17 +77,21 @@
             background: transparent;
             cursor: pointer;
             font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
             border-radius: 5px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
         .btn:hover { background: #333; color: #fff; }
 
-        @keyframes introAnimation {
-            0% { transform: scale(0.3); }
-            100% { transform: scale(1) translateY(0); } /* ساده‌تر و ایمن‌تر از مقادیر منفی */
+        @keyframes moveLogo {
+            0% { transform: scale(0.2); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1) translateY(-150px); }
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
