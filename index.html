@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فروشگاه تیوان</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -10,13 +11,20 @@
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            min-height: 100%;
+            width: 100%;
             background: #fff;
             font-family: 'Vazirmatn', sans-serif;
             overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
         }
 
         .page {
@@ -30,16 +38,19 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            z-index: 10;
+            width: 128px;
+            transform: translate(-50%, -50%) scale(0);
+            transform-origin: center center;
+            z-index: 20;
             pointer-events: none;
-            animation: logoMove 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            opacity: 0;
+            animation: logoIntro 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             will-change: transform, opacity;
         }
 
         .logo-layer img {
             width: 100%;
+            height: auto;
             display: block;
         }
 
@@ -49,14 +60,15 @@
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            padding-top: 260px; /* فضای لازم برای لوگو */
+            padding-top: 250px;
             opacity: 0;
-            animation: contentFade 0.8s ease forwards 2.2s;
+            transform: translateY(24px);
+            animation: contentEnter 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards 2.35s;
         }
 
         .main-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             padding: 20px;
             text-align: center;
         }
@@ -64,8 +76,8 @@
         .info-item {
             font-size: 15px;
             color: #444;
-            margin-bottom: 12px;
-            line-height: 1.9;
+            margin-bottom: 14px;
+            line-height: 2;
             overflow-wrap: break-word;
         }
 
@@ -78,8 +90,8 @@
             text-decoration: none;
             color: #444;
             margin: 6px 0;
-            padding: 5px 10px;
-            transition: transform 0.25s ease;
+            padding: 6px 12px;
+            transition: transform 0.25s ease, opacity 0.25s ease;
             direction: ltr;
             unicode-bidi: isolate;
         }
@@ -114,7 +126,7 @@
         }
 
         .button-group {
-            margin-top: 25px;
+            margin-top: 26px;
             display: flex;
             gap: 12px;
             justify-content: center;
@@ -129,67 +141,83 @@
             font-family: 'Vazirmatn', sans-serif;
             font-size: 14px;
             font-weight: 500;
-            transition: all 0.3s ease;
-            border-radius: 5px;
+            border-radius: 6px;
+            transition: all 0.25s ease;
         }
 
         .btn:hover {
             background: #333;
             color: #fff;
+            transform: translateY(-1px);
         }
 
-        /* انیمیشن لوگو: ظاهر شود، بزرگ شود، برود بالا */
-        @keyframes logoMove {
+        /* لوگو: نرم، حرفه‌ای، بدون پرش */
+        @keyframes logoIntro {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0);
+                transform: translate(-50%, -50%) scale(0.08) translateY(35px);
             }
-            35% {
+            18% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1.2);
+                transform: translate(-50%, -50%) scale(0.45) translateY(18px);
             }
-            70% {
+            45% {
                 opacity: 1;
-                transform: translate(-50%, -65%) scale(1.05);
+                transform: translate(-50%, -50%) scale(1.08) translateY(0px);
+            }
+            68% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.03) translateY(-62px);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, -150%) scale(1);
+                transform: translate(-50%, -50%) scale(1) translateY(-135px);
             }
         }
 
-        @keyframes contentFade {
-            to {
+        /* متن‌ها از پایین اسلاید بخورند */
+        @keyframes contentEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            100% {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
         @media (max-width: 480px) {
             .logo-layer {
-                width: 104px;
-                animation: logoMoveMobile 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+                width: 108px;
+                animation: logoIntroMobile 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             }
 
             .content {
-                padding-top: 220px;
+                padding-top: 210px;
+                animation-delay: 2.3s;
             }
 
-            @keyframes logoMoveMobile {
+            @keyframes logoIntroMobile {
                 0% {
                     opacity: 0;
-                    transform: translate(-50%, -50%) scale(0);
+                    transform: translate(-50%, -50%) scale(0.08) translateY(28px);
                 }
-                35% {
+                18% {
                     opacity: 1;
-                    transform: translate(-50%, -50%) scale(1.15);
+                    transform: translate(-50%, -50%) scale(0.42) translateY(14px);
                 }
-                70% {
+                45% {
                     opacity: 1;
-                    transform: translate(-50%, -62%) scale(1.03);
+                    transform: translate(-50%, -50%) scale(1.06) translateY(0px);
+                }
+                68% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1.02) translateY(-50px);
                 }
                 100% {
                     opacity: 1;
-                    transform: translate(-50%, -125%) scale(1);
+                    transform: translate(-50%, -50%) scale(1) translateY(-108px);
                 }
             }
         }
