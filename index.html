@@ -17,29 +17,31 @@
 
         .page { position: relative; width: 100%; height: 100vh; }
 
-        /* لوگوی مستقل */
+        /* لایه لوگو با بهینه‌سازی گرافیکی */
         .logo-layer {
             position: fixed;
             top: 50%;
             left: 50%;
-            width: 150px; /* اندازه پایه */
+            width: 150px;
             z-index: 20;
             pointer-events: none;
-            animation: logoIntro 2.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            /* فعال کردن پردازش سخت‌افزاری برای نرمی بیشتر */
+            will-change: transform;
+            animation: logoIntro 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .logo-layer img { width: 100%; display: block; }
 
-        /* محتوای اصلی */
+        /* محتوای اصلی با تاخیر مناسب */
         .content {
             position: absolute;
             top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
-            padding-top: 320px; /* فاصله از بالای صفحه برای قرارگیری زیر لوگوی مستقر در -210px */
+            padding-top: 300px;
             opacity: 0;
-            animation: contentEnter 1s ease forwards 1.8s;
+            animation: contentEnter 1s ease-out forwards 1.2s;
         }
 
         .main-container {
@@ -76,17 +78,15 @@
 
         .btn:hover { background: #333; color: #fff; }
 
-        /* انیمیشن لوگو */
+        /* انیمیشن لوگو: ترکیب مستقیم برای حذف حالت پله‌ای */
         @keyframes logoIntro {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-            30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 1; transform: translate(-50%, -210px) scale(0.85); }
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            100% { transform: translate(-50%, -210px) scale(0.85); opacity: 1; }
         }
 
-        /* انیمیشن ورود متن */
+        /* ورود نرم محتوا */
         @keyframes contentEnter {
-            0% { opacity: 0; transform: translateY(30px); }
+            0% { opacity: 0; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -95,7 +95,8 @@
 
     <div class="page">
         <div class="logo-layer">
-            <img src="logo-title-red.png" alt="تیوان">
+            <!-- فایل تصویر در کنار فایل HTML قرار دارد -->
+            <img src="image.png" alt="لوگوی تیوان">
         </div>
 
         <div class="content">
