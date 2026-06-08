@@ -172,7 +172,7 @@ body{
     color:#fff;
 }
 
-/* استایل‌های مربوط به پاپ‌آپ انتخاب نقشه */
+/* پاپ‌آپ انتخاب نقشه */
 .map-modal-overlay {
     position: fixed;
     top: 0;
@@ -437,14 +437,14 @@ body{
                 </svg>
                 <span>گوگل مپ</span>
             </a>
-            <a href="#" target="_blank" class="app-btn" id="link-neshan">
+            <a href="#" class="app-btn" id="link-neshan">
                 <svg class="app-icon" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10" fill="#0084FF"/>
                     <path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/>
                 </svg>
                 <span>نشان</span>
             </a>
-            <a href="#" target="_blank" class="app-btn" id="link-balad">
+            <a href="#" class="app-btn" id="link-balad">
                 <svg class="app-icon" viewBox="0 0 24 24">
                     <rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/>
                     <path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/>
@@ -467,32 +467,30 @@ body{
 
 <script>
 (function() {
-    const triggers = document.querySelectorAll('.open-map-trigger');
-    const overlay = document.getElementById('mapModalOverlay');
-    const closeBtn = document.getElementById('closeModalBtn');
+    var triggers = document.querySelectorAll('.open-map-trigger');
+    var overlay = document.getElementById('mapModalOverlay');
+    var closeBtn = document.getElementById('closeModalBtn');
     
-    const googleLink = document.getElementById('link-google');
-    const neshanLink = document.getElementById('link-neshan');
-    const baladLink = document.getElementById('link-balad');
-    const wazeLink = document.getElementById('link-waze');
+    var googleLink = document.getElementById('link-google');
+    var neshanLink = document.getElementById('link-neshan');
+    var baladLink = document.getElementById('link-balad');
+    var wazeLink = document.getElementById('link-waze');
 
-    // باز کردن پاپ‌آپ و تزریق مختصات اختصاصی هر شعبه
-    triggers.forEach(trigger => {
+    triggers.forEach(function(trigger) {
         trigger.addEventListener('click', function() {
-            const lat = this.getAttribute('data-lat');
-            const lng = this.getAttribute('data-lng');
+            var lat = this.getAttribute('data-lat');
+            var lng = this.getAttribute('data-lng');
             
-            // ساخت لینک استاندارد و هوشمند برای هر اپلیکیشن
-            googleLink.href = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-            neshanLink.href = `https://neshan.org/maps/direction?to=${lat},${lng}`;
-            baladLink.href = `https://balad.ir/route?to=${lat},${lng}`;
-            wazeLink.href = `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`;
+            // استفاده از ساختار ایمن الحاق رشته (+) و پروتکل مستقیم اپلیکیشن‌ها
+            googleLink.href = 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng;
+            neshanLink.href = 'nshn://navigate?lat=' + lat + '&lng=' + lng;
+            baladLink.href = 'balad://navigate?lat=' + lat + '&lng=' + lng;
+            wazeLink.href = 'https://waze.com/ul?ll=' + lat + ',' + lng + '&navigate=yes';
             
             overlay.classList.add('active');
         });
     });
 
-    // بستن پاپ‌آپ
     function closeModal() {
         overlay.classList.remove('active');
     }
