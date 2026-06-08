@@ -128,18 +128,13 @@ body{
 }
 
 /* دکمه ها */
-.footer-section{
-    opacity:0;
-    animation:fadeIn 1s ease forwards 2.5s;
-    text-align:center;
-}
-
 .button-group{
     display:flex;
     justify-content:center;
     align-items:center;
     gap:12px;
     flex-wrap:nowrap;
+    margin-top:4px;
 }
 
 .btn{
@@ -280,11 +275,9 @@ body{
             <span>instagram.com/tivan.shop</span>
         </a>
 
-        <div class="footer-section">
-            <div class="button-group">
-                <a href="hamkari.html" class="btn">فرم همکاری</a>
-                <a href="gallery.html" class="btn">گالری عکس‌ها</a>
-            </div>
+        <div class="button-group">
+            <a href="hamkari.html" class="btn">فرم همکاری</a>
+            <a href="gallery.html" class="btn">گالری عکس‌ها</a>
         </div>
 
         <div class="footer-divider"></div>
@@ -297,13 +290,26 @@ body{
     const logoWrapper = document.getElementById('logoWrapper');
     const contentSection = document.getElementById('contentSection');
 
-    function syncContentOffset() {
-        const logoHeight = logoWrapper.getBoundingClientRect().height || 0;
-        contentSection.style.marginTop = (logoHeight + 60) + 'px';
+    function updateLayout() {
+        const logoHeight = logoWrapper.getBoundingClientRect().height || 120;
+        contentSection.style.marginTop = (logoHeight + 40) + 'px';
     }
 
-    window.addEventListener('load', syncContentOffset);
-    window.addEventListener('resize', syncContentOffset);
+    function settleLogo() {
+        logoWrapper.style.animation = 'none';
+        logoWrapper.style.position = 'fixed';
+        logoWrapper.style.left = '50%';
+        logoWrapper.style.top = '30px';
+        logoWrapper.style.transform = 'translateX(-50%)';
+        logoWrapper.style.opacity = '1';
+    }
+
+    window.addEventListener('load', () => {
+        updateLayout();
+        setTimeout(settleLogo, 2500);
+    });
+
+    window.addEventListener('resize', updateLayout);
 })();
 </script>
 
