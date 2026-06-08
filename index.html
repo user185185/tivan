@@ -86,6 +86,7 @@ body{
     color:#444;
     font-size:15px;
     transition:0.2s ease;
+    cursor: pointer;
 }
 
 .branch-link:hover{
@@ -171,6 +172,108 @@ body{
     color:#fff;
 }
 
+/* استایل‌های مربوط به پاپ‌آپ انتخاب نقشه */
+.map-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.map-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.map-modal {
+    background: #fff;
+    width: 90%;
+    max-width: 400px;
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.map-modal-overlay.active .map-modal {
+    transform: scale(1);
+}
+
+.map-modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 6px;
+}
+
+.map-modal-subtitle {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.app-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: #fdfdfd;
+}
+
+.app-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+    transform: translateY(-2px);
+}
+
+.app-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+    object-fit: contain;
+}
+
+.close-modal-btn {
+    margin-top: 20px;
+    background: none;
+    border: none;
+    color: #999;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: #333;
+}
+
 @keyframes logoIntro{
     0%{
         opacity:0;
@@ -249,12 +352,12 @@ body{
                     </svg>
                     <span>03136264237</span>
                 </a>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=32.6380318,51.6435897" target="_blank" rel="noopener noreferrer" class="branch-link">
+                <div class="branch-link open-map-trigger" data-lat="32.6380318" data-lng="51.6435897">
                     <svg class="location-svg" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/>
                     </svg>
                     <span>مسیریابی روی نقشه</span>
-                </a>
+                </div>
             </div>
             <div class="branch-divider"></div>
         </div>
@@ -270,12 +373,12 @@ body{
                     </svg>
                     <span>03136264237</span>
                 </a>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=32.6325682,51.6586030" target="_blank" rel="noopener noreferrer" class="branch-link">
+                <div class="branch-link open-map-trigger" data-lat="32.6325682" data-lng="51.6586030">
                     <svg class="location-svg" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/>
                     </svg>
                     <span>مسیریابی روی نقشه</span>
-                </a>
+                </div>
             </div>
             <div class="branch-divider"></div>
         </div>
@@ -291,12 +394,12 @@ body{
                     </svg>
                     <span>03136610848</span>
                 </a>
-                <a href="https://www.google.com/maps/dir/?api=1&destination=32.6238140,51.6649018" target="_blank" rel="noopener noreferrer" class="branch-link">
+                <div class="branch-link open-map-trigger" data-lat="32.6238140" data-lng="51.6649018">
                     <svg class="location-svg" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/>
                     </svg>
                     <span>مسیریابی روی نقشه</span>
-                </a>
+                </div>
             </div>
             <div class="branch-divider"></div>
         </div>
@@ -321,6 +424,85 @@ body{
         <div class="branch-divider" style="margin-top: 18px;"></div>
     </div>
 </div>
+
+<div class="map-modal-overlay" id="mapModalOverlay">
+    <div class="map-modal">
+        <div class="map-modal-title">انتخاب اپلیکیشن مسیریاب</div>
+        <div class="map-modal-subtitle">لطفاً نقشه مورد نظر خود را انتخاب کنید:</div>
+        
+        <div class="apps-grid">
+            <a href="#" target="_blank" class="app-btn" id="link-google">
+                <svg class="app-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                </svg>
+                <span>گوگل مپ</span>
+            </a>
+            <a href="#" target="_blank" class="app-btn" id="link-neshan">
+                <svg class="app-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" fill="#0084FF"/>
+                    <path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/>
+                </svg>
+                <span>نشان</span>
+            </a>
+            <a href="#" target="_blank" class="app-btn" id="link-balad">
+                <svg class="app-icon" viewBox="0 0 24 24">
+                    <rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/>
+                    <path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/>
+                </svg>
+                <span>بلد</span>
+            </a>
+            <a href="#" target="_blank" class="app-btn" id="link-waze">
+                <svg class="app-icon" viewBox="0 0 24 24">
+                    <path fill="#33CCFF" d="M12 2a10 10 0 0 0-10 10c0 4.1 2.5 7.6 6 9.1v-1.2c-2.4-1.2-4-3.7-4-6.4a8 8 0 1 1 14.2 5c-.7.6-1.6 1-2.6 1.3V21c3.5-1.5 6-5 6-9.1A10 10 0 0 0 12 2z"/>
+                    <circle cx="9" cy="11" r="1.5" fill="#333"/>
+                    <circle cx="15" cy="11" r="1.5" fill="#333"/>
+                </svg>
+                <span>ویز (Waze)</span>
+            </a>
+        </div>
+        
+        <button class="close-modal-btn" id="closeModalBtn">انصراف</button>
+    </div>
+</div>
+
+<script>
+(function() {
+    const triggers = document.querySelectorAll('.open-map-trigger');
+    const overlay = document.getElementById('mapModalOverlay');
+    const closeBtn = document.getElementById('closeModalBtn');
+    
+    const googleLink = document.getElementById('link-google');
+    const neshanLink = document.getElementById('link-neshan');
+    const baladLink = document.getElementById('link-balad');
+    const wazeLink = document.getElementById('link-waze');
+
+    // باز کردن پاپ‌آپ و تزریق مختصات اختصاصی هر شعبه
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+            const lat = this.getAttribute('data-lat');
+            const lng = this.getAttribute('data-lng');
+            
+            // ساخت لینک استاندارد و هوشمند برای هر اپلیکیشن
+            googleLink.href = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+            neshanLink.href = `https://neshan.org/maps/direction?to=${lat},${lng}`;
+            baladLink.href = `https://balad.ir/route?to=${lat},${lng}`;
+            wazeLink.href = `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`;
+            
+            overlay.classList.add('active');
+        });
+    });
+
+    // بستن پاپ‌آپ
+    function closeModal() {
+        overlay.classList.remove('active');
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) {
+        if(e.target === overlay) closeModal();
+    });
+})();
+</script>
 
 </body>
 </html>
