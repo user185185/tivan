@@ -27,10 +27,6 @@ body{
     overflow-x:hidden;
 }
 
-/* ==========================
-   کانتینر اصلی
-========================== */
-
 .main-container{
     width:100%;
     max-width:550px;
@@ -39,17 +35,17 @@ body{
 }
 
 /* ==========================
-   بخش لوگو
+   لوگو
 ========================== */
 
 .logo-section{
-    height:260px;
+    height:140px;
     position:relative;
 }
 
 .logo-wrapper{
 
-    position:fixed;
+    position:absolute;
 
     left:50%;
     top:50%;
@@ -61,8 +57,6 @@ body{
     transform:translate(-50%,-50%);
 
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
-
-    z-index:100;
 }
 
 .logo-wrapper img{
@@ -71,7 +65,7 @@ body{
 }
 
 /* ==========================
-   بخش محتوا
+   محتوا
 ========================== */
 
 .content-section{
@@ -79,8 +73,6 @@ body{
     opacity:0;
 
     animation:fadeIn 1s ease forwards 2.5s;
-
-    padding-top:20px;
 }
 
 .branch-item{
@@ -89,7 +81,7 @@ body{
 
 .branch-address{
 
-    text-align:right;
+    text-align:center;
 
     color:#444;
 
@@ -111,8 +103,6 @@ body{
     margin-top:8px;
 
     font-size:15px;
-
-    transition:.2s;
 }
 
 .branch-phone:hover{
@@ -155,10 +145,6 @@ body{
     margin-top:30px;
 
     margin-bottom:35px;
-}
-
-.instagram-link:hover{
-    opacity:.8;
 }
 
 .instagram-svg{
@@ -228,22 +214,21 @@ body{
 
     0%{
         opacity:0;
-        transform:translate(-50%,-50%) scale(.2);
+        transform:translate(-50%,50px) scale(.2);
     }
 
     50%{
         opacity:1;
-        transform:translate(-50%,-50%) scale(1.2);
+        transform:translate(-50%,0) scale(1.2);
     }
 
     100%{
         opacity:1;
-        transform:translate(-50%,-180px) scale(1);
+        transform:translate(-50%,-60px) scale(1);
     }
 }
 
 @keyframes fadeIn{
-
     to{
         opacity:1;
     }
@@ -279,8 +264,6 @@ body{
 
 <div class="main-container">
 
-    <!-- لوگو -->
-
     <div class="logo-section">
 
         <div class="logo-wrapper">
@@ -289,14 +272,12 @@ body{
 
     </div>
 
-    <!-- شعب -->
-
     <div class="content-section">
 
         <div class="branch-item">
 
             <div class="branch-address">
-                📍 شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
+                شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
             </div>
 
             <a href="tel:03136264237" class="branch-phone">
@@ -310,7 +291,7 @@ body{
         <div class="branch-item">
 
             <div class="branch-address">
-                📍 شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
+                شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
             </div>
 
             <a href="tel:03136264237" class="branch-phone">
@@ -324,7 +305,7 @@ body{
         <div class="branch-item">
 
             <div class="branch-address">
-                📍 شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
+                شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
             </div>
 
             <a href="tel:03136610848" class="branch-phone">
@@ -334,8 +315,6 @@ body{
             <div class="branch-divider"></div>
 
         </div>
-
-        <!-- اینستاگرام -->
 
         <a href="https://instagram.com/tivan.shop"
            target="_blank"
@@ -351,8 +330,6 @@ body{
         </a>
 
     </div>
-
-    <!-- دکمه ها -->
 
     <div class="footer-section">
 
