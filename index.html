@@ -34,7 +34,8 @@ body{
 /* لوگو */
 .logo-section{
     position:relative;
-    height:0;
+    height:150px;
+    overflow:hidden;
 }
 
 .logo-wrapper{
@@ -104,7 +105,7 @@ body{
     text-decoration:none;
     color:#444;
     margin-top:18px;
-    margin-bottom:28px;
+    margin-bottom:18px;
 }
 
 .instagram-link:hover{
@@ -117,23 +118,33 @@ body{
     fill:#E1306C;
 }
 
+.footer-divider{
+    width:90%;
+    max-width:420px;
+    height:1px;
+    background:#d6d6d6;
+    margin:18px auto 0 auto;
+}
+
 /* دکمه ها */
 .footer-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
     text-align:center;
+    margin-top:18px;
 }
 
 .button-group{
     display:flex;
-    flex-direction:column;
+    justify-content:center;
     align-items:center;
     gap:12px;
+    flex-wrap:nowrap;
 }
 
 .btn{
     display:inline-block;
-    min-width:180px;
+    min-width:160px;
     padding:10px 24px;
     border:1.5px solid #333;
     border-radius:6px;
@@ -190,8 +201,14 @@ body{
         font-size:14px;
     }
 
+    .button-group{
+        gap:10px;
+    }
+
     .btn{
-        min-width:160px;
+        min-width:140px;
+        padding:10px 18px;
+        font-size:14px;
     }
 }
 </style>
@@ -242,6 +259,9 @@ body{
             </svg>
             <span>instagram.com/tivan.shop</span>
         </a>
+
+        <div class="footer-divider"></div>
+
     </div>
 
     <div class="footer-section">
