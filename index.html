@@ -49,16 +49,6 @@ body{
     will-change:transform, top, opacity;
 }
 
-.logo-wrapper.logo-settled{
-    position:absolute;
-    left:50%;
-    top:20px;
-    width:120px;
-    opacity:1;
-    transform:translateX(-50%);
-    animation:none;
-}
-
 .logo-wrapper img{
     width:100%;
     display:block;
@@ -187,8 +177,8 @@ body{
     }
     100%{
         opacity:1;
-        top:20px;
-        transform:translate(-50%,-50%) scale(1);
+        top:30px;
+        transform:translate(-50%,0) scale(1);
     }
 }
 
@@ -199,17 +189,12 @@ body{
 }
 
 @media(max-width:480px){
-    .logo-section{
-        height:120px;
-    }
-
     .logo-wrapper{
         width:100px;
     }
 
-    .logo-wrapper.logo-settled{
-        top:20px;
-        width:100px;
+    .logo-section{
+        height:120px;
     }
 
     .content-section{
@@ -242,8 +227,8 @@ body{
 
 <div class="main-container">
 
-    <div class="logo-section" id="logoSection">
-        <div class="logo-wrapper" id="logoWrapper">
+    <div class="logo-section">
+        <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
@@ -310,18 +295,6 @@ body{
     </div>
 
 </div>
-
-<script>
-(function () {
-    const logoWrapper = document.getElementById('logoWrapper');
-
-    function settleLogo() {
-        logoWrapper.classList.add('logo-settled');
-    }
-
-    logoWrapper.addEventListener('animationend', settleLogo, { once: true });
-})();
-</script>
 
 </body>
 </html>
