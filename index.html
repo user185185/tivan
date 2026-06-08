@@ -35,18 +35,17 @@ body{
 }
 
 /* ==========================
-   لوگو
+   بخش لوگو
 ========================== */
 
 .logo-section{
-    height:140px;
     position:relative;
+    height:220px;
+    overflow:hidden;
 }
 
 .logo-wrapper{
-
     position:absolute;
-
     left:50%;
     top:50%;
 
@@ -65,13 +64,11 @@ body{
 }
 
 /* ==========================
-   محتوا
+   بخش محتوا
 ========================== */
 
 .content-section{
-
     opacity:0;
-
     animation:fadeIn 1s ease forwards 2.5s;
 }
 
@@ -80,28 +77,18 @@ body{
 }
 
 .branch-address{
-
     text-align:center;
-
     color:#444;
-
     font-size:15px;
-
     line-height:2;
 }
 
 .branch-phone{
-
     display:block;
-
     text-align:center;
-
     text-decoration:none;
-
     color:#444;
-
     margin-top:8px;
-
     font-size:15px;
 }
 
@@ -110,15 +97,10 @@ body{
 }
 
 .branch-divider{
-
     width:95%;
-
-    max-width:460px;
-
+    max-width:420px;
     height:1px;
-
-    background:#d8d8d8;
-
+    background:#d6d6d6;
     margin:18px auto 0 auto;
 }
 
@@ -127,32 +109,23 @@ body{
 ========================== */
 
 .instagram-link{
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     gap:8px;
 
     direction:ltr;
 
     text-decoration:none;
-
     color:#444;
 
     margin-top:30px;
-
     margin-bottom:35px;
 }
 
 .instagram-svg{
-
     width:20px;
-
     height:20px;
-
     fill:#E1306C;
 }
 
@@ -161,70 +134,58 @@ body{
 ========================== */
 
 .footer-section{
-
     opacity:0;
-
     animation:fadeIn 1s ease forwards 2.5s;
+    text-align:center;
 }
 
 .button-group{
-
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     gap:12px;
 }
 
 .btn{
+    display:inline-block;
 
-    display:block;
+    min-width:180px;
 
-    width:220px;
-
-    text-align:center;
-
-    padding:10px;
+    padding:10px 24px;
 
     border:1.5px solid #333;
-
     border-radius:6px;
 
-    color:#333;
-
     text-decoration:none;
+    color:#333;
 
     transition:.3s;
 }
 
 .btn:hover{
-
     background:#333;
-
     color:#fff;
 }
 
 /* ==========================
-   انیمیشن
+   انیمیشن لوگو
 ========================== */
 
 @keyframes logoIntro{
 
     0%{
         opacity:0;
-        transform:translate(-50%,50px) scale(.2);
+        transform:translate(-50%,-50%) scale(.2);
     }
 
     50%{
         opacity:1;
-        transform:translate(-50%,0) scale(1.2);
+        transform:translate(-50%,-50%) scale(1.2);
     }
 
     100%{
         opacity:1;
-        transform:translate(-50%,-60px) scale(1);
+        transform:translate(-50%,-110px) scale(1);
     }
 }
 
@@ -253,7 +214,7 @@ body{
     }
 
     .btn{
-        width:200px;
+        min-width:160px;
     }
 }
 
@@ -264,6 +225,8 @@ body{
 
 <div class="main-container">
 
+    <!-- لوگو -->
+
     <div class="logo-section">
 
         <div class="logo-wrapper">
@@ -271,6 +234,8 @@ body{
         </div>
 
     </div>
+
+    <!-- شعب -->
 
     <div class="content-section">
 
@@ -330,6 +295,8 @@ body{
         </a>
 
     </div>
+
+    <!-- دکمه ها -->
 
     <div class="footer-section">
 
