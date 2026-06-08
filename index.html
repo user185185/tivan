@@ -5,15 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>فروشگاه تیوان</title>
-
 <meta name="description" content="فروشگاه پوشاک تیوان">
 
 <link rel="icon" type="image/png" href="logo-title-red-c.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;500;700&display=swap" rel="stylesheet">
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -34,28 +31,21 @@ body{
     padding:20px;
 }
 
-/* ==========================
-   بخش لوگو
-========================== */
-
+/* لوگو */
 .logo-section{
     position:relative;
-    height:220px;
-    overflow:hidden;
+    height:300px;
 }
 
 .logo-wrapper{
-    position:absolute;
+    position:fixed;
     left:50%;
     top:50%;
-
     width:120px;
-
     opacity:0;
-
     transform:translate(-50%,-50%);
-
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
+    z-index:100;
 }
 
 .logo-wrapper img{
@@ -63,24 +53,22 @@ body{
     display:block;
 }
 
-/* ==========================
-   بخش محتوا
-========================== */
-
+/* محتوا */
 .content-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
+    margin-top:50px;
 }
 
 .branch-item{
-    margin-bottom:22px;
+    margin-bottom:14px;
 }
 
 .branch-address{
     text-align:center;
     color:#444;
     font-size:15px;
-    line-height:2;
+    line-height:1.8;
 }
 
 .branch-phone{
@@ -88,8 +76,9 @@ body{
     text-align:center;
     text-decoration:none;
     color:#444;
-    margin-top:8px;
+    margin-top:6px;
     font-size:15px;
+    transition:0.2s ease;
 }
 
 .branch-phone:hover{
@@ -97,30 +86,28 @@ body{
 }
 
 .branch-divider{
-    width:95%;
+    width:90%;
     max-width:420px;
     height:1px;
     background:#d6d6d6;
-    margin:18px auto 0 auto;
+    margin:10px auto 0 auto;
 }
 
-/* ==========================
-   اینستاگرام
-========================== */
-
+/* اینستاگرام */
 .instagram-link{
     display:flex;
     justify-content:center;
     align-items:center;
     gap:8px;
-
     direction:ltr;
-
     text-decoration:none;
     color:#444;
+    margin-top:22px;
+    margin-bottom:28px;
+}
 
-    margin-top:30px;
-    margin-bottom:35px;
+.instagram-link:hover{
+    opacity:.8;
 }
 
 .instagram-svg{
@@ -129,10 +116,7 @@ body{
     fill:#E1306C;
 }
 
-/* ==========================
-   دکمه ها
-========================== */
-
+/* دکمه ها */
 .footer-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
@@ -148,17 +132,12 @@ body{
 
 .btn{
     display:inline-block;
-
     min-width:180px;
-
     padding:10px 24px;
-
     border:1.5px solid #333;
     border-radius:6px;
-
     text-decoration:none;
     color:#333;
-
     transition:.3s;
 }
 
@@ -167,25 +146,19 @@ body{
     color:#fff;
 }
 
-/* ==========================
-   انیمیشن لوگو
-========================== */
-
+/* انیمیشن */
 @keyframes logoIntro{
-
     0%{
         opacity:0;
         transform:translate(-50%,-50%) scale(.2);
     }
-
     50%{
         opacity:1;
         transform:translate(-50%,-50%) scale(1.2);
     }
-
     100%{
         opacity:1;
-        transform:translate(-50%,-110px) scale(1);
+        transform:translate(-50%,-calc(50vh - 30px)) scale(1);
     }
 }
 
@@ -195,14 +168,14 @@ body{
     }
 }
 
-/* ==========================
-   موبایل
-========================== */
-
+/* موبایل */
 @media(max-width:480px){
-
     .logo-wrapper{
         width:100px;
+    }
+
+    .content-section{
+        margin-top:50px;
     }
 
     .branch-address{
@@ -217,7 +190,6 @@ body{
         min-width:160px;
     }
 }
-
 </style>
 </head>
 
@@ -225,93 +197,54 @@ body{
 
 <div class="main-container">
 
-    <!-- لوگو -->
-
     <div class="logo-section">
-
         <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
-
     </div>
-
-    <!-- شعب -->
 
     <div class="content-section">
 
         <div class="branch-item">
-
             <div class="branch-address">
                 شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
             </div>
-
-            <a href="tel:03136264237" class="branch-phone">
-                ☎ 03136264237
-            </a>
-
+            <a href="tel:03136264237" class="branch-phone">☎ 03136264237</a>
             <div class="branch-divider"></div>
-
         </div>
 
         <div class="branch-item">
-
             <div class="branch-address">
                 شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
             </div>
-
-            <a href="tel:03136264237" class="branch-phone">
-                ☎ 03136264237
-            </a>
-
+            <a href="tel:03136264237" class="branch-phone">☎ 03136264237</a>
             <div class="branch-divider"></div>
-
         </div>
 
         <div class="branch-item">
-
             <div class="branch-address">
                 شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
             </div>
-
-            <a href="tel:03136610848" class="branch-phone">
-                ☎ 03136610848
-            </a>
-
+            <a href="tel:03136610848" class="branch-phone">☎ 03136610848</a>
             <div class="branch-divider"></div>
-
         </div>
 
         <a href="https://instagram.com/tivan.shop"
            target="_blank"
            rel="noopener noreferrer"
            class="instagram-link">
-
             <svg class="instagram-svg" viewBox="0 0 24 24">
                 <path d="M7,2C4.24,2 2,4.24 2,7V17C2,19.76 4.24,22 7,22H17C19.76,22 22,19.76 22,17V7C22,4.24 19.76,2 17,2H7M18,4A1,1 0 0,1 19,5A1,1 0 0,1 18,6A1,1 0 0,1 17,5A1,1 0 0,1 18,4M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
             </svg>
-
             <span>instagram.com/tivan.shop</span>
-
         </a>
-
     </div>
 
-    <!-- دکمه ها -->
-
     <div class="footer-section">
-
         <div class="button-group">
-
-            <a href="hamkari.html" class="btn">
-                فرم همکاری
-            </a>
-
-            <a href="gallery.html" class="btn">
-                گالری عکس‌ها
-            </a>
-
+            <a href="hamkari.html" class="btn">فرم همکاری</a>
+            <a href="gallery.html" class="btn">گالری عکس‌ها</a>
         </div>
-
     </div>
 
 </div>
