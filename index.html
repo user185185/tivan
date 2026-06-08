@@ -31,10 +31,10 @@ body{
     padding:20px;
 }
 
+/* لوگو */
 .logo-section{
     position:relative;
-    height:120px;
-    overflow:hidden;
+    height:0;
 }
 
 .logo-wrapper{
@@ -47,6 +47,7 @@ body{
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
     z-index:100;
     will-change:transform, top, opacity;
+    pointer-events:none;
 }
 
 .logo-wrapper img{
@@ -54,10 +55,10 @@ body{
     display:block;
 }
 
+/* محتوا */
 .content-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
-    margin-top:30px;
 }
 
 .branch-item{
@@ -103,6 +104,7 @@ body{
     margin:8px auto 0 auto;
 }
 
+/* اینستاگرام */
 .instagram-link{
     display:flex;
     justify-content:center;
@@ -125,19 +127,11 @@ body{
     fill:#E1306C;
 }
 
-.footer-divider{
-    width:90%;
-    max-width:420px;
-    height:1px;
-    background:#d6d6d6;
-    margin:18px auto 0 auto;
-}
-
+/* دکمه ها */
 .footer-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
     text-align:center;
-    margin-top:18px;
 }
 
 .button-group{
@@ -164,6 +158,15 @@ body{
     color:#fff;
 }
 
+.footer-divider{
+    width:90%;
+    max-width:420px;
+    height:1px;
+    background:#d6d6d6;
+    margin:18px auto 0 auto;
+}
+
+/* انیمیشن */
 @keyframes logoIntro{
     0%{
         opacity:0;
@@ -188,17 +191,10 @@ body{
     }
 }
 
+/* موبایل */
 @media(max-width:480px){
     .logo-wrapper{
         width:100px;
-    }
-
-    .logo-section{
-        height:120px;
-    }
-
-    .content-section{
-        margin-top:30px;
     }
 
     .branch-address{
@@ -228,12 +224,12 @@ body{
 <div class="main-container">
 
     <div class="logo-section">
-        <div class="logo-wrapper">
+        <div class="logo-wrapper" id="logoWrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
 
-    <div class="content-section">
+    <div class="content-section" id="contentSection">
 
         <div class="branch-item">
             <div class="branch-address">
@@ -284,17 +280,32 @@ body{
             <span>instagram.com/tivan.shop</span>
         </a>
 
+        <div class="footer-section">
+            <div class="button-group">
+                <a href="hamkari.html" class="btn">فرم همکاری</a>
+                <a href="gallery.html" class="btn">گالری عکس‌ها</a>
+            </div>
+        </div>
+
         <div class="footer-divider"></div>
     </div>
 
-    <div class="footer-section">
-        <div class="button-group">
-            <a href="hamkari.html" class="btn">فرم همکاری</a>
-            <a href="gallery.html" class="btn">گالری عکس‌ها</a>
-        </div>
-    </div>
-
 </div>
+
+<script>
+(function () {
+    const logoWrapper = document.getElementById('logoWrapper');
+    const contentSection = document.getElementById('contentSection');
+
+    function syncContentOffset() {
+        const logoHeight = logoWrapper.getBoundingClientRect().height || 0;
+        contentSection.style.marginTop = (logoHeight + 60) + 'px';
+    }
+
+    window.addEventListener('load', syncContentOffset);
+    window.addEventListener('resize', syncContentOffset);
+})();
+</script>
 
 </body>
 </html>
