@@ -156,14 +156,6 @@ body{
     color:#fff;
 }
 
-.footer-divider{
-    width:90%;
-    max-width:420px;
-    height:1px;
-    background:#d6d6d6;
-    margin:18px auto 0 auto;
-}
-
 @keyframes logoIntro{
     0%{
         opacity:0;
@@ -177,7 +169,7 @@ body{
     }
     100%{
         opacity:1;
-        top:22px;
+        top:20px; /* هماهنگ با جاوا اسکریپت */
         transform:translate(-50%,0) scale(1);
     }
 }
@@ -279,6 +271,7 @@ body{
             </svg>
             <span>instagram.com/tivan.shop</span>
         </a>
+        <div class="branch-divider"></div>
     </div>
 
     <div class="footer-section">
@@ -286,6 +279,8 @@ body{
             <a href="hamkari.html" class="btn">فرم همکاری</a>
             <a href="gallery.html" class="btn">گالری عکس‌ها</a>
         </div>
+        <div class="branch-divider" style="margin-top: 18px;"></div>
+    </div>
 </div>
 
 <script>
@@ -303,7 +298,7 @@ body{
         logoWrapper.style.animation = 'none';
         logoWrapper.style.position = 'absolute';
         logoWrapper.style.left = '50%';
-        logoWrapper.style.top = '20px';
+        logoWrapper.style.top = '20px'; /* هماهنگ با انیمیشن CSS */
         logoWrapper.style.transform = 'translateX(-50%)';
         logoWrapper.style.opacity = '1';
         syncLogoSectionHeight();
