@@ -32,43 +32,54 @@
             overflow-y: auto;
         }
 
-        .main-container {
-            width: 100%;
-            max-width: 500px;
+.main-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    min-height: 550px;
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-            text-align: center;
-            padding: 20px;
-        }
+    text-align: center;
+    padding: 20px;
+}
 
-        .logo-wrapper {
-            width: 120px;
-            opacity: 0;
-            animation: introAnimation 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
-        }
+.logo-wrapper {
+    position: fixed;
 
+    top: 50%;
+    left: 50%;
+
+    width: 120px;
+    height: auto;
+
+    transform: translate(-50%, -50%);
+    opacity: 0;
+
+    animation: logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
+
+    z-index: 100;
+}
         .logo-wrapper img {
             width: 100%;
             height: auto;
             display: block;
         }
 
-        .info-container {
-            margin-top: -40px;
+.info-container {
+    margin-top: 180px;
 
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 2.5s;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 2.5s;
 
-            width: 100%;
-            max-width: 400px;
-            padding: 0 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 0 20px;
 
-            line-height: 1.9;
-        }
+    line-height: 1.9;
+}
 
 .info-item {
     font-size: 15px;
@@ -155,44 +166,44 @@
             color: #fff;
         }
 
-        @keyframes introAnimation {
-            0% {
-                opacity: 0;
-                transform: scale(0.2);
-            }
+@keyframes logoIntro {
 
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2);
+    }
 
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(-100px);
-            }
-        }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
 
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -220px) scale(1);
+    }
+}
         @keyframes fadeIn {
             to {
                 opacity: 1;
             }
         }
 
-        @media (max-width:480px){
+@media (max-width:480px){
 
-            .logo-wrapper{
-                width:100px;
-            }
+    .logo-wrapper{
+        width:100px;
+    }
 
-            .info-container{
-                margin-top:-30px;
-            }
+    .info-container{
+        margin-top:160px;
+    }
 
-            .btn{
-                width:100%;
-                max-width:220px;
-            }
-        }
+    .btn{
+        width:100%;
+        max-width:220px;
+    }
+}
     </style>
 </head>
 <body>
