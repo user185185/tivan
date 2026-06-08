@@ -15,230 +15,6 @@
         *{
             box-sizing:border-box;
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #ffffff;
-            font-family: 'Vazirmatn', sans-serif;
-
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-.main-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    min-height: 550px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    text-align: center;
-    padding: 20px;
-}
-
-.logo-wrapper {
-    position: fixed;
-
-    top: 50%;
-    left: 50%;
-
-    width: 120px;
-    height: auto;
-
-    transform: translate(-50%, -50%);
-    opacity: 0;
-
-    animation: logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
-
-    z-index: 100;
-}
-        .logo-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-.info-container {
-    margin-top: 180px;
-
-    opacity: 0;
-    animation: fadeIn 1s ease forwards 2.5s;
-
-    width: 100%;
-    max-width: 400px;
-    padding: 0 20px;
-
-    line-height: 1.9;
-}
-
-.info-item {
-    font-size: 15px;
-    color: #444;
-    margin-bottom: 12px;
-    font-weight: 400;
-    word-wrap: break-word;
-    line-height: 1.9;
-}
-
-        .phone-link,
-        .instagram-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-
-            direction: ltr;
-
-            text-decoration: none;
-            margin-bottom: 10px;
-
-            transition: transform .2s ease;
-        }
-
-        .phone-link:hover,
-        .instagram-link:hover {
-            transform: scale(1.03);
-        }
-
-        .phone-svg,
-        .instagram-svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .phone-svg {
-            fill: #25D366;
-        }
-
-        .instagram-svg {
-            fill: #E1306C;
-        }
-
-        .phone-text,
-        .instagram-text {
-            color: #444;
-            font-size: 15px;
-            font-weight: 400;
-        }
-
-        .button-group {
-            margin-top: 25px;
-
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-
-            padding: 8px 22px;
-
-            border: 1.5px solid #333;
-            border-radius: 5px;
-
-            text-decoration: none;
-            color: #333;
-            background: transparent;
-
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-
-            transition: all .3s ease;
-        }
-
-        .btn:hover {
-            background: #333;
-            color: #fff;
-        }
-
-@keyframes logoIntro {
-
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.2);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.2);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -220px) scale(1);
-    }
-}
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-@media (max-width:480px){
-
-    .logo-wrapper{
-        width:100px;
-    }
-
-    .info-container{
-        margin-top:160px;
-    }
-
-    .btn{
-        width:100%;
-        max-width:220px;
-    }
-}
-        .branch-item {
-    text-align: right;
-    margin-bottom: 18px;
-    color: #444;
-    line-height: 1.9;
-}
-
-.branch-address {
-    font-size: 15px;
-    margin-bottom: 5px;
-}
-
-.branch-phone {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    direction: ltr;
-    justify-content: flex-end;
-    text-decoration: none;
-    color: #444;
-    font-size: 14px;
-}
-
-.branch-phone:hover {
-    opacity: 0.8;
-}
-
-.branch-phone svg {
-    width: 18px;
-    height: 18px;
-    fill: #25D366;
-    flex-shrink: 0;
-}
-    </style>
-</head>
 <body>
 
 <div class="main-container">
@@ -247,54 +23,46 @@
         <img src="logo-title-red-c.png" alt="لوگوی فروشگاه تیوان">
     </div>
 
-<div class="branch-item">
-    <div class="branch-address">
-        📍 شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
-    </div>
+    <div class="info-container">
 
-    <a href="tel:03136264237" class="branch-phone">
-        <svg viewBox="0 0 24 24">
-            <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-        </svg>
-        03136264237
-    </a>
-</div>
+        <div class="branch-item">
+            <div class="branch-address">
+                📍 شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
+            </div>
 
-<div class="branch-item">
-    <div class="branch-address">
-        📍 شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
-    </div>
+            <a href="tel:03136264237" class="branch-phone">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+                </svg>
+                03136264237
+            </a>
+        </div>
 
-    <a href="tel:03136264237" class="branch-phone">
-        <svg viewBox="0 0 24 24">
-            <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-        </svg>
-        03136264237
-    </a>
-</div>
+        <div class="branch-item">
+            <div class="branch-address">
+                📍 شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
+            </div>
 
-<div class="branch-item">
-    <div class="branch-address">
-        📍 شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
-    </div>
+            <a href="tel:03136264237" class="branch-phone">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+                </svg>
+                03136264237
+            </a>
+        </div>
 
-    <a href="tel:03136610848" class="branch-phone">
-        <svg viewBox="0 0 24 24">
-            <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-        </svg>
-        03136610848
-    </a>
-</div>
+        <div class="branch-item">
+            <div class="branch-address">
+                📍 شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
+            </div>
 
-        <a href="tel:03136264237" class="phone-link">
-
-            <svg class="phone-svg" viewBox="0 0 24 24">
-                <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-            </svg>
-
-            <span class="phone-text">03136264237</span>
-
-        </a>
+            <a href="tel:03136610848" class="branch-phone">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
+                </svg>
+                03136610848
+            </a>
+        </div>
 
         <a href="https://instagram.com/tivan.shop"
            target="_blank"
