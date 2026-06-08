@@ -31,10 +31,10 @@ body{
     padding:20px;
 }
 
-/* لوگو */
 .logo-section{
     position:relative;
-    height:0;
+    height:180px;
+    overflow:hidden;
 }
 
 .logo-wrapper{
@@ -47,7 +47,6 @@ body{
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
     z-index:100;
     will-change:transform, top, opacity;
-    pointer-events:none;
 }
 
 .logo-wrapper img{
@@ -55,7 +54,6 @@ body{
     display:block;
 }
 
-/* محتوا */
 .content-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
@@ -78,6 +76,7 @@ body{
     align-items:center;
     gap:8px;
     direction:ltr;
+
     text-decoration:none;
     color:#444;
     margin-top:6px;
@@ -104,7 +103,6 @@ body{
     margin:8px auto 0 auto;
 }
 
-/* اینستاگرام */
 .instagram-link{
     display:flex;
     justify-content:center;
@@ -127,14 +125,19 @@ body{
     fill:#E1306C;
 }
 
-/* دکمه ها */
+.footer-section{
+    opacity:0;
+    animation:fadeIn 1s ease forwards 2.5s;
+    text-align:center;
+    margin-top:18px;
+}
+
 .button-group{
     display:flex;
     justify-content:center;
     align-items:center;
     gap:12px;
     flex-wrap:nowrap;
-    margin-top:4px;
 }
 
 .btn{
@@ -161,7 +164,6 @@ body{
     margin:18px auto 0 auto;
 }
 
-/* انیمیشن */
 @keyframes logoIntro{
     0%{
         opacity:0;
@@ -175,7 +177,7 @@ body{
     }
     100%{
         opacity:1;
-        top:30px;
+        top:20px;
         transform:translate(-50%,0) scale(1);
     }
 }
@@ -186,10 +188,13 @@ body{
     }
 }
 
-/* موبایل */
 @media(max-width:480px){
     .logo-wrapper{
         width:100px;
+    }
+
+    .logo-section{
+        height:160px;
     }
 
     .branch-address{
@@ -218,13 +223,13 @@ body{
 
 <div class="main-container">
 
-    <div class="logo-section">
+    <div class="logo-section" id="logoSection">
         <div class="logo-wrapper" id="logoWrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
 
-    <div class="content-section" id="contentSection">
+    <div class="content-section">
 
         <div class="branch-item">
             <div class="branch-address">
@@ -274,12 +279,13 @@ body{
             </svg>
             <span>instagram.com/tivan.shop</span>
         </a>
+    </div>
 
+    <div class="footer-section">
         <div class="button-group">
             <a href="hamkari.html" class="btn">فرم همکاری</a>
             <a href="gallery.html" class="btn">گالری عکس‌ها</a>
         </div>
-
         <div class="footer-divider"></div>
     </div>
 
@@ -288,28 +294,31 @@ body{
 <script>
 (function () {
     const logoWrapper = document.getElementById('logoWrapper');
-    const contentSection = document.getElementById('contentSection');
+    const logoSection = document.getElementById('logoSection');
 
-    function updateLayout() {
-        const logoHeight = logoWrapper.getBoundingClientRect().height || 120;
-        contentSection.style.marginTop = (logoHeight + 40) + 'px';
+    function syncLogoSectionHeight() {
+        const logoRect = logoWrapper.getBoundingClientRect();
+        const height = Math.ceil(logoRect.height + 50);
+        logoSection.style.height = height + 'px';
     }
 
     function settleLogo() {
         logoWrapper.style.animation = 'none';
-        logoWrapper.style.position = 'fixed';
+        logoWrapper.style.position = 'absolute';
         logoWrapper.style.left = '50%';
-        logoWrapper.style.top = '30px';
+        logoWrapper.style.top = '20px';
         logoWrapper.style.transform = 'translateX(-50%)';
         logoWrapper.style.opacity = '1';
+        syncLogoSectionHeight();
     }
 
     window.addEventListener('load', () => {
-        updateLayout();
-        setTimeout(settleLogo, 2500);
+        syncLogoSectionHeight();
+        requestAnimationFrame(syncLogoSectionHeight);
     });
 
-    window.addEventListener('resize', updateLayout);
+    window.addEventListener('resize', syncLogoSectionHeight);
+    logoWrapper.addEventListener('animationend', settleLogo);
 })();
 </script>
 
