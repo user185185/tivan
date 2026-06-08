@@ -206,7 +206,7 @@ body{
     flex-shrink:0;
 }
 
-/* استایل مشترک پاپ‌آپ‌ها (طراحی مدرن با شیشه مات پشت صفحه) */
+/* استایل پاپ‌آپ‌ها با افکت شیشه‌ای (Blur) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -259,7 +259,7 @@ body{
     margin-bottom: 20px;
 }
 
-/* المان‌های اختصاصی فرم باشگاه مشتریان */
+/* استایل‌های شیک فرم اختصاصی */
 .club-form-group {
     display: flex;
     flex-direction: column;
@@ -318,15 +318,8 @@ body{
     display: none;
 }
 
-.form-feedback.success {
-    color: #10b981;
-    display: block;
-}
-
-.form-feedback.error {
-    color: #ef4444;
-    display: block;
-}
+.form-feedback.success { color: #10b981; display: block; }
+.form-feedback.error { color: #ef4444; display: block; }
 
 /* پاپ‌آپ مپ */
 .apps-list {
@@ -376,33 +369,15 @@ body{
     font-weight: 500;
 }
 
-.close-modal-btn:hover {
-    color: #ef4444;
-}
+.close-modal-btn:hover { color: #ef4444; }
 
 @keyframes logoIntro{
-    0%{
-        opacity:0;
-        top:50vh;
-        transform:translate(-50%, -50%) scale(.2);
-    }
-    50%{
-        opacity:1;
-        top:50vh;
-        transform:translate(-50%, -50%) scale(1.2);
-    }
-    100%{
-        opacity:1;
-        top:30px;
-        transform:translate(-50%, 0) scale(1);
-    }
+    0%{ opacity:0; top:50vh; transform:translate(-50%, -50%) scale(.2); }
+    50%{ opacity:1; top:50vh; transform:translate(-50%, -50%) scale(1.2); }
+    100%{ opacity:1; top:30px; transform:translate(-50%, 0) scale(1); }
 }
 
-@keyframes fadeIn{
-    to{
-        opacity:1;
-    }
-}
+@keyframes fadeIn{ to{ opacity:1; } }
 
 @media(max-width:480px){
     .logo-wrapper{ width:100px; }
@@ -419,7 +394,6 @@ body{
 <body>
 
 <div class="main-container">
-
     <div class="logo-section">
         <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
@@ -427,6 +401,7 @@ body{
     </div>
 
     <div class="content-section">
+        <!-- شعب -->
         <div class="branch-item">
             <div class="branch-address">شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
             <div class="branch-links">
@@ -507,6 +482,7 @@ body{
     </div>
 </div>
 
+<!-- پاپ‌آپ زیبای باشگاه مشتریان -->
 <div class="modal-overlay" id="clubModalOverlay">
     <div class="custom-modal">
         <div class="modal-title">عضویت در باشگاه مشتریان</div>
@@ -522,6 +498,7 @@ body{
     </div>
 </div>
 
+<!-- پاپ‌آپ نقشه -->
 <div class="modal-overlay" id="mapModalOverlay">
     <div class="custom-modal">
         <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
@@ -546,7 +523,6 @@ body{
 
 <script>
 (function() {
-    // مدیریت پاپ‌آپ نقشه
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
     var closeMapBtn = document.getElementById('closeMapModalBtn');
@@ -567,7 +543,6 @@ body{
 
     closeMapBtn.addEventListener('click', function() { mapOverlay.classList.remove('active'); });
 
-    // مدیریت پاپ‌آپ باشگاه مشتریان
     var openClubBtn = document.getElementById('openClubBtn');
     var clubOverlay = document.getElementById('clubModalOverlay');
     var closeClubBtn = document.getElementById('closeClubModalBtn');
@@ -584,21 +559,17 @@ body{
 
     closeClubBtn.addEventListener('click', function() { clubOverlay.classList.remove('active'); });
 
-    // بستن پاپ‌آپ‌ها با کلیک روی فضای بیرون
     window.addEventListener('click', function(e) {
-        if (e.target === mapOverlay) mapOverlay.classList.remove('active');
+        if (e.target === mapOverlay) mapOverlay.classList.remove('remove');
         if (e.target === clubOverlay) clubOverlay.classList.remove('active');
     });
 
-    // عملیات ثبت شماره تلفن و اتصال به بک‌اند
     submitPhoneBtn.addEventListener('click', function() {
         var phone = clientPhoneInput.value.trim();
-        
-        // اعتبار سنجی شماره موبایل ایران
         var phoneRegex = /^09[0-9]{9}$/;
         if (!phoneRegex.test(phone)) {
             formFeedback.className = 'form-feedback error';
-            formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی (مثل ۰۹۱۲۳۴۵۶۷۸۹) وارد کنید.';
+            formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
             return;
         }
 
@@ -606,28 +577,25 @@ body{
         formFeedback.innerText = 'در حال ثبت...';
         submitPhoneBtn.disabled = true;
 
-        // ارسال شماره به فایل واسط PHP امن
-        fetch('club.php', {
+        // 🔴 آدرس نهایی وب‌اپلیکیشن گوگل که در قدم دوم می‌سازید را اینجا بین دو کوتیشن بگذارید:
+        var googleScriptUrl = 'YOUR_GOOGLE_WEB_APP_URL_HERE';
+
+        fetch(googleScriptUrl, {
             method: 'POST',
+            mode: 'no-cors', // برای دور زدن خطای CORS در گیت‌هاب پیجز
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: phone })
         })
-        .then(response => response.json())
-        .then(data => {
+        .then(function() {
             submitPhoneBtn.disabled = false;
-            if (data.success) {
-                formFeedback.className = 'form-feedback success';
-                formFeedback.innerText = 'شماره شما با موفقیت در باشگاه مشتریان تیوان ثبت شد. 🎉';
-                setTimeout(() => { clubOverlay.classList.remove('active'); }, 2500);
-            } else {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = data.message || 'خطایی رخ داد. دوباره تلاش کنید.';
-            }
+            formFeedback.className = 'form-feedback success';
+            formFeedback.innerText = 'شماره شما با موفقیت در باشگاه مشتریان تیوان ثبت شد. 🎉';
+            setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
         })
-        .catch(error => {
+        .catch(function() {
             submitPhoneBtn.disabled = false;
             formFeedback.className = 'form-feedback error';
-            formFeedback.innerText = 'خطا در ارتباط با سرور. لطفاً اتصال خود را بررسی کنید.';
+            formFeedback.innerText = 'خطایی رخ داد. دوباره تلاش کنید.';
         });
     });
 })();
