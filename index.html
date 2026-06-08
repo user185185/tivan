@@ -119,7 +119,7 @@ body{
     margin:12px auto 0 auto;
 }
 
-/* بخش اختصاصی اینستاگرام سنتر شده */
+/* بخش اختصاصی اینستاگرام */
 .instagram-section{
     display:flex;
     justify-content:center;
@@ -133,7 +133,7 @@ body{
     justify-content:center;
     align-items:center;
     gap:8px;
-    direction:ltr; /* جهت چپ به راست برای قرارگیری لوگو در سمت چپ متن */
+    direction:ltr;
     text-decoration:none;
     color:#444;
     font-size:15px;
@@ -153,6 +153,7 @@ body{
     flex-shrink:0;
 }
 
+/* بخش نوین دکمه‌های فوتر با استایل کپسولی و فشرده */
 .footer-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
@@ -164,24 +165,43 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:12px;
-    flex-wrap:nowrap;
+    gap:10px;
+    width:100%;
+    max-width:460px;
+    margin:0 auto;
 }
 
 .btn{
-    display:inline-block;
-    min-width:160px;
-    padding:10px 24px;
-    border:1.5px solid #333;
-    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
     text-decoration:none;
-    color:#333;
-    transition:.3s;
+    color:#222;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:50px;
+    padding:10px 12px;
+    font-size:13px;
+    font-weight:500;
+    transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    width:135px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.03);
 }
 
 .btn:hover{
-    background:#333;
+    background:#222;
     color:#fff;
+    border-color:#222;
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.btn svg{
+    width:16px;
+    height:16px;
+    fill:currentColor;
+    flex-shrink:0;
 }
 
 /* پاپ‌آپ انتخاب نقشه */
@@ -311,6 +331,7 @@ body{
     }
 }
 
+/* ریسپانسیو فوق‌العاده دقیق برای صفحات موبایل */
 @media(max-width:480px){
     .logo-wrapper{
         width:100px;
@@ -329,14 +350,22 @@ body{
     }
 
     .button-group{
-        gap:10px;
+        gap:6px;
+        padding:0 4px;
     }
 
     .btn{
-        width:calc(50% - 5px);
+        width:calc(33.33% - 4px);
         min-width:0;
-        padding:10px 12px;
-        font-size:13px;
+        padding:8px 2px;
+        font-size:11px;
+        border-radius:30px;
+        gap:4px;
+    }
+    
+    .btn svg{
+        width:13px;
+        height:13px;
     }
 }
 </style>
@@ -346,14 +375,17 @@ body{
 
 <div class="main-container">
 
+    <!-- بخش لوگو -->
     <div class="logo-section">
         <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
 
+    <!-- بخش محتوا و شعب -->
     <div class="content-section">
 
+        <!-- شعبه مرکزی -->
         <div class="branch-item">
             <div class="branch-address">
                 شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
@@ -375,6 +407,7 @@ body{
             <div class="branch-divider"></div>
         </div>
 
+        <!-- شعبه ۱ -->
         <div class="branch-item">
             <div class="branch-address">
                 شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
@@ -396,6 +429,7 @@ body{
             <div class="branch-divider"></div>
         </div>
 
+        <!-- شعبه ۲ -->
         <div class="branch-item">
             <div class="branch-address">
                 شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
@@ -417,6 +451,7 @@ body{
             <div class="branch-divider"></div>
         </div>
 
+        <!-- دکمه اینستاگرام با رنگ گرادینت اصلی و لوگو در سمت چپ متن -->
         <div class="instagram-section">
             <a href="https://instagram.com/tivan.shop" target="_blank" rel="noopener noreferrer" class="instagram-link">
                 <svg class="instagram-svg" viewBox="0 0 24 24" aria-hidden="true">
@@ -437,27 +472,50 @@ body{
         <div class="branch-divider"></div>
     </div>
 
+    <!-- فوتر (۳ دکمه جدید کپسولی با چیدمان و ترتیب کاملا سفارشی) -->
     <div class="footer-section">
         <div class="button-group">
-            <a href="hamkari.html" class="btn">فرم همکاری</a>
-            <a href="gallery.html" class="btn">گالری عکس‌ها</a>
+            <!-- اولی از راست: باشگاه مشتریان -->
+            <a href="club.html" class="btn">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+                <span>باشگاه مشتریان</span>
+            </a>
+            <!-- دومی از راست (وسط): درخواست همکاری -->
+            <a href="hamkari.html" class="btn">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                </svg>
+                <span>درخواست همکاری</span>
+            </a>
+            <!-- سومی از راست (چپ): گالری تصاویر -->
+            <a href="gallery.html" class="btn">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg>
+                <span>گالری تصاویر</span>
+            </a>
         </div>
         <div class="branch-divider" style="margin-top: 18px;"></div>
     </div>
 </div>
 
+<!-- کانتینر پاپ‌آپ انتخاب نقشه -->
 <div class="map-modal-overlay" id="mapModalOverlay">
     <div class="map-modal">
         <div class="map-modal-title">انتخاب اپلیکیشن مسیریاب</div>
         <div class="map-modal-subtitle">لطفاً نقشه مورد نظر خود را انتخاب کنید:</div>
         
         <div class="apps-list">
+            <!-- گوگل مپ -->
             <a href="#" target="_blank" class="app-btn" id="link-google">
                 <svg class="app-icon" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
                 </svg>
                 <span>گوگل مپ (Google Maps)</span>
             </a>
+            <!-- نشان -->
             <a href="#" target="_blank" class="app-btn" id="link-neshan">
                 <svg class="app-icon" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10" fill="#0084FF"/>
@@ -465,6 +523,7 @@ body{
                 </svg>
                 <span>مسیریاب نشان</span>
             </a>
+            <!-- بلد -->
             <a href="#" target="_blank" class="app-btn" id="link-balad">
                 <svg class="app-icon" viewBox="0 0 24 24">
                     <rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/>
@@ -478,6 +537,7 @@ body{
     </div>
 </div>
 
+<!-- اسکریپت هماهنگ‌سازی موقعیت‌ها با متدهای استاندارد و نوین وب -->
 <script>
 (function() {
     var triggers = document.querySelectorAll('.open-map-trigger');
@@ -493,7 +553,7 @@ body{
             var lat = this.getAttribute('data-lat');
             var lng = this.getAttribute('data-lng');
             
-            // فرمت‌های دقیق برای سنجاق کردن لوکیشن در نقشه‌های مختلف
+            // لینک رسمی متد سرچ گوگل مپ بدون تداخل با اپلیکیشن ویز
             googleLink.href = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
             neshanLink.href = 'https://neshan.org/maps/search/' + lat + ',' + lng;
             baladLink.href = 'https://balad.ir/location?lat=' + lat + '&lng=' + lng;
