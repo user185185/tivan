@@ -1,235 +1,296 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فروشگاه تیوان</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="فروشگاه پوشاک تیوان - عرضه انواع پوشاک زنانه در اصفهان">
+<title>فروشگاه تیوان</title>
 
-    <link rel="icon" type="image/png" href="logo-title-red-c.png">
+<meta name="description" content="فروشگاه پوشاک تیوان">
 
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo-title-red-c.png">
 
-    <style>
-        *{
-            box-sizing:border-box;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;500;700&display=swap" rel="stylesheet">
 
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
+<style>
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-            background: #ffffff;
-            font-family: 'Vazirmatn', sans-serif;
+body{
+    min-height:100vh;
+    background:#fff;
+    font-family:'Vazirmatn',sans-serif;
+    overflow-x:hidden;
+}
 
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
+.main-container{
+    width:100%;
+    max-width:550px;
+    margin:auto;
+    padding:20px;
+}
 
-        .main-container {
-            width: 100%;
-            max-width: 500px;
+/* ==========================
+   بخش لوگو
+========================== */
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+.logo-section{
+    height:220px;
+    position:relative;
+}
 
-            text-align: center;
-            padding: 20px;
-        }
+.logo-wrapper{
+    width:120px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    opacity:0;
 
-        .logo-wrapper {
-            width: 120px;
-            opacity: 0;
-            animation: introAnimation 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
-        }
+    transform:translate(-50%,-50%);
 
-        .logo-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+    animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
+}
 
-        .info-container {
-            margin-top: -40px;
+.logo-wrapper img{
+    width:100%;
+    display:block;
+}
 
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 2.5s;
+/* ==========================
+   بخش محتوا
+========================== */
 
-            width: 100%;
-            max-width: 400px;
-            padding: 0 20px;
+.content-section{
+    opacity:0;
+    animation:fadeIn 1s ease forwards 2.5s;
+}
 
-            line-height: 1.9;
-        }
+.branch-item{
+    margin-bottom:22px;
+}
 
-        .info-item {
-            color: #444;
-            margin-bottom: 10px;
-            font-size: clamp(14px, 2vw, 15px);
-            font-weight: 400;
-            word-wrap: break-word;
-        }
+.branch-address{
+    text-align:right;
+    color:#444;
+    font-size:15px;
+    line-height:2;
+}
 
-        .phone-link,
-        .instagram-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+.branch-phone{
+    display:block;
+    text-align:center;
+    text-decoration:none;
+    color:#444;
+    margin-top:8px;
+    font-size:15px;
+}
 
-            direction: ltr;
+.branch-phone:hover{
+    opacity:.8;
+}
 
-            text-decoration: none;
-            margin-bottom: 10px;
+.branch-divider{
+    width:85%;
+    height:1px;
+    background:#d8d8d8;
+    margin:18px auto 0 auto;
+}
 
-            transition: transform .2s ease;
-        }
+/* ==========================
+   اینستاگرام
+========================== */
 
-        .phone-link:hover,
-        .instagram-link:hover {
-            transform: scale(1.03);
-        }
+.instagram-link{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
 
-        .phone-svg,
-        .instagram-svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
+    direction:ltr;
 
-        .phone-svg {
-            fill: #25D366;
-        }
+    text-decoration:none;
 
-        .instagram-svg {
-            fill: #E1306C;
-        }
+    color:#444;
 
-        .phone-text,
-        .instagram-text {
-            color: #444;
-            font-size: 15px;
-            font-weight: 400;
-        }
+    margin-top:25px;
+    margin-bottom:30px;
+}
 
-        .button-group {
-            margin-top: 25px;
+.instagram-svg{
+    width:20px;
+    height:20px;
+    fill:#E1306C;
+}
 
-            display: flex;
-            justify-content: center;
-            gap: 12px;
+/* ==========================
+   دکمه ها
+========================== */
 
-            flex-wrap: wrap;
-        }
+.footer-section{
+    opacity:0;
+    animation:fadeIn 1s ease forwards 2.5s;
+}
 
-        .btn {
-            display: inline-block;
+.button-group{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
 
-            padding: 8px 22px;
+.btn{
+    display:block;
 
-            border: 1.5px solid #333;
-            border-radius: 5px;
+    width:100%;
 
-            text-decoration: none;
-            color: #333;
-            background: transparent;
+    text-align:center;
 
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
+    padding:10px;
 
-            transition: all .3s ease;
-        }
+    border:1.5px solid #333;
+    border-radius:6px;
 
-        .btn:hover {
-            background: #333;
-            color: #fff;
-        }
+    color:#333;
+    text-decoration:none;
 
-        @keyframes introAnimation {
-            0% {
-                opacity: 0;
-                transform: scale(0.2);
-            }
+    transition:.3s;
+}
 
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+.btn:hover{
+    background:#333;
+    color:#fff;
+}
 
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(-100px);
-            }
-        }
+/* ==========================
+   انیمیشن
+========================== */
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
+@keyframes logoIntro{
 
-        @media (max-width:480px){
+    0%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(.2);
+    }
 
-            .logo-wrapper{
-                width:100px;
-            }
+    50%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1.2);
+    }
 
-            .info-container{
-                margin-top:-30px;
-            }
+    100%{
+        opacity:1;
+        transform:translate(-50%,-140px) scale(1);
+    }
+}
 
-            .btn{
-                width:100%;
-                max-width:220px;
-            }
-        }
-    </style>
+@keyframes fadeIn{
+    to{
+        opacity:1;
+    }
+}
+
+/* ==========================
+   موبایل
+========================== */
+
+@media(max-width:480px){
+
+    .logo-wrapper{
+        width:100px;
+    }
+
+    .branch-address{
+        font-size:14px;
+    }
+
+    .branch-phone{
+        font-size:14px;
+    }
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="main-container">
 
-    <div class="logo-wrapper">
-        <img src="logo-title-red-c.png" alt="لوگوی فروشگاه تیوان">
-    </div>
+    <!-- بخش لوگو -->
 
-    <div class="info-container">
+    <div class="logo-section">
 
-        <div class="info-item">
-            آدرس فروشگاه: اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
+        <div class="logo-wrapper">
+            <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
 
-        <a href="tel:03136264237" class="phone-link">
+    </div>
 
-            <svg class="phone-svg" viewBox="0 0 24 24">
-                <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-            </svg>
+    <!-- بخش شعب -->
 
-            <span class="phone-text">03136264237</span>
+    <div class="content-section">
 
-        </a>
+        <div class="branch-item">
+
+            <div class="branch-address">
+                📍 شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی
+            </div>
+
+            <a href="tel:03136264237" class="branch-phone">
+                ☎ 03136264237
+            </a>
+
+            <div class="branch-divider"></div>
+
+        </div>
+
+        <div class="branch-item">
+
+            <div class="branch-address">
+                📍 شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره
+            </div>
+
+            <a href="tel:03136264237" class="branch-phone">
+                ☎ 03136264237
+            </a>
+
+            <div class="branch-divider"></div>
+
+        </div>
+
+        <div class="branch-item">
+
+            <div class="branch-address">
+                📍 شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا
+            </div>
+
+            <a href="tel:03136610848" class="branch-phone">
+                ☎ 03136610848
+            </a>
+
+            <div class="branch-divider"></div>
+
+        </div>
 
         <a href="https://instagram.com/tivan.shop"
            target="_blank"
-           rel="noopener noreferrer"
            class="instagram-link">
 
             <svg class="instagram-svg" viewBox="0 0 24 24">
                 <path d="M7,2C4.24,2 2,4.24 2,7V17C2,19.76 4.24,22 7,22H17C19.76,22 22,19.76 22,17V7C22,4.24 19.76,2 17,2H7M18,4A1,1 0 0,1 19,5A1,1 0 0,1 18,6A1,1 0 0,1 17,5A1,1 0 0,1 18,4M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
             </svg>
 
-            <span class="instagram-text">instagram.com/tivan.shop</span>
+            <span>instagram.com/tivan.shop</span>
 
         </a>
+
+    </div>
+
+    <!-- دکمه ها -->
+
+    <div class="footer-section">
 
         <div class="button-group">
 
