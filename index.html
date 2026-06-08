@@ -33,7 +33,7 @@ body{
 
 .logo-section{
     position:relative;
-    height:180px;
+    height:120px;
     overflow:hidden;
 }
 
@@ -49,6 +49,16 @@ body{
     will-change:transform, top, opacity;
 }
 
+.logo-wrapper.logo-settled{
+    position:absolute;
+    left:50%;
+    top:20px;
+    width:120px;
+    opacity:1;
+    transform:translateX(-50%);
+    animation:none;
+}
+
 .logo-wrapper img{
     width:100%;
     display:block;
@@ -57,6 +67,7 @@ body{
 .content-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
+    margin-top:30px;
 }
 
 .branch-item{
@@ -76,7 +87,6 @@ body{
     align-items:center;
     gap:8px;
     direction:ltr;
-
     text-decoration:none;
     color:#444;
     margin-top:6px;
@@ -125,6 +135,14 @@ body{
     fill:#E1306C;
 }
 
+.footer-divider{
+    width:90%;
+    max-width:420px;
+    height:1px;
+    background:#d6d6d6;
+    margin:18px auto 0 auto;
+}
+
 .footer-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
@@ -156,14 +174,6 @@ body{
     color:#fff;
 }
 
-.footer-divider{
-    width:90%;
-    max-width:420px;
-    height:1px;
-    background:#d6d6d6;
-    margin:18px auto 0 auto;
-}
-
 @keyframes logoIntro{
     0%{
         opacity:0;
@@ -178,7 +188,7 @@ body{
     100%{
         opacity:1;
         top:20px;
-        transform:translate(-50%,0) scale(1);
+        transform:translate(-50%,-50%) scale(1);
     }
 }
 
@@ -189,12 +199,21 @@ body{
 }
 
 @media(max-width:480px){
+    .logo-section{
+        height:120px;
+    }
+
     .logo-wrapper{
         width:100px;
     }
 
-    .logo-section{
-        height:160px;
+    .logo-wrapper.logo-settled{
+        top:20px;
+        width:100px;
+    }
+
+    .content-section{
+        margin-top:30px;
     }
 
     .branch-address{
@@ -279,6 +298,8 @@ body{
             </svg>
             <span>instagram.com/tivan.shop</span>
         </a>
+
+        <div class="footer-divider"></div>
     </div>
 
     <div class="footer-section">
@@ -286,7 +307,6 @@ body{
             <a href="hamkari.html" class="btn">فرم همکاری</a>
             <a href="gallery.html" class="btn">گالری عکس‌ها</a>
         </div>
-        <div class="footer-divider"></div>
     </div>
 
 </div>
@@ -294,31 +314,12 @@ body{
 <script>
 (function () {
     const logoWrapper = document.getElementById('logoWrapper');
-    const logoSection = document.getElementById('logoSection');
-
-    function syncLogoSectionHeight() {
-        const logoRect = logoWrapper.getBoundingClientRect();
-        const height = Math.ceil(logoRect.height + 50);
-        logoSection.style.height = height + 'px';
-    }
 
     function settleLogo() {
-        logoWrapper.style.animation = 'none';
-        logoWrapper.style.position = 'absolute';
-        logoWrapper.style.left = '50%';
-        logoWrapper.style.top = '20px';
-        logoWrapper.style.transform = 'translateX(-50%)';
-        logoWrapper.style.opacity = '1';
-        syncLogoSectionHeight();
+        logoWrapper.classList.add('logo-settled');
     }
 
-    window.addEventListener('load', () => {
-        syncLogoSectionHeight();
-        requestAnimationFrame(syncLogoSectionHeight);
-    });
-
-    window.addEventListener('resize', syncLogoSectionHeight);
-    logoWrapper.addEventListener('animationend', settleLogo);
+    logoWrapper.addEventListener('animationend', settleLogo, { once: true });
 })();
 </script>
 
