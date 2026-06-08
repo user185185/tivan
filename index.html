@@ -43,7 +43,7 @@ body{
     top:50%;
     width:120px;
     opacity:0;
-    transform:translate(-50%,-50%);
+    transform:translate(-50%,-50%) scale(.2);
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
     z-index:100;
     will-change:transform, top, opacity;
@@ -169,8 +169,8 @@ body{
     }
     100%{
         opacity:1;
-        top:20px; /* هماهنگ با جاوا اسکریپت */
-        transform:translate(-50%,0) scale(1);
+        top:20px;
+        transform:translate(-50%, 0) scale(1); /* هماهنگی کامل با جاوا اسکریپت */
     }
 }
 
@@ -298,8 +298,8 @@ body{
         logoWrapper.style.animation = 'none';
         logoWrapper.style.position = 'absolute';
         logoWrapper.style.left = '50%';
-        logoWrapper.style.top = '20px'; /* هماهنگ با انیمیشن CSS */
-        logoWrapper.style.transform = 'translateX(-50%)';
+        logoWrapper.style.top = '20px';
+        logoWrapper.style.transform = 'translate(-50%, 0) scale(1)'; /* تطابق ۱۰۰٪ با پایان انیمیشن CSS */
         logoWrapper.style.opacity = '1';
         syncLogoSectionHeight();
     }
