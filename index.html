@@ -34,8 +34,7 @@ body{
 /* لوگو */
 .logo-section{
     position:relative;
-    height:150px;
-    overflow:hidden;
+    height:0;
 }
 
 .logo-wrapper{
@@ -47,15 +46,7 @@ body{
     transform:translate(-50%,-50%);
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
     z-index:100;
-}
-
-.logo-wrapper.logo-settled{
-    position:absolute;
-    left:50%;
-    top:30px;
-    transform:translateX(-50%) scale(1);
-    opacity:1;
-    animation:none;
+    will-change:transform, top, opacity;
 }
 
 .logo-wrapper img{
@@ -67,6 +58,7 @@ body{
 .content-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
+    margin-top:130px;
 }
 
 .branch-item{
@@ -99,7 +91,7 @@ body{
     max-width:420px;
     height:1px;
     background:#d6d6d6;
-    margin:10px auto 0 auto;
+    margin:8px auto 0 auto;
 }
 
 /* اینستاگرام */
@@ -169,7 +161,7 @@ body{
     }
     100%{
         opacity:1;
-        top:30px;
+        top:20px;
         transform:translate(-50%,0) scale(1);
     }
 }
@@ -184,6 +176,10 @@ body{
 @media(max-width:480px){
     .logo-wrapper{
         width:100px;
+    }
+
+    .content-section{
+        margin-top:130px;
     }
 
     .branch-address{
@@ -206,7 +202,7 @@ body{
 <div class="main-container">
 
     <div class="logo-section">
-        <div class="logo-wrapper" id="logoWrapper">
+        <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
@@ -256,13 +252,6 @@ body{
     </div>
 
 </div>
-
-<script>
-    const logo = document.getElementById('logoWrapper');
-    logo.addEventListener('animationend', () => {
-        logo.classList.add('logo-settled');
-    });
-</script>
 
 </body>
 </html>
