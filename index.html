@@ -34,7 +34,8 @@ body{
 /* لوگو */
 .logo-section{
     position:relative;
-    height:300px;
+    height:150px;
+    overflow:hidden;
 }
 
 .logo-wrapper{
@@ -48,6 +49,15 @@ body{
     z-index:100;
 }
 
+.logo-wrapper.logo-settled{
+    position:absolute;
+    left:50%;
+    top:30px;
+    transform:translateX(-50%) scale(1);
+    opacity:1;
+    animation:none;
+}
+
 .logo-wrapper img{
     width:100%;
     display:block;
@@ -57,11 +67,10 @@ body{
 .content-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
-    margin-top:50px;
 }
 
 .branch-item{
-    margin-bottom:14px;
+    margin-bottom:10px;
 }
 
 .branch-address{
@@ -102,7 +111,7 @@ body{
     direction:ltr;
     text-decoration:none;
     color:#444;
-    margin-top:22px;
+    margin-top:18px;
     margin-bottom:28px;
 }
 
@@ -150,15 +159,18 @@ body{
 @keyframes logoIntro{
     0%{
         opacity:0;
+        top:50%;
         transform:translate(-50%,-50%) scale(.2);
     }
     50%{
         opacity:1;
+        top:50%;
         transform:translate(-50%,-50%) scale(1.2);
     }
     100%{
         opacity:1;
-        transform:translate(-50%,-calc(50vh - 30px)) scale(1);
+        top:30px;
+        transform:translate(-50%,0) scale(1);
     }
 }
 
@@ -172,10 +184,6 @@ body{
 @media(max-width:480px){
     .logo-wrapper{
         width:100px;
-    }
-
-    .content-section{
-        margin-top:50px;
     }
 
     .branch-address{
@@ -198,7 +206,7 @@ body{
 <div class="main-container">
 
     <div class="logo-section">
-        <div class="logo-wrapper">
+        <div class="logo-wrapper" id="logoWrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
@@ -248,6 +256,13 @@ body{
     </div>
 
 </div>
+
+<script>
+    const logo = document.getElementById('logoWrapper');
+    logo.addEventListener('animationend', () => {
+        logo.classList.add('logo-settled');
+    });
+</script>
 
 </body>
 </html>
