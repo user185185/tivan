@@ -29,21 +29,23 @@ body{
     max-width:550px;
     margin:auto;
     padding:20px;
+    position: relative;
 }
 
+/* بخش لوگو با ارتفاع ثابت جهت جلوگیری از تداخل با متن‌ها هنگام اسکرول */
 .logo-section{
     position:relative;
-    height:180px;
-    overflow:hidden;
+    height:170px; 
+    width:100%;
+    overflow:visible;
 }
 
 .logo-wrapper{
-    position:fixed;
+    position:absolute;
     left:50%;
-    top:50%;
     width:120px;
     opacity:0;
-    transform:translate(-50%,-50%) scale(.2);
+    /* انیمیشن هوشمند بدون نیاز به جاوااسکریپت */
     animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
     z-index:100;
     will-change:transform, top, opacity;
@@ -156,21 +158,22 @@ body{
     color:#fff;
 }
 
+/* انیمیشن یکپارچه بدون تغییر موقعیت فنی (بدون پرش) */
 @keyframes logoIntro{
     0%{
         opacity:0;
-        top:50%;
-        transform:translate(-50%,-50%) scale(.2);
+        top:50vh; /* شروع دقیقاً از وسط قد صفحه نمایش */
+        transform:translate(-50%, -50%) scale(.2);
     }
     50%{
         opacity:1;
-        top:50%;
-        transform:translate(-50%,-50%) scale(1.2);
+        top:50vh;
+        transform:translate(-50%, -50%) scale(1.2);
     }
     100%{
         opacity:1;
-        top:20px;
-        transform:translate(-50%, 0) scale(1); /* هماهنگی کامل با جاوا اسکریپت */
+        top:30px; /* توقف قطعی در فاصله ۳۰ پیکسلی از بالا */
+        transform:translate(-50%, 0) scale(1);
     }
 }
 
@@ -180,13 +183,14 @@ body{
     }
 }
 
+/* بهینه‌سازی کامل برای موبایل و حالت لنداسکیپ (افقی) */
 @media(max-width:480px){
     .logo-wrapper{
         width:100px;
     }
 
     .logo-section{
-        height:160px;
+        height:150px; /* هماهنگی فضا در حالت موبایل */
     }
 
     .branch-address{
@@ -215,8 +219,8 @@ body{
 
 <div class="main-container">
 
-    <div class="logo-section" id="logoSection">
-        <div class="logo-wrapper" id="logoWrapper">
+    <div class="logo-section">
+        <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
@@ -282,37 +286,6 @@ body{
         <div class="branch-divider" style="margin-top: 18px;"></div>
     </div>
 </div>
-
-<script>
-(function () {
-    const logoWrapper = document.getElementById('logoWrapper');
-    const logoSection = document.getElementById('logoSection');
-
-    function syncLogoSectionHeight() {
-        const logoRect = logoWrapper.getBoundingClientRect();
-        const height = Math.ceil(logoRect.height + 50);
-        logoSection.style.height = height + 'px';
-    }
-
-    function settleLogo() {
-        logoWrapper.style.animation = 'none';
-        logoWrapper.style.position = 'absolute';
-        logoWrapper.style.left = '50%';
-        logoWrapper.style.top = '20px';
-        logoWrapper.style.transform = 'translate(-50%, 0) scale(1)'; /* تطابق ۱۰۰٪ با پایان انیمیشن CSS */
-        logoWrapper.style.opacity = '1';
-        syncLogoSectionHeight();
-    }
-
-    window.addEventListener('load', () => {
-        syncLogoSectionHeight();
-        requestAnimationFrame(syncLogoSectionHeight);
-    });
-
-    window.addEventListener('resize', syncLogoSectionHeight);
-    logoWrapper.addEventListener('animationend', settleLogo);
-})();
-</script>
 
 </body>
 </html>
