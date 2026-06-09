@@ -1,132 +1,606 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فروشگاه تیوان</title>
-    <meta name="description" content="فروشگاه پوشاک تیوان">
-    <link rel="icon" type="image/png" href="logo-title-red-c.png">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { min-height: 100vh; background: #fff; font-family: 'Vazirmatn', sans-serif; overflow-x: hidden; }
-        .main-container { width: 100%; max-width: 550px; margin: auto; padding: 20px; position: relative; }
-        .logo-section { position: relative; height: 170px; width: 100%; overflow: visible; }
-        .logo-wrapper { position: absolute; left: 50%; width: 120px; opacity: 0; animation: logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards; z-index: 100; }
-        .logo-wrapper img { width: 100%; display: block; }
-        .content-section { opacity: 0; animation: fadeIn 1s ease forwards 2.5s; }
-        .branch-item { margin-bottom: 12px; }
-        .branch-address { text-align: center; color: #444; font-size: 15px; line-height: 1.8; }
-        .branch-links { display: flex; justify-content: center; align-items: center; gap: 24px; margin-top: 8px; }
-        .branch-link { display: flex; align-items: center; gap: 6px; text-decoration: none; color: #444; font-size: 15px; cursor: pointer; }
-        .branch-link:hover { opacity: .7; }
-        .phone-link { direction: ltr; }
-        .phone-svg { width: 18px; height: 18px; fill: #34C759; }
-        .location-svg { width: 20px; height: 20px; fill: #FF3B30; }
-        .branch-divider { width: 90%; max-width: 420px; height: 1px; background: #d6d6d6; margin: 12px auto 0 auto; }
-        .instagram-section { display: flex; justify-content: center; align-items: center; margin-top: 18px; margin-bottom: 18px; }
-        .instagram-link { display: flex; align-items: center; gap: 8px; direction: ltr; text-decoration: none; color: #444; font-size: 15px; font-weight: 500; padding: 6px 14px; border-radius: 10px; }
-        .instagram-link:hover { background: #f5f5f5; }
-        .instagram-svg { width: 22px; height: 22px; }
-        .footer-section { opacity: 0; animation: fadeIn 1s ease forwards 2.5s; text-align: center; margin-top: 20px; }
-        .button-group { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; max-width: 480px; margin: 0 auto; }
-        .btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn:hover { background: #0f172a; color: #fff; transform: translateY(-2px); }
-        .btn svg { width: 15px; height: 15px; fill: currentColor; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .custom-modal { background: #fff; width: 90%; max-width: 380px; padding: 28px 24px; border-radius: 20px; text-align: center; transform: scale(0.9); transition: 0.3s; }
-        .modal-overlay.active .custom-modal { transform: scale(1); }
-        .club-input { width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 16px; text-align: center; margin-bottom: 12px; outline: none; }
-        .club-submit-btn { width: 100%; padding: 14px; background: #0f172a; color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .form-feedback { font-size: 13px; margin-top: 10px; display: none; }
-        .app-btn { display: flex; align-items: center; padding: 14px 20px; border: 1px solid #eaeaea; border-radius: 14px; text-decoration: none; color: #333; margin-bottom: 10px; gap: 16px; }
-        @keyframes logoIntro { 0%{ opacity:0; top:50vh; transform:translate(-50%, -50%) scale(.2); } 100%{ opacity:1; top:30px; transform:translate(-50%, 0) scale(1); } }
-        @keyframes fadeIn { to{ opacity:1; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>فروشگاه تیوان</title>
+<meta name="description" content="فروشگاه پوشاک تیوان">
+
+<link rel="icon" type="image/png" href="logo-title-red-c.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#fff;
+    font-family:'Vazirmatn',sans-serif;
+    overflow-x:hidden;
+}
+
+.main-container{
+    width:100%;
+    max-width:550px;
+    margin:auto;
+    padding:20px;
+    position: relative;
+}
+
+.logo-section{
+    position:relative;
+    height:170px; 
+    width:100%;
+    overflow:visible;
+}
+
+.logo-wrapper{
+    position:absolute;
+    left:50%;
+    width:120px;
+    opacity:0;
+    animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
+    z-index:100;
+    will-change:transform, top, opacity;
+}
+
+.logo-wrapper img{
+    width:100%;
+    display:block;
+}
+
+.content-section{
+    opacity:0;
+    animation:fadeIn 1s ease forwards 2.5s;
+}
+
+.branch-item{
+    margin-bottom:12px;
+}
+
+.branch-address{
+    text-align:center;
+    color:#444;
+    font-size:15px;
+    line-height:1.8;
+}
+
+.branch-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 8px;
+}
+
+.branch-link{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
+    color:#444;
+    font-size:15px;
+    transition:0.2s ease;
+    cursor: pointer;
+}
+
+.branch-link:hover{
+    opacity:.7;
+}
+
+.phone-link {
+    direction: ltr;
+}
+
+.phone-svg{
+    width:18px;
+    height:18px;
+    fill:#34C759;
+    flex-shrink:0;
+}
+
+.location-svg {
+    width:20px;
+    height:20px;
+    fill:#FF3B30;
+    flex-shrink:0;
+}
+
+.branch-divider{
+    width:90%;
+    max-width:420px;
+    height:1px;
+    background:#d6d6d6;
+    margin:12px auto 0 auto;
+}
+
+.instagram-section{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:18px;
+    margin-bottom:18px;
+}
+
+.instagram-link{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    direction:ltr;
+    text-decoration:none;
+    color:#444;
+    font-size:15px;
+    font-weight:500;
+    transition:0.2s ease;
+    padding:6px 14px;
+    border-radius:10px;
+}
+
+.instagram-link:hover{
+    background:#f5f5f5;
+}
+
+.instagram-svg{
+    width:22px;
+    height:22px;
+    flex-shrink:0;
+}
+
+.footer-section{
+    opacity:0;
+    animation:fadeIn 1s ease forwards 2.5s;
+    text-align:center;
+    margin-top:20px;
+}
+
+.button-group{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    width:100%;
+    max-width:480px;
+    margin:0 auto;
+}
+
+.btn{
+    flex: 1; 
+    min-width: 0; 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+    color:#0f172a;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px; 
+    padding:12px 6px;
+    font-size:12px;
+    font-weight:600;
+    transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:0 1px 3px rgba(0,0,0,0.02);
+    cursor: pointer;
+}
+
+.btn:hover{
+    background:#0f172a;
+    color:#fff;
+    border-color:#0f172a;
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(15,23,42,0.12);
+}
+
+.btn svg{
+    width:15px;
+    height:15px;
+    fill:currentColor;
+    flex-shrink:0;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.custom-modal {
+    background: #fff;
+    width: 90%;
+    max-width: 380px;
+    padding: 28px 24px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.active .custom-modal {
+    transform: scale(1);
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.modal-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.club-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.club-input {
+    width: 100%;
+    padding: 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+}
+
+.club-input:focus {
+    border-color: #0f172a;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+}
+
+.club-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #0f172a;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.club-submit-btn:hover {
+    background: #1e293b;
+}
+
+.club-submit-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+.form-feedback {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 8px;
+    display: none;
+}
+
+.form-feedback.success { color: #10b981; display: block; }
+.form-feedback.error { color: #ef4444; display: block; }
+
+.apps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.app-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 14px 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: #fefefe;
+    gap: 16px;
+}
+
+.app-btn:hover {
+    background: #f5f5f5;
+    border-color: #d1d1d1;
+    transform: translateX(-4px);
+}
+
+.app-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.close-modal-btn {
+    margin-top: 22px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.close-modal-btn:hover { color: #ef4444; }
+
+@keyframes logoIntro{
+    0%{ opacity:0; top:50vh; transform:translate(-50%, -50%) scale(.2); }
+    50%{ opacity:1; top:50vh; transform:translate(-50%, -50%) scale(1.2); }
+    100%{ opacity:1; top:30px; transform:translate(-50%, 0) scale(1); }
+}
+
+@keyframes fadeIn{ to{ opacity:1; } }
+
+@media(max-width:480px){
+    .logo-wrapper{ width:100px; }
+    .logo-section{ height:150px; }
+    .branch-address{ font-size:14px; }
+    .branch-link{ font-size:14px; }
+    .button-group{ gap:6px; }
+    .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
+    .btn svg{ width:12px; height:12px; }
+}
+</style>
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="logo-section">
-            <div class="logo-wrapper"><img src="logo-title-red-c.png" alt="فروشگاه تیوان"></div>
-        </div>
 
-        <div class="content-section">
-            <div class="branch-item">
-                <div class="branch-address">شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
-                <div class="branch-links">
-                    <a href="tel:03136264237" class="branch-link phone-link"><span>03136264237</span></a>
-                    <div class="branch-link open-map-trigger" data-lat="32.6380318" data-lng="51.6435897">مسیریابی</div>
-                </div>
-                <div class="branch-divider"></div>
-            </div>
-            <div class="footer-section">
-                <div class="button-group">
-                    <div class="btn" id="openClubBtn">باشگاه مشتریان</div>
-                </div>
-            </div>
+<div class="main-container">
+    <div class="logo-section">
+        <div class="logo-wrapper">
+            <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
         </div>
     </div>
 
-    <div class="modal-overlay" id="clubModalOverlay">
-        <div class="custom-modal">
-            <div class="modal-title">عضویت در باشگاه مشتریان</div>
-            <input type="tel" id="clientPhone" class="club-input" placeholder="شماره موبایل" maxlength="11">
-            <button id="submitPhoneBtn" class="club-submit-btn">تایید و ثبت</button>
+    <div class="content-section">
+        <div class="branch-item">
+            <div class="branch-address">شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
+            <div class="branch-links">
+                <a href="tel:03136264237" class="branch-link phone-link">
+                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                    <span>03136264237</span>
+                </a>
+                <div class="branch-link open-map-trigger" data-lat="32.6380318" data-lng="51.6435897">
+                    <svg class="location-svg" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
+                    <span>مسیریابی روی نقشه</span>
+                </div>
+            </div>
+            <div class="branch-divider"></div>
+        </div>
+
+        <div class="branch-item">
+            <div class="branch-address">شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره</div>
+            <div class="branch-links">
+                <a href="tel:03136264237" class="branch-link phone-link">
+                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                    <span>03136264237</span>
+                </a>
+                <div class="branch-link open-map-trigger" data-lat="32.6325682" data-lng="51.6586030">
+                    <svg class="location-svg" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
+                    <span>مسیریابی روی نقشه</span>
+                </div>
+            </div>
+            <div class="branch-divider"></div>
+        </div>
+
+        <div class="branch-item">
+            <div class="branch-address">شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا</div>
+            <div class="branch-links">
+                <a href="tel:03136610848" class="branch-link phone-link">
+                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                    <span>03136610848</span>
+                </a>
+                <div class="branch-link open-map-trigger" data-lat="32.6238140" data-lng="51.6649018">
+                    <svg class="location-svg" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
+                    <span>مسیریابی روی نقشه</span>
+                </div>
+            </div>
+            <div class="branch-divider"></div>
+        </div>
+
+        <div class="instagram-section">
+            <a href="https://instagram.com/tivan.shop" target="_blank" rel="noopener noreferrer" class="instagram-link">
+                <svg class="instagram-svg" viewBox="0 0 24 24">
+                    <defs>
+                        <linearGradient id="instagram-real-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#fdf497" /><stop offset="5%" stop-color="#fdf497" /><stop offset="45%" stop-color="#fd5949" /><stop offset="60%" stop-color="#d6249f" /><stop offset="100%" stop-color="#285AEB" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#instagram-real-gradient)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>tivan.shop</span>
+            </a>
+        </div>
+        <div class="branch-divider"></div>
+    </div>
+
+    <div class="footer-section">
+        <div class="button-group">
+            <div class="btn" id="openClubBtn">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <span>باشگاه مشتریان</span>
+            </div>
+            <a href="hamkari.html" class="btn">
+                <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                <span>درخواست همکاری</span>
+            </a>
+            <a href="gallery.html" class="btn">
+                <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                <span>گالری تصاویر</span>
+            </a>
+        </div>
+        <div class="branch-divider" style="margin-top: 18px;"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="clubModalOverlay">
+    <div class="custom-modal">
+        <div class="modal-title">عضویت در باشگاه مشتریان</div>
+        <div class="modal-subtitle">با ثبت شماره خود، از تخفیف‌ها و کالکشن‌های جدید زودتر از همه باخبر شوید.</div>
+        
+        <div class="club-form-group">
+            <input type="tel" id="clientPhone" class="club-input" placeholder="۰۹XXXXXXXXX" maxlength="11" inputmode="numeric">
+            <button id="submitPhoneBtn" class="club-submit-btn">تایید و ثبت عضویت</button>
             <div id="formFeedback" class="form-feedback"></div>
-            <button class="close-modal-btn" id="closeClubModalBtn" style="margin-top:20px; border:none; background:none; cursor:pointer;">انصراف</button>
         </div>
+        
+        <button class="close-modal-btn" id="closeClubModalBtn">انصراف</button>
     </div>
+</div>
 
-    <div class="modal-overlay" id="mapModalOverlay">
-        <div class="custom-modal">
-            <div class="app-btn" id="link-google">گوگل مپ</div>
-            <div class="app-btn" id="link-neshan">نشان</div>
-            <button class="close-modal-btn" id="closeMapModalBtn" style="border:none; background:none; cursor:pointer;">انصراف</button>
+<div class="modal-overlay" id="mapModalOverlay">
+    <div class="custom-modal">
+        <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
+        <div class="modal-subtitle">لطفاً نقشه مورد نظر خود را انتخاب کنید:</div>
+        <div class="apps-list">
+            <a href="#" target="_blank" class="app-btn" id="link-google">
+                <svg class="app-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                <span>گوگل مپ (Google Maps)</span>
+            </a>
+            <a href="#" target="_blank" class="app-btn" id="link-neshan">
+                <svg class="app-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#0084FF"/><path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/></svg>
+                <span>مسیریاب نشان</span>
+            </a>
+            <a href="#" target="_blank" class="app-btn" id="link-balad">
+                <svg class="app-icon" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/><path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/></svg>
+                <span>مسیریاب بلد</span>
+            </a>
         </div>
+        <button class="close-modal-btn" id="closeMapModalBtn">انصراف</button>
     </div>
+</div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Map Logic
-        document.querySelectorAll('.open-map-trigger').forEach(trigger => {
-            trigger.addEventListener('click', function() {
-                const lat = this.getAttribute('data-lat');
-                const lng = this.getAttribute('data-lng');
-                document.getElementById('link-google').onclick = () => window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
-                document.getElementById('link-neshan').onclick = () => window.open(`https://neshan.org/maps/search/${lat}/${lng}`);
-                document.getElementById('mapModalOverlay').classList.add('active');
-            });
-        });
+<script>
+(function() {
+    // منطق نقشه و مسیریابی
+    var mapTriggers = document.querySelectorAll('.open-map-trigger');
+    var mapOverlay = document.getElementById('mapModalOverlay');
+    var closeMapBtn = document.getElementById('closeMapModalBtn');
+    var googleLink = document.getElementById('link-google');
+    var neshanLink = document.getElementById('link-neshan');
+    var baladLink = document.getElementById('link-balad');
 
-        // Club Logic
-        const clubOverlay = document.getElementById('clubModalOverlay');
-        document.getElementById('openClubBtn').addEventListener('click', () => clubOverlay.classList.add('active'));
-        document.getElementById('closeClubModalBtn').addEventListener('click', () => clubOverlay.classList.remove('active'));
-        document.getElementById('closeMapModalBtn').addEventListener('click', () => document.getElementById('mapModalOverlay').classList.remove('active'));
-
-        document.getElementById('submitPhoneBtn').addEventListener('click', function() {
-            const phone = document.getElementById('clientPhone').value.trim();
-            const feedback = document.getElementById('formFeedback');
-            if (!/^09[0-9]{9}$/.test(phone)) {
-                feedback.innerText = 'شماره معتبر نیست';
-                feedback.style.display = 'block';
-                return;
-            }
-            
-            feedback.innerText = 'در حال ثبت...';
-            feedback.style.display = 'block';
-
-            fetch('https://tivansms.tiva1shop-kh8xv.arvanedge.ir?phone=' + phone)
-            .then(res => res.json())
-            .then(data => {
-                feedback.innerText = data.message || 'ثبت انجام شد';
-            }).catch(() => {
-                feedback.innerText = 'خطا در ارتباط با سرور';
-            });
+    mapTriggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+            var lat = this.getAttribute('data-lat');
+            var lng = this.getAttribute('data-lng');
+            googleLink.href = 'http://maps.google.com/?q=' + lat + ',' + lng;
+            neshanLink.href = 'https://neshan.org/maps/search/' + lat + ',' + lng;
+            baladLink.href = 'https://balad.ir/location?lat=' + lat + '&lng=' + lng;
+            mapOverlay.classList.add('active');
         });
     });
-    </script>
+
+    closeMapBtn.addEventListener('click', function() { mapOverlay.classList.remove('active'); });
+
+    // منطق باشگاه مشتریان
+    var openClubBtn = document.getElementById('openClubBtn');
+    var clubOverlay = document.getElementById('clubModalOverlay');
+    var closeClubBtn = document.getElementById('closeClubModalBtn');
+    var submitPhoneBtn = document.getElementById('submitPhoneBtn');
+    var clientPhoneInput = document.getElementById('clientPhone');
+    var formFeedback = document.getElementById('formFeedback');
+
+    openClubBtn.addEventListener('click', function() {
+        formFeedback.className = 'form-feedback';
+        formFeedback.innerText = '';
+        clientPhoneInput.value = '';
+        clubOverlay.classList.add('active');
+    });
+
+    closeClubBtn.addEventListener('click', function() { clubOverlay.classList.remove('active'); });
+
+    window.addEventListener('click', function(e) {
+        if (e.target === mapOverlay) mapOverlay.classList.remove('active');
+        if (e.target === clubOverlay) clubOverlay.classList.remove('active');
+    });
+
+    submitPhoneBtn.addEventListener('click', function() {
+        var phone = clientPhoneInput.value.trim();
+        var phoneRegex = /^09[0-9]{9}$/;
+        if (!phoneRegex.test(phone)) {
+            formFeedback.className = 'form-feedback error';
+            formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
+            return;
+        }
+
+        formFeedback.className = 'form-feedback';
+        formFeedback.innerText = 'در حال ثبت...';
+        submitPhoneBtn.disabled = true;
+
+        var googleScriptUrl = 'https://steep-queen-188b.mehrdadtaghvaei.workers.dev';
+
+        // فراخوانی امن
+        fetch(googleScriptUrl + '?phone=' + phone, {
+            method: 'GET'
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            submitPhoneBtn.disabled = false;
+            if (data.success) {
+                formFeedback.className = 'form-feedback success';
+                formFeedback.innerText = 'شماره شما با موفقیت در باشگاه مشتریان تیوان ثبت شد. 🎉';
+                setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
+            } else {
+                formFeedback.className = 'form-feedback error';
+                // نمایش مستقیم متن خطایی که ورکر ما از فراز دریافت کرده
+                formFeedback.innerText = data.message || 'خطا در ثبت شماره.';
+            }
+        })
+        .catch(function(error) {
+            submitPhoneBtn.disabled = false;
+            formFeedback.className = 'form-feedback error';
+            formFeedback.innerText = 'خطا در ارتباط با سرور. لطفاً مجدداً تلاش کنید.';
+            console.error(error);
+        });
+    });
+})();
+</script>
+
 </body>
 </html>
