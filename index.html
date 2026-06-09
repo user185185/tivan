@@ -396,7 +396,6 @@ body{
     </div>
 
     <div class="content-section">
-        <!-- شعبه مرکزی -->
         <div class="branch-item">
             <div class="branch-address">شعبه مرکزی : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
             <div class="branch-links">
@@ -412,7 +411,6 @@ body{
             <div class="branch-divider"></div>
         </div>
 
-        <!-- شعبه ۱ -->
         <div class="branch-item">
             <div class="branch-address">شعبه ۱ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره</div>
             <div class="branch-links">
@@ -428,7 +426,6 @@ body{
             <div class="branch-divider"></div>
         </div>
 
-        <!-- شعبه ۲ -->
         <div class="branch-item">
             <div class="branch-address">شعبه ۲ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا</div>
             <div class="branch-links">
@@ -444,7 +441,6 @@ body{
             <div class="branch-divider"></div>
         </div>
 
-        <!-- اینستاگرام -->
         <div class="instagram-section">
             <a href="https://instagram.com/tivan.shop" target="_blank" rel="noopener noreferrer" class="instagram-link">
                 <svg class="instagram-svg" viewBox="0 0 24 24">
@@ -461,7 +457,6 @@ body{
         <div class="branch-divider"></div>
     </div>
 
-    <!-- دکمه‌های فوتر -->
     <div class="footer-section">
         <div class="button-group">
             <div class="btn" id="openClubBtn">
@@ -481,7 +476,6 @@ body{
     </div>
 </div>
 
-<!-- پاپ‌آپ باشگاه مشتریان -->
 <div class="modal-overlay" id="clubModalOverlay">
     <div class="custom-modal">
         <div class="modal-title">عضویت در باشگاه مشتریان</div>
@@ -497,7 +491,6 @@ body{
     </div>
 </div>
 
-<!-- پاپ‌آپ نقشه -->
 <div class="modal-overlay" id="mapModalOverlay">
     <div class="custom-modal">
         <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
@@ -578,24 +571,33 @@ body{
         formFeedback.innerText = 'در حال ثبت...';
         submitPhoneBtn.disabled = true;
 
-        // 🔴 آدرس نهایی وب‌اپلیکیشن گوگل (Web app URL) را دقیقاً بین دو کوتیشن قرار بده:
+        // لینک ورکر کلودفلر اختصاصی شما
         var googleScriptUrl = 'https://steep-queen-188b.mehrdadtaghvaei.workers.dev';
 
-        // ارسال اطلاعات با ساختار ایمن و بدون مسدودیِ GET
+        // ارسال درخواست امن به کلودفلر ورکر و پردازش پاسخ واقعی
         fetch(googleScriptUrl + '?phone=' + phone, {
-            method: 'GET',
-            mode: 'no-cors'
+            method: 'GET'
         })
-        .then(function() {
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
             submitPhoneBtn.disabled = false;
-            formFeedback.className = 'form-feedback success';
-            formFeedback.innerText = 'شماره شما با موفقیت در باشگاه مشتریان تیوان ثبت شد. 🎉';
-            setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
+            if (data.success) {
+                formFeedback.className = 'form-feedback success';
+                formFeedback.innerText = 'شماره شما با موفقیت در باشگاه مشتریان تیوان ثبت شد. 🎉';
+                setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
+            } else {
+                formFeedback.className = 'form-feedback error';
+                formFeedback.innerText = 'خطای پنل: شماره ثبت نشد یا از قبل موجود است.';
+                console.error(data);
+            }
         })
-        .catch(function() {
+        .catch(function(error) {
             submitPhoneBtn.disabled = false;
             formFeedback.className = 'form-feedback error';
-            formFeedback.innerText = 'خطایی رخ داد. دوباره تلاش کنید.';
+            formFeedback.innerText = 'خطا در ارتباط با سرور مانیتورینگ.';
+            console.error(error);
         });
     });
 })();
