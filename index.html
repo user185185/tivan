@@ -571,10 +571,8 @@ body{
         formFeedback.innerText = 'در حال ثبت...';
         submitPhoneBtn.disabled = true;
 
-        // لینک ورکر کلودفلر اختصاصی شما
         var googleScriptUrl = 'https://steep-queen-188b.mehrdadtaghvaei.workers.dev';
 
-        // ارسال درخواست امن به کلودفلر ورکر و پردازش پاسخ واقعی
         fetch(googleScriptUrl + '?phone=' + phone, {
             method: 'GET'
         })
@@ -589,8 +587,18 @@ body{
                 setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
             } else {
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'خطای پنل: شماره ثبت نشد یا از قبل موجود است.';
-                console.error(data);
+                
+                // 🟢 اینجا هوشمند شد: اگر خطایی باشد، متن مستقیم سرور فراز را می‌خواند و چاپ می‌کند
+                try {
+                    var parsedFaraz = JSON.parse(data.data);
+                    if (parsedFaraz && parsedFaraz.message) {
+                        formFeedback.innerText = 'پاسخ پنل: ' + parsedFaraz.message;
+                    } else {
+                        formFeedback.innerText = 'خطای پنل: ' + data.data;
+                    }
+                } catch(e) {
+                    formFeedback.innerText = 'خطای پنل: ' + data.data;
+                }
             }
         })
         .catch(function(error) {
