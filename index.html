@@ -119,6 +119,7 @@ body{
     margin:12px auto 0 auto;
 }
 
+/* بخش اختصاصی اینستاگرام */
 .instagram-section{
     display:flex;
     justify-content:center;
@@ -152,6 +153,7 @@ body{
     flex-shrink:0;
 }
 
+/* بخش فوتر و دکمه‌های متناسب */
 .footer-section{
     opacity:0;
     animation:fadeIn 1s ease forwards 2.5s;
@@ -204,6 +206,7 @@ body{
     flex-shrink:0;
 }
 
+/* استایل مشترک پاپ‌آپ‌ها (طراحی مدرن با شیشه مات پشت صفحه) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -256,6 +259,7 @@ body{
     margin-bottom: 20px;
 }
 
+/* المان‌های اختصاصی فرم باشگاه مشتریان */
 .club-form-group {
     display: flex;
     flex-direction: column;
@@ -314,9 +318,17 @@ body{
     display: none;
 }
 
-.form-feedback.success { color: #10b981; display: block; }
-.form-feedback.error { color: #ef4444; display: block; }
+.form-feedback.success {
+    color: #10b981;
+    display: block;
+}
 
+.form-feedback.error {
+    color: #ef4444;
+    display: block;
+}
+
+/* پاپ‌آپ مپ */
 .apps-list {
     display: flex;
     flex-direction: column;
@@ -364,15 +376,33 @@ body{
     font-weight: 500;
 }
 
-.close-modal-btn:hover { color: #ef4444; }
-
-@keyframes logoIntro{
-    0%{ opacity:0; top:50vh; transform:translate(-50%, -50%) scale(.2); }
-    50%{ opacity:1; top:50vh; transform:translate(-50%, -50%) scale(1.2); }
-    100%{ opacity:1; top:30px; transform:translate(-50%, 0) scale(1); }
+.close-modal-btn:hover {
+    color: #ef4444;
 }
 
-@keyframes fadeIn{ to{ opacity:1; } }
+@keyframes logoIntro{
+    0%{
+        opacity:0;
+        top:50vh;
+        transform:translate(-50%, -50%) scale(.2);
+    }
+    50%{
+        opacity:1;
+        top:50vh;
+        transform:translate(-50%, -50%) scale(1.2);
+    }
+    100%{
+        opacity:1;
+        top:30px;
+        transform:translate(-50%, 0) scale(1);
+    }
+}
+
+@keyframes fadeIn{
+    to{
+        opacity:1;
+    }
+}
 
 @media(max-width:480px){
     .logo-wrapper{ width:100px; }
@@ -389,6 +419,7 @@ body{
 <body>
 
 <div class="main-container">
+
     <div class="logo-section">
         <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
@@ -515,7 +546,7 @@ body{
 
 <script>
 (function() {
-    // منطق نقشه و مسیریابی
+    // مدیریت پاپ‌آپ نقشه
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
     var closeMapBtn = document.getElementById('closeMapModalBtn');
@@ -527,7 +558,7 @@ body{
         trigger.addEventListener('click', function() {
             var lat = this.getAttribute('data-lat');
             var lng = this.getAttribute('data-lng');
-            googleLink.href = 'http://maps.google.com/?q=' + lat + ',' + lng;
+            googleLink.href = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
             neshanLink.href = 'https://neshan.org/maps/search/' + lat + ',' + lng;
             baladLink.href = 'https://balad.ir/location?lat=' + lat + '&lng=' + lng;
             mapOverlay.classList.add('active');
@@ -536,7 +567,7 @@ body{
 
     closeMapBtn.addEventListener('click', function() { mapOverlay.classList.remove('active'); });
 
-    // منطق باشگاه مشتریان
+    // مدیریت پاپ‌آپ باشگاه مشتریان
     var openClubBtn = document.getElementById('openClubBtn');
     var clubOverlay = document.getElementById('clubModalOverlay');
     var closeClubBtn = document.getElementById('closeClubModalBtn');
@@ -553,17 +584,21 @@ body{
 
     closeClubBtn.addEventListener('click', function() { clubOverlay.classList.remove('active'); });
 
+    // بستن پاپ‌آپ‌ها با کلیک روی فضای بیرون
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
         if (e.target === clubOverlay) clubOverlay.classList.remove('active');
     });
 
+    // عملیات ثبت شماره تلفن و اتصال به بک‌اند
     submitPhoneBtn.addEventListener('click', function() {
         var phone = clientPhoneInput.value.trim();
+        
+        // اعتبار سنجی شماره موبایل ایران
         var phoneRegex = /^09[0-9]{9}$/;
         if (!phoneRegex.test(phone)) {
             formFeedback.className = 'form-feedback error';
-            formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
+            formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی (مثل ۰۹۱۲۳۴۵۶۷۸۹) وارد کنید.';
             return;
         }
 
@@ -571,32 +606,28 @@ body{
         formFeedback.innerText = 'در حال ثبت...';
         submitPhoneBtn.disabled = true;
 
-        var googleScriptUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
-
-        // فراخوانی امن
-        fetch(googleScriptUrl + '?phone=' + phone, {
-            method: 'GET'
+        // ارسال شماره به فایل واسط PHP امن
+        fetch('club.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: phone })
         })
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
+        .then(response => response.json())
+        .then(data => {
             submitPhoneBtn.disabled = false;
             if (data.success) {
                 formFeedback.className = 'form-feedback success';
                 formFeedback.innerText = 'شماره شما با موفقیت در باشگاه مشتریان تیوان ثبت شد. 🎉';
-                setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
+                setTimeout(() => { clubOverlay.classList.remove('active'); }, 2500);
             } else {
                 formFeedback.className = 'form-feedback error';
-                // نمایش مستقیم متن خطایی که ورکر ما از فراز دریافت کرده
-                formFeedback.innerText = data.message || 'خطا در ثبت شماره.';
+                formFeedback.innerText = data.message || 'خطایی رخ داد. دوباره تلاش کنید.';
             }
         })
-        .catch(function(error) {
+        .catch(error => {
             submitPhoneBtn.disabled = false;
             formFeedback.className = 'form-feedback error';
-            formFeedback.innerText = 'خطا در ارتباط با سرور. لطفاً مجدداً تلاش کنید.';
-            console.error(error);
+            formFeedback.innerText = 'خطا در ارتباط با سرور. لطفاً اتصال خود را بررسی کنید.';
         });
     });
 })();
