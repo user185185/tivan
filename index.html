@@ -314,6 +314,8 @@ body{
     display: none;
 }
 
+/* تنطیمات نمایش بازخوردها */
+.form-feedback.loading { color: #64748b; display: block; }
 .form-feedback.success { color: #10b981; display: block; }
 .form-feedback.error { color: #ef4444; display: block; }
 
@@ -581,11 +583,12 @@ body{
             return;
         }
 
-        formFeedback.className = 'form-feedback';
-        formFeedback.innerText = 'در حال ثبت...';
+        // اصلاح نمایش حالت در حال بارگذاری با افزودن کلاس زرد/خاکستری
+        formFeedback.className = 'form-feedback loading';
+        formFeedback.innerText = 'در حال بررسی و ثبت اطلاعات... ⏳';
         submitPhoneBtn.disabled = true;
 
-        // آدرس دامنه ست شده روی ورکر آروان شما (منطبق با درخواست متد GET)
+        // آدرس دامنه ست شده روی ورکر آروان شما
         var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
 
         fetch(arvanWorkerUrl + '?phone=' + phone, {
@@ -596,14 +599,16 @@ body{
         })
         .then(function(data) {
             submitPhoneBtn.disabled = false;
-            if (data.success) {
+            
+            // نمایش کاملاً منطبق با موفقیت یا عدم موفقیت ارسالی از ورکر آروان
+            if (data.success === true) {
                 formFeedback.className = 'form-feedback success';
-                formFeedback.innerText = data.message;
+                formFeedback.innerText = data.message; // پیغام موفقیت آمیز ثبت
                 // بستن خودکار مودال بعد از ثبت موفقیت‌آمیز
                 setTimeout(function() { clubOverlay.classList.remove('active'); }, 2500);
             } else {
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = data.message;
+                formFeedback.innerText = data.message; // پیغام "این شماره از قبل در باشگاه مشتریان موجود است" یا خطاهای دیگر
             }
         })
         .catch(function(error) {
