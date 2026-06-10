@@ -520,7 +520,9 @@ body{
 
 <script>
 (function() {
+    // =========================================
     // منطق و مدیریت مودال مسیریابی دکمه‌های مپ
+    // =========================================
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
     var closeMapBtn = document.getElementById('closeMapModalBtn');
@@ -539,9 +541,13 @@ body{
         });
     });
 
-    closeMapBtn.addEventListener('click', function() { mapOverlay.classList.remove('active'); });
+    closeMapBtn.addEventListener('click', function() { 
+        mapOverlay.classList.remove('active'); 
+    });
 
-    // تابع کمکی برای تبدیل اعداد فارسی/عربی به انگلیسی پیش از ارسال
+    // =========================================
+    // تابع کمکی برای تبدیل اعداد فارسی/عربی
+    // =========================================
     function toEnglishDigits(str) {
         var persianDigits = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
         var arabicDigits = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
@@ -551,7 +557,9 @@ body{
         return str;
     }
 
-    // منطق و مدیریت ثبت‌نام در باشگاه مشتریان (با ساختار جدید OTP)
+    // =========================================
+    // منطق باشگاه مشتریان (OTP)
+    // =========================================
     var openClubBtn = document.getElementById('openClubBtn');
     var clubOverlay = document.getElementById('clubModalOverlay');
     var closeClubBtn = document.getElementById('closeClubModalBtn');
@@ -567,7 +575,7 @@ body{
     var verifiedPhone = '';
     var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
 
-    // تابع بازنشانی فرم به حالت اولیه (مرحله اول)
+    // تابع بازنشانی فرم به حالت اولیه
     function resetClubForm() {
         currentStep = 1;
         currentToken = '';
@@ -588,25 +596,34 @@ body{
         clubOverlay.classList.add('active');
     });
 
-    closeClubBtn.addEventListener('click', function() { resetClubForm(); clubOverlay.classList.remove('active'); });
+    closeClubBtn.addEventListener('click', function() { 
+        resetClubForm(); 
+        clubOverlay.classList.remove('active'); 
+    });
 
     // بستن مودال‌ها با کلیک روی فضای خالی خارج از کادر
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
-        if (e.target === clubOverlay) { resetClubForm(); clubOverlay.classList.remove('active'); }
+        if (e.target === clubOverlay) { 
+            resetClubForm(); 
+            clubOverlay.classList.remove('active'); 
+        }
     });
 
-    // عملیات کلیک روی دکمه ثبت (مدیریت هر دو مرحله)
+    // =========================================
+    // عملیات کلیک روی دکمه ثبت (دو مرحله)
+    // =========================================
     submitPhoneBtn.addEventListener('click', function() {
         
-        // ----------------------------------------
-        // 🛑 مرحله اول: ارسال درخواست پیامک کد تایید
-        // ----------------------------------------
+        // ========================================
+        // 🛑 مرحله اول: ارسال درخواست پیامک OTP
+        // ========================================
         if (currentStep === 1) {
             var phone = clientPhoneInput.value.trim();
             phone = toEnglishDigits(phone);
             
-            var phoneRegex = /^09[0-9]{9}$/;
+            // صحت‌سنجی بهتر شماره تلفن
+            var phoneRegex = /^09\d{9}$/;
             if (!phoneRegex.test(phone)) {
                 formFeedback.className = 'form-feedback error';
                 formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
@@ -617,14 +634,18 @@ body{
             formFeedback.innerText = 'در حال بررسی و ارسال کد تایید... ⏳';
             submitPhoneBtn.disabled = true;
 
-            fetch(arvanWorkerUrl + '?phone=' + phone + '&action=send', {
-                method: 'GET'
+            fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', {
+                method: 'GET',
+                mode: 'cors'
             })
-            .then(function(response) { return response.json(); })
+            .then(function(response) {
+                if (!response.ok) throw new Error('خطا: ' + response.status);
+                return response.json();
+            })
             .then(function(data) {
                 submitPhoneBtn.disabled = false;
                 if (data.success === true) {
-                    // ذخیره اطلاعات رمزگذاری شده دریافتی برای مرحله بعد
+                    // ذخیره اطلاعات دریافتی برای مرحله بعد
                     currentToken = data.token;
                     currentExpires = data.expires;
                     verifiedPhone = phone;
@@ -633,32 +654,34 @@ body{
                     currentStep = 2;
                     clientPhoneInput.style.display = 'none';
                     otpCodeInput.style.display = 'block';
+                    otpCodeInput.focus();
                     submitPhoneBtn.innerText = 'تایید و ثبت نهایی';
                     
                     formFeedback.className = 'form-feedback success';
-                    formFeedback.innerText = data.message || 'کد تایید پیامک شد.';
+                    formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
                 } else {
                     formFeedback.className = 'form-feedback error';
-                    formFeedback.innerText = data.message;
+                    formFeedback.innerText = data.message || 'خطا در ارسال کد.';
                 }
             })
             .catch(function(error) {
                 submitPhoneBtn.disabled = false;
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'خطا در ارتباط با سرور. لطفاً مجدداً تلاش کنید.';
-                console.error(error);
+                formFeedback.innerText = 'خطا: سرور پاسخ نداد. لطفاً اتصال اینترنت را بررسی کنید.';
+                console.error('خطا در درخواست:', error);
             });
 
-        // ----------------------------------------
-        // 🛑 مرحله دوم: تایید رمز ورود و ثبت نهایی
-        // ----------------------------------------
+        // ========================================
+        // 🛑 مرحله دوم: تایید OTP و ثبت نهایی
+        // ========================================
         } else if (currentStep === 2) {
             var otp = otpCodeInput.value.trim();
             otp = toEnglishDigits(otp);
 
-            if (otp.length < 5) {
+            // صحت‌سنجی دقیق OTP
+            if (!/^\d{5}$/.test(otp)) {
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
+                formFeedback.innerText = 'کد تایید باید دقیقاً ۵ عدد باشد.';
                 return;
             }
 
@@ -666,33 +689,44 @@ body{
             formFeedback.innerText = 'در حال تایید کد و ثبت نام... ⏳';
             submitPhoneBtn.disabled = true;
 
-            var verifyUrl = arvanWorkerUrl + '?phone=' + verifiedPhone + '&action=verify&otp=' + otp + '&token=' + currentToken + '&expires=' + currentExpires;
+            // استفاده از URLSearchParams برای پارامترهای بهتر
+            var params = new URLSearchParams({
+                phone: verifiedPhone,
+                action: 'verify',
+                otp: otp,
+                token: currentToken,
+                expires: currentExpires
+            });
 
-            fetch(verifyUrl, {
-                method: 'GET'
+            fetch(arvanWorkerUrl + '?' + params.toString(), {
+                method: 'GET',
+                mode: 'cors'
             })
-            .then(function(response) { return response.json(); })
+            .then(function(response) {
+                if (!response.ok) throw new Error('خطا: ' + response.status);
+                return response.json();
+            })
             .then(function(data) {
                 submitPhoneBtn.disabled = false;
                 if (data.success === true) {
                     formFeedback.className = 'form-feedback success';
-                    formFeedback.innerText = data.message; // پیغام تایید موفقیت‌آمیز و خوش‌آمدگویی
+                    formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
                     
-                    // بستن موفقیت آمیز فرم پس از چند لحظه کوتاه
+                    // بستن موفقیت آمیز فرم پس از ۲.۵ ثانیه
                     setTimeout(function() { 
                         clubOverlay.classList.remove('active'); 
                         resetClubForm();
                     }, 2500);
                 } else {
                     formFeedback.className = 'form-feedback error';
-                    formFeedback.innerText = data.message; // پیام‌های خطا نظیر اشتباه بودن کد یا انقضا
+                    formFeedback.innerText = data.message || 'کد تایید نادرست است. دوباره سعی کنید.';
                 }
             })
             .catch(function(error) {
                 submitPhoneBtn.disabled = false;
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'خطا در شبکه یا سرور. مجدداً تلاش کنید.';
-                console.error(error);
+                formFeedback.innerText = 'خطا در تایید. لطفاً اتصال خود را بررسی و دوباره سعی کنید.';
+                console.error('خطا در درخواست:', error);
             });
         }
     });
