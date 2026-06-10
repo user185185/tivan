@@ -841,8 +841,8 @@ body{
     function startTimer() {
         remainingSeconds = 120; // 2 دقیقه = 120 ثانیه
         timerDisplay.style.display = 'block';
-        submitPhoneBtn.textContent = 'درخواست کد جدید';
-        submitPhoneBtn.disabled = true;
+        submitPhoneBtn.textContent = 'تایید نهایی';
+        submitPhoneBtn.disabled = false;
         
         updateTimerDisplay();
         
@@ -854,7 +854,7 @@ body{
                 clearInterval(timerInterval);
                 timerDisplay.style.display = 'none';
                 submitPhoneBtn.disabled = false;
-                submitPhoneBtn.textContent = 'دریافت کد جدید';
+                submitPhoneBtn.textContent = 'درخواست کد جدید';
                 resetOtpInputs();
                 formFeedback.className = 'form-feedback error';
                 formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
@@ -996,7 +996,7 @@ body{
         // ========================================
         // 🛑 درخواست کد جدید (وقتی تایمر تمام شود)
         // ========================================
-        } else if (currentStep === 1 && submitPhoneBtn.textContent === 'دریافت کد جدید') {
+        } else if (currentStep === 1 && submitPhoneBtn.textContent === 'درخواست کد جدید') {
             var phone = clientPhoneInput.value.trim();
             phone = toEnglishDigits(phone);
             
@@ -1049,7 +1049,7 @@ body{
         // ========================================
         // 🛑 مرحله دوم: تایید OTP و ثبت نهایی (دستی از دکمه)
         // ========================================
-        } else if (currentStep === 2) {
+        } else if (currentStep === 2 && submitPhoneBtn.textContent === 'تایید نهایی') {
             var otp = '';
             otpInputs.forEach(function(input) {
                 otp += input.value;
