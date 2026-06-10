@@ -739,6 +739,7 @@ body{
     var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
     var timerInterval = null;
     var remainingSeconds = 0;
+    var isVerifying = false; // برای جلوگیری از ارسال مکرر
 
     // مدیریت OTP Inputs - جابجایی اتوماتیک بین کادرها (از چپ به راست)
     otpInputs.forEach(function(input, index) {
@@ -755,6 +756,9 @@ body{
             if (value && index < otpInputs.length - 1) {
                 otpInputs[index + 1].focus();
             }
+
+            // اگر 5 کارکتر کامل شد، اتوماتیک درخواست بفرست
+            checkAndSubmitOTP();
         });
 
         input.addEventListener('keydown', function(e) {
@@ -772,13 +776,73 @@ body{
         });
     });
 
+    // تابع برای چک کردن و ارسال خودکار OTP
+    function checkAndSubmitOTP() {
+        var otp = '';
+        otpInputs.forEach(function(input) {
+            otp += input.value;
+        });
+
+        // اگر 5 کارکتر کامل شد و در حال ارسال نیستیم، اتوماتیک بفرست
+        if (otp.length === 5 && !isVerifying) {
+            submitOTP(otp);
+        }
+    }
+
+    // تابع ارسال OTP
+    function submitOTP(otp) {
+        isVerifying = true;
+        formFeedback.className = 'form-feedback loading';
+        formFeedback.innerText = 'در حال تایید کد و ثبت نام... ⏳';
+
+        var params = new URLSearchParams({
+            phone: verifiedPhone,
+            action: 'verify',
+            otp: otp,
+            token: currentToken,
+            expires: currentExpires
+        });
+
+        fetch(arvanWorkerUrl + '?' + params.toString(), {
+            method: 'GET',
+            mode: 'cors'
+        })
+        .then(function(response) {
+            if (!response.ok) throw new Error('خطا: ' + response.status);
+            return response.json();
+        })
+        .then(function(data) {
+            isVerifying = false;
+            if (data.success === true) {
+                clearInterval(timerInterval);
+                formFeedback.className = 'form-feedback success';
+                formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
+                timerDisplay.style.display = 'none';
+                
+                // بستن موفقیت آمیز فرم پس از ۲.۵ ثانیه
+                setTimeout(function() { 
+                    clubOverlay.classList.remove('active'); 
+                    resetClubForm();
+                }, 2500);
+            } else {
+                formFeedback.className = 'form-feedback error';
+                formFeedback.innerText = data.message || 'کد تایید نادرست است. دوباره سعی کنید.';
+            }
+        })
+        .catch(function(error) {
+            isVerifying = false;
+            formFeedback.className = 'form-feedback error';
+            formFeedback.innerText = 'خطا در تایید. لطفاً اتصال خود را بررسی و دوباره سعی کنید.';
+            console.error('خطا در درخواست:', error);
+        });
+    }
+
     // تابع شمارنده 2 دقیقه (120 ثانیه)
     function startTimer() {
         remainingSeconds = 120; // 2 دقیقه = 120 ثانیه
         timerDisplay.style.display = 'block';
         submitPhoneBtn.textContent = 'درخواست کد جدید';
         submitPhoneBtn.disabled = true;
-        clientPhoneInput.disabled = true;
         
         updateTimerDisplay();
         
@@ -791,7 +855,6 @@ body{
                 timerDisplay.style.display = 'none';
                 submitPhoneBtn.disabled = false;
                 submitPhoneBtn.textContent = 'دریافت کد جدید';
-                clientPhoneInput.disabled = false;
                 resetOtpInputs();
                 formFeedback.className = 'form-feedback error';
                 formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
@@ -831,6 +894,7 @@ body{
         currentToken = '';
         currentExpires = '';
         verifiedPhone = '';
+        isVerifying = false;
         formFeedback.className = 'form-feedback';
         formFeedback.innerText = '';
         clientPhoneInput.value = '';
@@ -867,7 +931,7 @@ body{
     });
 
     // =========================================
-    // عملیات کلیک روی دکمه ثبت (دو مرحله)
+    // عملیات کلیک روی دکمه ثبت
     // =========================================
     submitPhoneBtn.addEventListener('click', function() {
         
@@ -899,6 +963,7 @@ body{
                 return response.json();
             })
             .then(function(data) {
+                submitPhoneBtn.disabled = false;
                 if (data.success === true) {
                     // ذخیره اطلاعات دریافتی برای مرحله بعد
                     currentToken = data.token;
@@ -911,12 +976,12 @@ body{
                     // تغییر فاز به فاز دوم (دریافت OTP)
                     currentStep = 2;
                     otpSection.style.display = 'block';
+                    resetOtpInputs();
                     otpInputs[0].focus();
                     
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
                 } else {
-                    submitPhoneBtn.disabled = false;
                     formFeedback.className = 'form-feedback error';
                     formFeedback.innerText = data.message || 'خطا در ارسال کد.';
                 }
@@ -955,6 +1020,7 @@ body{
                 return response.json();
             })
             .then(function(data) {
+                submitPhoneBtn.disabled = false;
                 if (data.success === true) {
                     currentToken = data.token;
                     currentExpires = data.expires;
@@ -969,7 +1035,6 @@ body{
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
                 } else {
-                    submitPhoneBtn.disabled = false;
                     formFeedback.className = 'form-feedback error';
                     formFeedback.innerText = data.message || 'خطا در ارسال کد.';
                 }
@@ -982,7 +1047,7 @@ body{
             });
 
         // ========================================
-        // 🛑 مرحله دوم: تایید OTP و ثبت نهایی
+        // 🛑 مرحله دوم: تایید OTP و ثبت نهایی (دستی از دکمه)
         // ========================================
         } else if (currentStep === 2) {
             var otp = '';
@@ -997,48 +1062,7 @@ body{
                 return;
             }
 
-            formFeedback.className = 'form-feedback loading';
-            formFeedback.innerText = 'در حال تایید کد و ثبت نام... ⏳';
-
-            // استفاده از URLSearchParams برای پارامترهای بهتر
-            var params = new URLSearchParams({
-                phone: verifiedPhone,
-                action: 'verify',
-                otp: otp,
-                token: currentToken,
-                expires: currentExpires
-            });
-
-            fetch(arvanWorkerUrl + '?' + params.toString(), {
-                method: 'GET',
-                mode: 'cors'
-            })
-            .then(function(response) {
-                if (!response.ok) throw new Error('خطا: ' + response.status);
-                return response.json();
-            })
-            .then(function(data) {
-                if (data.success === true) {
-                    clearInterval(timerInterval);
-                    formFeedback.className = 'form-feedback success';
-                    formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
-                    timerDisplay.style.display = 'none';
-                    
-                    // بستن موفقیت آمیز فرم پس از ۲.۵ ثانیه
-                    setTimeout(function() { 
-                        clubOverlay.classList.remove('active'); 
-                        resetClubForm();
-                    }, 2500);
-                } else {
-                    formFeedback.className = 'form-feedback error';
-                    formFeedback.innerText = data.message || 'کد تایید نادرست است. دوباره سعی کنید.';
-                }
-            })
-            .catch(function(error) {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'خطا در تایید. لطفاً اتصال خود را بررسی و دوباره سعی کنید.';
-                console.error('خطا در درخواست:', error);
-            });
+            submitOTP(otp);
         }
     });
 })();
