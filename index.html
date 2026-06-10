@@ -159,49 +159,102 @@ body{
     margin-top:20px;
 }
 
+/* استایل جدید برای بخش باشگاه مشتریان */
+.club-section {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.club-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.club-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: none;
+    border-radius: 16px;
+    padding: 18px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    cursor: pointer;
+    width: 100%;
+    max-width: 380px;
+}
+
+.club-btn:hover {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+}
+
+.club-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+
+.club-divider {
+    width: 90%;
+    max-width: 420px;
+    height: 1px;
+    background: #d6d6d6;
+    margin: 12px auto 0 auto;
+}
+
 .button-group{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    width:100%;
-    max-width:480px;
-    margin:0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
 }
 
 .btn{
     flex: 1; 
     min-width: 0; 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    text-decoration:none;
-    color:#0f172a;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:12px; 
-    padding:12px 6px;
-    font-size:12px;
-    font-weight:600;
-    transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow:0 1px 3px rgba(0,0,0,0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #0f172a;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px; 
+    padding: 12px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     cursor: pointer;
 }
 
 .btn:hover{
-    background:#0f172a;
-    color:#fff;
-    border-color:#0f172a;
-    transform:translateY(-2px);
-    box-shadow:0 6px 16px rgba(15,23,42,0.12);
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15,23,42,0.12);
 }
 
 .btn svg{
-    width:15px;
-    height:15px;
-    fill:currentColor;
-    flex-shrink:0;
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+    flex-shrink: 0;
 }
 
 .modal-overlay {
@@ -381,7 +434,9 @@ body{
     .logo-section{ height:150px; }
     .branch-address{ font-size:14px; }
     .branch-link{ font-size:14px; }
-    .button-group{ gap:6px; }
+    .club-btn { padding: 16px 24px; font-size: 15px; }
+    .club-btn svg { width: 20px; height: 20px; }
+    .button-group{ gap: 8px; }
     .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
     .btn svg{ width:12px; height:12px; }
 }
@@ -457,24 +512,30 @@ body{
             </a>
         </div>
         <div class="branch-divider"></div>
-    </div>
 
-    <div class="footer-section">
-        <div class="button-group">
-            <div class="btn" id="openClubBtn">
-                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                <span>باشگاه مشتریان</span>
+        <!-- بخش باشگاه مشتریان جدید -->
+        <div class="club-section">
+            <div class="club-btn-wrapper">
+                <button class="club-btn" id="openClubBtn">
+                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    <span>عضویت در باشگاه مشتریان</span>
+                </button>
             </div>
-            <a href="hamkari.html" class="btn">
-                <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
-                <span>درخواست همکاری</span>
-            </a>
-            <a href="gallery.html" class="btn">
-                <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                <span>گالری تصاویر</span>
-            </a>
+            <div class="club-divider"></div>
         </div>
-        <div class="branch-divider" style="margin-top: 18px;"></div>
+
+        <div class="footer-section">
+            <div class="button-group">
+                <a href="hamkari.html" class="btn">
+                    <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                    <span>درخواست همکاری</span>
+                </a>
+                <a href="gallery.html" class="btn">
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    <span>گالری تصاویر</span>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
