@@ -171,28 +171,37 @@ body{
     margin-bottom: 12px;
 }
 
-/* انیمیشن pulse برای جلب توجه */
-@keyframes clubPulse {
+/* انیمیشن‌های جدید و زیبا برای دکمه قرمز */
+@keyframes glowPulse {
     0% {
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
         transform: scale(1);
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
     }
     50% {
-        transform: scale(1.02);
-        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3);
+        transform: scale(1.03);
     }
     100% {
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
         transform: scale(1);
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
     }
 }
 
-@keyframes starBounce {
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes float {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateY(0px);
     }
     50% {
-        transform: translateY(-8px);
+        transform: translateY(-6px);
     }
 }
 
@@ -200,53 +209,61 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     text-decoration: none;
     color: #fff;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border: 2px solid rgba(15, 23, 42, 0.3);
-    border-radius: 14px;
-    padding: 14px 28px;
-    font-size: 15px;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #991B1B 100%);
+    background-size: 200% 200%;
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 13px;
     font-weight: 700;
     font-family: inherit;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
     cursor: pointer;
     width: 100%;
-    max-width: 340px;
-    animation: clubPulse 3s ease-in-out infinite;
+    max-width: 220px;
+    animation: glowPulse 3s ease-in-out infinite, float 3s ease-in-out infinite;
     position: relative;
+    overflow: hidden;
 }
 
 .club-btn::before {
     content: '';
     position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 10px solid #FFD700;
-    opacity: 0;
-    animation: starBounce 2s ease-in-out infinite;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+    pointer-events: none;
+}
+
+.club-btn:hover::before {
+    left: 100%;
 }
 
 .club-btn:hover {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    background: linear-gradient(135deg, #DC2626 0%, #991B1B 50%, #7F1D1D 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
-    border-color: rgba(15, 23, 42, 0.5);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.4);
+    border-color: rgba(239, 68, 68, 0.8);
     animation: none;
 }
 
+.club-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
 .club-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     fill: currentColor;
-    animation: starBounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
 }
 
 .club-divider {
@@ -479,8 +496,8 @@ body{
     .logo-section{ height:150px; }
     .branch-address{ font-size:14px; }
     .branch-link{ font-size:14px; }
-    .club-btn { padding: 12px 20px; font-size: 14px; max-width: 300px; }
-    .club-btn svg { width: 18px; height: 18px; }
+    .club-btn { padding: 9px 16px; font-size: 12px; max-width: 200px; }
+    .club-btn svg { width: 16px; height: 16px; }
     .button-group{ gap: 8px; }
     .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
     .btn svg{ width:12px; height:12px; }
@@ -563,7 +580,7 @@ body{
             <div class="club-btn-wrapper">
                 <button class="club-btn" id="openClubBtn">
                     <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    <span>عضویت در باشگاه مشتریان</span>
+                    <span>باشگاه مشتریان</span>
                 </button>
             </div>
             <div class="club-divider"></div>
@@ -590,7 +607,7 @@ body{
         <div class="modal-subtitle">با ثبت شماره خود، از تخفیف‌ها و کالکشن‌های جدید زودتر از همه باخبر شوید.</div>
         
         <div class="club-form-group">
-            <input type="tel" id="clientPhone" class="club-input" placeholder="۰۹XXXXXXXXX" maxlength="11" inputmode="numeric">
+            <input type="text" id="clientPhone" class="club-input" placeholder="۰۹XXXXXXXXX" maxlength="11" inputmode="numeric">
             
             <input type="text" id="otpCode" class="club-input" placeholder="کد تایید ۵ رقمی" maxlength="5" inputmode="numeric" style="display: none; letter-spacing: 6px;">
             
