@@ -361,6 +361,45 @@ body{
     box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
 }
 
+/* استایل 5 کادر برای کد OTP */
+.otp-inputs-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.otp-input {
+    width: 50px;
+    height: 50px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #0f172a;
+    background: #f8fafc;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+.otp-input:focus {
+    border-color: #0f172a;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+}
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.otp-input[type=number] {
+    -moz-appearance: textfield;
+}
+
 .club-submit-btn {
     width: 100%;
     padding: 14px;
@@ -387,13 +426,17 @@ body{
 
 .timer-badge {
     display: inline-block;
-    background: #ef4444;
-    color: #fff;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     margin-top: 8px;
+    color: #64748b;
+    background: transparent;
+}
+
+.timer-badge.warning {
+    color: #ef4444;
 }
 
 .form-feedback {
@@ -475,6 +518,8 @@ body{
     .button-group{ gap: 8px; }
     .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
     .btn svg{ width:12px; height:12px; }
+    .otp-input { width: 40px; height: 40px; font-size: 18px; }
+    .otp-inputs-container { gap: 6px; }
 }
 </style>
 </head>
@@ -584,7 +629,15 @@ body{
         <div class="club-form-group">
             <input type="text" id="clientPhone" class="club-input" placeholder="۰۹XXXXXXXXX" maxlength="11" inputmode="numeric">
             
-            <input type="text" id="otpCode" class="club-input" placeholder="کد تایید ۵ رقمی" maxlength="5" inputmode="numeric" style="display: none; letter-spacing: 6px;">
+            <div id="otpSection" style="display: none;">
+                <div class="otp-inputs-container">
+                    <input type="number" class="otp-input" id="otp1" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp2" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp3" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp4" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp5" maxlength="1" inputmode="numeric" min="0" max="9">
+                </div>
+            </div>
             
             <button id="submitPhoneBtn" class="club-submit-btn">دریافت کد تایید</button>
             <div id="timerDisplay" class="timer-badge" style="display: none;"></div>
@@ -664,9 +717,12 @@ body{
     var closeClubBtn = document.getElementById('closeClubModalBtn');
     var submitPhoneBtn = document.getElementById('submitPhoneBtn');
     var clientPhoneInput = document.getElementById('clientPhone');
-    var otpCodeInput = document.getElementById('otpCode'); 
+    var otpSection = document.getElementById('otpSection');
     var formFeedback = document.getElementById('formFeedback');
     var timerDisplay = document.getElementById('timerDisplay');
+
+    // کادرهای OTP
+    var otpInputs = document.querySelectorAll('.otp-input');
 
     // متغیرهای وضعیت دهی به مراحل تایید فرم
     var currentStep = 1; // 1: وارد کردن شماره، 2: وارد کردن کد OTP
@@ -676,14 +732,46 @@ body{
     var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
     var timerInterval = null;
     var remainingSeconds = 0;
-    var codeExpired = false; // برای کنترل انقضای کد
+
+    // مدیریت OTP Inputs - جابجایی اتوماتیک بین کادرها
+    otpInputs.forEach(function(input, index) {
+        input.addEventListener('input', function(e) {
+            var value = e.target.value;
+            
+            // فقط اعداد
+            if (!/^\d$/.test(value) && value !== '') {
+                e.target.value = '';
+                return;
+            }
+
+            // اگر یک عدد وارد شد، به کادر بعدی برو
+            if (value && index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', function(e) {
+            // Backspace - به کادر قبلی برو
+            if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                otpInputs[index - 1].focus();
+            }
+        });
+
+        input.addEventListener('keyup', function(e) {
+            // Delete - پاک کن و به کادر قبلی برو
+            if (e.key === 'Delete' && this.value === '' && index > 0) {
+                otpInputs[index - 1].focus();
+            }
+        });
+    });
 
     // تابع شمارنده 2 دقیقه (120 ثانیه)
     function startTimer() {
         remainingSeconds = 120; // 2 دقیقه = 120 ثانیه
-        codeExpired = false;
         timerDisplay.style.display = 'block';
-        submitPhoneBtn.disabled = false; // دکمه ثبت فعال باقی می‌ماند
+        submitPhoneBtn.textContent = 'درخواست کد جدید';
+        submitPhoneBtn.disabled = true;
+        clientPhoneInput.disabled = true;
         
         updateTimerDisplay();
         
@@ -693,13 +781,13 @@ body{
             
             if (remainingSeconds <= 0) {
                 clearInterval(timerInterval);
-                codeExpired = true; // کد منقضی شده است
                 timerDisplay.style.display = 'none';
-                submitPhoneBtn.disabled = true;
-                submitPhoneBtn.innerText = 'درخواست کد جدید';
-                resetClubFormAfterExpire();
+                submitPhoneBtn.disabled = false;
+                submitPhoneBtn.textContent = 'دریافت کد جدید';
+                clientPhoneInput.disabled = false;
+                resetOtpInputs();
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'کد تایید منقضی شد. لطفاً درخواست رمز جدید بزنید.';
+                formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
             }
         }, 1000);
     }
@@ -708,19 +796,24 @@ body{
     function updateTimerDisplay() {
         var minutes = Math.floor(remainingSeconds / 60);
         var seconds = remainingSeconds % 60;
-        timerDisplay.innerText = 'کد تایید تا ' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' ثانیه فعال است';
+        var display = 'کد تایید تا ' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' ثانیه فعال است';
+        
+        timerDisplay.innerText = display;
+        
+        // اگر کمتر از 10 ثانیه مانده، رنگ قرمز بکن
+        if (remainingSeconds <= 10) {
+            timerDisplay.classList.add('warning');
+        } else {
+            timerDisplay.classList.remove('warning');
+        }
     }
 
-    // بازنشانی فرم پس از انقضای کد
-    function resetClubFormAfterExpire() {
-        currentStep = 1;
-        clientPhoneInput.value = '';
-        otpCodeInput.value = '';
-        clientPhoneInput.style.display = 'block';
-        otpCodeInput.style.display = 'none';
-        currentToken = '';
-        currentExpires = '';
-        verifiedPhone = '';
+    // تابع بازنشانی کادرهای OTP
+    function resetOtpInputs() {
+        otpInputs.forEach(function(input) {
+            input.value = '';
+        });
+        otpInputs[0].focus();
     }
 
     // تابع بازنشانی فرم به حالت اولیه
@@ -729,16 +822,16 @@ body{
         currentToken = '';
         currentExpires = '';
         verifiedPhone = '';
-        codeExpired = false;
         formFeedback.className = 'form-feedback';
         formFeedback.innerText = '';
         clientPhoneInput.value = '';
-        otpCodeInput.value = '';
-        clientPhoneInput.style.display = 'block';
-        otpCodeInput.style.display = 'none';
+        clientPhoneInput.disabled = false;
+        otpSection.style.display = 'none';
+        resetOtpInputs();
         submitPhoneBtn.innerText = 'دریافت کد تایید';
         submitPhoneBtn.disabled = false;
         timerDisplay.style.display = 'none';
+        timerDisplay.classList.remove('warning');
         
         if (timerInterval) {
             clearInterval(timerInterval);
@@ -808,10 +901,8 @@ body{
                     
                     // تغییر فاز به فاز دوم (دریافت OTP)
                     currentStep = 2;
-                    clientPhoneInput.style.display = 'none';
-                    otpCodeInput.style.display = 'block';
-                    otpCodeInput.focus();
-                    submitPhoneBtn.innerText = 'ثبت نهایی';
+                    otpSection.style.display = 'block';
+                    otpInputs[0].focus();
                     
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
@@ -832,20 +923,15 @@ body{
         // 🛑 مرحله دوم: تایید OTP و ثبت نهایی
         // ========================================
         } else if (currentStep === 2) {
-            // بررسی اینکه کد منقضی نشده است
-            if (codeExpired) {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'کد تایید منقضی شده است. لطفاً درخواست رمز جدید بزنید.';
-                return;
-            }
-
-            var otp = otpCodeInput.value.trim();
-            otp = toEnglishDigits(otp);
+            var otp = '';
+            otpInputs.forEach(function(input) {
+                otp += input.value;
+            });
 
             // صحت‌سنجی دقیق OTP
-            if (!/^\d{5}$/.test(otp)) {
+            if (otp.length < 5) {
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'کد تایید باید دقیقاً ۵ عدد باشد.';
+                formFeedback.innerText = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
                 return;
             }
 
@@ -875,7 +961,6 @@ body{
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
                     timerDisplay.style.display = 'none';
-                    codeExpired = false;
                     
                     // بستن موفقیت آمیز فرم پس از ۲.۵ ثانیه
                     setTimeout(function() { 
