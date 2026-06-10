@@ -676,14 +676,14 @@ body{
     var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
     var timerInterval = null;
     var remainingSeconds = 0;
+    var codeExpired = false; // برای کنترل انقضای کد
 
-    // تابع شمارنده 2 دقیقه (120 ثانیه) - فقط درخواست جدید را غیرفعال می‌کند
+    // تابع شمارنده 2 دقیقه (120 ثانیه)
     function startTimer() {
         remainingSeconds = 120; // 2 دقیقه = 120 ثانیه
+        codeExpired = false;
         timerDisplay.style.display = 'block';
-        // فقط دکمه درخواست کد را غیرفعال می‌کنیم، نه دکمه تایید
-        submitPhoneBtn.textContent = 'درخواست کد جدید';
-        submitPhoneBtn.disabled = true;
+        submitPhoneBtn.disabled = false; // دکمه ثبت فعال باقی می‌ماند
         
         updateTimerDisplay();
         
@@ -693,12 +693,13 @@ body{
             
             if (remainingSeconds <= 0) {
                 clearInterval(timerInterval);
+                codeExpired = true; // کد منقضی شده است
                 timerDisplay.style.display = 'none';
-                submitPhoneBtn.disabled = false;
-                submitPhoneBtn.textContent = 'دریافت کد جدید';
-                resetClubForm();
+                submitPhoneBtn.disabled = true;
+                submitPhoneBtn.innerText = 'درخواست کد جدید';
+                resetClubFormAfterExpire();
                 formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
+                formFeedback.innerText = 'کد تایید منقضی شد. لطفاً درخواست رمز جدید بزنید.';
             }
         }, 1000);
     }
@@ -710,12 +711,25 @@ body{
         timerDisplay.innerText = 'کد تایید تا ' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' ثانیه فعال است';
     }
 
+    // بازنشانی فرم پس از انقضای کد
+    function resetClubFormAfterExpire() {
+        currentStep = 1;
+        clientPhoneInput.value = '';
+        otpCodeInput.value = '';
+        clientPhoneInput.style.display = 'block';
+        otpCodeInput.style.display = 'none';
+        currentToken = '';
+        currentExpires = '';
+        verifiedPhone = '';
+    }
+
     // تابع بازنشانی فرم به حالت اولیه
     function resetClubForm() {
         currentStep = 1;
         currentToken = '';
         currentExpires = '';
         verifiedPhone = '';
+        codeExpired = false;
         formFeedback.className = 'form-feedback';
         formFeedback.innerText = '';
         clientPhoneInput.value = '';
@@ -797,7 +811,7 @@ body{
                     clientPhoneInput.style.display = 'none';
                     otpCodeInput.style.display = 'block';
                     otpCodeInput.focus();
-                    // دکمه تایید فعال باقی می‌ماند
+                    submitPhoneBtn.innerText = 'ثبت نهایی';
                     
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
@@ -818,6 +832,13 @@ body{
         // 🛑 مرحله دوم: تایید OTP و ثبت نهایی
         // ========================================
         } else if (currentStep === 2) {
+            // بررسی اینکه کد منقضی نشده است
+            if (codeExpired) {
+                formFeedback.className = 'form-feedback error';
+                formFeedback.innerText = 'کد تایید منقضی شده است. لطفاً درخواست رمز جدید بزنید.';
+                return;
+            }
+
             var otp = otpCodeInput.value.trim();
             otp = toEnglishDigits(otp);
 
@@ -830,7 +851,6 @@ body{
 
             formFeedback.className = 'form-feedback loading';
             formFeedback.innerText = 'در حال تایید کد و ثبت نام... ⏳';
-            // این بار دکمه ثبت را غیرفعال نمی‌کنیم که کاربر بتواند دوباره کلیک کند
 
             // استفاده از URLSearchParams برای پارامترهای بهتر
             var params = new URLSearchParams({
@@ -855,6 +875,7 @@ body{
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
                     timerDisplay.style.display = 'none';
+                    codeExpired = false;
                     
                     // بستن موفقیت آمیز فرم پس از ۲.۵ ثانیه
                     setTimeout(function() { 
