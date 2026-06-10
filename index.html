@@ -123,8 +123,8 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    margin-top:18px;
-    margin-bottom:18px;
+    margin-top:12px;
+    margin-bottom:12px;
 }
 
 .instagram-link{
@@ -161,8 +161,8 @@ body{
 
 /* استایل جدید برای بخش باشگاه مشتریان */
 .club-section {
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin-top: 18px;
+    margin-bottom: 18px;
 }
 
 .club-btn-wrapper {
@@ -171,37 +171,13 @@ body{
     margin-bottom: 12px;
 }
 
-/* انیمیشن‌های جدید و زیبا برای دکمه قرمز */
-@keyframes glowPulse {
-    0% {
-        box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3);
-        transform: scale(1.03);
-    }
-    100% {
-        box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
-        transform: scale(1);
-    }
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
-    }
-    100% {
-        background-position: 1000px 0;
-    }
-}
-
-@keyframes float {
+/* انیمیشن‌های ساده برای دکمه */
+@keyframes softFloat {
     0%, 100% {
         transform: translateY(0px);
     }
     50% {
-        transform: translateY(-6px);
+        transform: translateY(-4px);
     }
 }
 
@@ -212,58 +188,38 @@ body{
     gap: 8px;
     text-decoration: none;
     color: #fff;
-    background: linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #991B1B 100%);
-    background-size: 200% 200%;
-    border: 2px solid rgba(239, 68, 68, 0.5);
+    background: linear-gradient(135deg, #b20808 0%, #8b0606 100%);
+    border: none;
     border-radius: 12px;
     padding: 10px 18px;
     font-size: 13px;
     font-weight: 700;
     font-family: inherit;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
+    box-shadow: 0 2px 8px rgba(178, 8, 8, 0.2);
     cursor: pointer;
     width: 100%;
     max-width: 220px;
-    animation: glowPulse 3s ease-in-out infinite, float 3s ease-in-out infinite;
+    animation: softFloat 3s ease-in-out infinite;
     position: relative;
     overflow: hidden;
 }
 
-.club-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-    pointer-events: none;
-}
-
-.club-btn:hover::before {
-    left: 100%;
-}
-
 .club-btn:hover {
-    background: linear-gradient(135deg, #DC2626 0%, #991B1B 50%, #7F1D1D 100%);
+    background: linear-gradient(135deg, #8b0606 0%, #6b0505 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.4);
-    border-color: rgba(239, 68, 68, 0.8);
-    animation: none;
+    box-shadow: 0 4px 12px rgba(178, 8, 8, 0.3);
 }
 
 .club-btn:active {
     transform: translateY(0px);
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 2px 6px rgba(178, 8, 8, 0.2);
 }
 
 .club-btn svg {
     width: 18px;
     height: 18px;
     fill: currentColor;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
 }
 
 .club-divider {
@@ -597,6 +553,7 @@ body{
                     <span>گالری تصاویر</span>
                 </a>
             </div>
+            <div class="branch-divider" style="margin-top: 12px;"></div>
         </div>
     </div>
 </div>
