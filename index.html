@@ -376,7 +376,7 @@ body{
     position: relative;
 }
 
-.club-submit-btn:hover {
+.club-submit-btn:hover:not(:disabled) {
     background: #1e293b;
 }
 
@@ -677,10 +677,12 @@ body{
     var timerInterval = null;
     var remainingSeconds = 0;
 
-    // تابع شمارنده 2 دقیقه (120 ثانیه)
+    // تابع شمارنده 2 دقیقه (120 ثانیه) - فقط درخواست جدید را غیرفعال می‌کند
     function startTimer() {
         remainingSeconds = 120; // 2 دقیقه = 120 ثانیه
         timerDisplay.style.display = 'block';
+        // فقط دکمه درخواست کد را غیرفعال می‌کنیم، نه دکمه تایید
+        submitPhoneBtn.textContent = 'درخواست کد جدید';
         submitPhoneBtn.disabled = true;
         
         updateTimerDisplay();
@@ -693,6 +695,7 @@ body{
                 clearInterval(timerInterval);
                 timerDisplay.style.display = 'none';
                 submitPhoneBtn.disabled = false;
+                submitPhoneBtn.textContent = 'دریافت کد جدید';
                 resetClubForm();
                 formFeedback.className = 'form-feedback error';
                 formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
@@ -794,7 +797,7 @@ body{
                     clientPhoneInput.style.display = 'none';
                     otpCodeInput.style.display = 'block';
                     otpCodeInput.focus();
-                    submitPhoneBtn.innerText = 'تایید و ثبت نهایی';
+                    // دکمه تایید فعال باقی می‌ماند
                     
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
@@ -827,7 +830,7 @@ body{
 
             formFeedback.className = 'form-feedback loading';
             formFeedback.innerText = 'در حال تایید کد و ثبت نام... ⏳';
-            submitPhoneBtn.disabled = true;
+            // این بار دکمه ثبت را غیرفعال نمی‌کنیم که کاربر بتواند دوباره کلیک کند
 
             // استفاده از URLSearchParams برای پارامترهای بهتر
             var params = new URLSearchParams({
@@ -847,7 +850,6 @@ body{
                 return response.json();
             })
             .then(function(data) {
-                submitPhoneBtn.disabled = false;
                 if (data.success === true) {
                     clearInterval(timerInterval);
                     formFeedback.className = 'form-feedback success';
@@ -865,7 +867,6 @@ body{
                 }
             })
             .catch(function(error) {
-                submitPhoneBtn.disabled = false;
                 formFeedback.className = 'form-feedback error';
                 formFeedback.innerText = 'خطا در تایید. لطفاً اتصال خود را بررسی و دوباره سعی کنید.';
                 console.error('خطا در درخواست:', error);
