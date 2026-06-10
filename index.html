@@ -361,13 +361,13 @@ body{
     box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
 }
 
-/* استایل 5 کادر برای کد OTP - RTL */
+/* استایل 5 کادر برای کد OTP - LTR */
 .otp-inputs-container {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin: 12px 0;
-    flex-direction: row-reverse;
+    direction: ltr;
 }
 
 .otp-input {
@@ -632,11 +632,11 @@ body{
             
             <div id="otpSection" style="display: none;">
                 <div class="otp-inputs-container">
-                    <input type="number" class="otp-input" id="otp5" data-index="4" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp4" data-index="3" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp3" data-index="2" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp2" data-index="1" maxlength="1" inputmode="numeric" min="0" max="9">
                     <input type="number" class="otp-input" id="otp1" data-index="0" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp2" data-index="1" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp3" data-index="2" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp4" data-index="3" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp5" data-index="4" maxlength="1" inputmode="numeric" min="0" max="9">
                 </div>
             </div>
             
@@ -874,7 +874,7 @@ body{
         // ========================================
         // 🛑 مرحله اول: ارسال درخواست پیامک OTP
         // ========================================
-        if (currentStep === 1) {
+        if (currentStep === 1 && submitPhoneBtn.textContent === 'دریافت کد تایید') {
             var phone = clientPhoneInput.value.trim();
             phone = toEnglishDigits(phone);
             
@@ -932,7 +932,6 @@ body{
         // 🛑 درخواست کد جدید (وقتی تایمر تمام شود)
         // ========================================
         } else if (currentStep === 1 && submitPhoneBtn.textContent === 'دریافت کد جدید') {
-            // این بخش برای درخواست کد جدید است
             var phone = clientPhoneInput.value.trim();
             phone = toEnglishDigits(phone);
             
