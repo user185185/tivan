@@ -171,6 +171,31 @@ body{
     margin-bottom: 12px;
 }
 
+/* انیمیشن pulse برای جلب توجه */
+@keyframes clubPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    }
+}
+
+@keyframes starBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
 .club-btn {
     display: flex;
     align-items: center;
@@ -179,29 +204,49 @@ body{
     text-decoration: none;
     color: #fff;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border: none;
-    border-radius: 16px;
-    padding: 18px 32px;
-    font-size: 16px;
+    border: 2px solid rgba(15, 23, 42, 0.3);
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-size: 15px;
     font-weight: 700;
     font-family: inherit;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
     cursor: pointer;
     width: 100%;
-    max-width: 380px;
+    max-width: 340px;
+    animation: clubPulse 3s ease-in-out infinite;
+    position: relative;
+}
+
+.club-btn::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid #FFD700;
+    opacity: 0;
+    animation: starBounce 2s ease-in-out infinite;
 }
 
 .club-btn:hover {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
+    border-color: rgba(15, 23, 42, 0.5);
+    animation: none;
 }
 
 .club-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     fill: currentColor;
+    animation: starBounce 2s ease-in-out infinite;
 }
 
 .club-divider {
@@ -434,8 +479,8 @@ body{
     .logo-section{ height:150px; }
     .branch-address{ font-size:14px; }
     .branch-link{ font-size:14px; }
-    .club-btn { padding: 16px 24px; font-size: 15px; }
-    .club-btn svg { width: 20px; height: 20px; }
+    .club-btn { padding: 12px 20px; font-size: 14px; max-width: 300px; }
+    .club-btn svg { width: 18px; height: 18px; }
     .button-group{ gap: 8px; }
     .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
     .btn svg{ width:12px; height:12px; }
