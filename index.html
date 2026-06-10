@@ -216,6 +216,12 @@ body{
     box-shadow: 0 2px 6px rgba(178, 8, 8, 0.2);
 }
 
+.club-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: none;
+}
+
 .club-btn svg {
     width: 18px;
     height: 18px;
@@ -367,6 +373,7 @@ body{
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .club-submit-btn:hover {
@@ -376,6 +383,17 @@ body{
 .club-submit-btn:disabled {
     background: #94a3b8;
     cursor: not-allowed;
+}
+
+.timer-badge {
+    display: inline-block;
+    background: #ef4444;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
 }
 
 .form-feedback {
@@ -569,6 +587,7 @@ body{
             <input type="text" id="otpCode" class="club-input" placeholder="کد تایید ۵ رقمی" maxlength="5" inputmode="numeric" style="display: none; letter-spacing: 6px;">
             
             <button id="submitPhoneBtn" class="club-submit-btn">دریافت کد تایید</button>
+            <div id="timerDisplay" class="timer-badge" style="display: none;"></div>
             <div id="formFeedback" class="form-feedback"></div>
         </div>
         
@@ -638,7 +657,7 @@ body{
     }
 
     // =========================================
-    // منطق باشگاه مشتریان (OTP)
+    // منطق باشگاه مشتریان (OTP) با تایمر 2 دقیقه
     // =========================================
     var openClubBtn = document.getElementById('openClubBtn');
     var clubOverlay = document.getElementById('clubModalOverlay');
@@ -647,6 +666,7 @@ body{
     var clientPhoneInput = document.getElementById('clientPhone');
     var otpCodeInput = document.getElementById('otpCode'); 
     var formFeedback = document.getElementById('formFeedback');
+    var timerDisplay = document.getElementById('timerDisplay');
 
     // متغیرهای وضعیت دهی به مراحل تایید فرم
     var currentStep = 1; // 1: وارد کردن شماره، 2: وارد کردن کد OTP
@@ -654,6 +674,38 @@ body{
     var currentExpires = '';
     var verifiedPhone = '';
     var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
+    var timerInterval = null;
+    var remainingSeconds = 0;
+
+    // تابع شمارنده 2 دقیقه (120 ثانیه)
+    function startTimer() {
+        remainingSeconds = 120; // 2 دقیقه = 120 ثانیه
+        timerDisplay.style.display = 'block';
+        submitPhoneBtn.disabled = true;
+        
+        updateTimerDisplay();
+        
+        timerInterval = setInterval(function() {
+            remainingSeconds--;
+            updateTimerDisplay();
+            
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.style.display = 'none';
+                submitPhoneBtn.disabled = false;
+                resetClubForm();
+                formFeedback.className = 'form-feedback error';
+                formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
+            }
+        }, 1000);
+    }
+
+    // بروز رسانی نمایش تایمر
+    function updateTimerDisplay() {
+        var minutes = Math.floor(remainingSeconds / 60);
+        var seconds = remainingSeconds % 60;
+        timerDisplay.innerText = 'کد تایید تا ' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' ثانیه فعال است';
+    }
 
     // تابع بازنشانی فرم به حالت اولیه
     function resetClubForm() {
@@ -669,6 +721,11 @@ body{
         otpCodeInput.style.display = 'none';
         submitPhoneBtn.innerText = 'دریافت کد تایید';
         submitPhoneBtn.disabled = false;
+        timerDisplay.style.display = 'none';
+        
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
     }
 
     openClubBtn.addEventListener('click', function() {
@@ -723,12 +780,14 @@ body{
                 return response.json();
             })
             .then(function(data) {
-                submitPhoneBtn.disabled = false;
                 if (data.success === true) {
                     // ذخیره اطلاعات دریافتی برای مرحله بعد
                     currentToken = data.token;
                     currentExpires = data.expires;
                     verifiedPhone = phone;
+                    
+                    // شروع تایمر 2 دقیقه
+                    startTimer();
                     
                     // تغییر فاز به فاز دوم (دریافت OTP)
                     currentStep = 2;
@@ -740,6 +799,7 @@ body{
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
                 } else {
+                    submitPhoneBtn.disabled = false;
                     formFeedback.className = 'form-feedback error';
                     formFeedback.innerText = data.message || 'خطا در ارسال کد.';
                 }
@@ -789,8 +849,10 @@ body{
             .then(function(data) {
                 submitPhoneBtn.disabled = false;
                 if (data.success === true) {
+                    clearInterval(timerInterval);
                     formFeedback.className = 'form-feedback success';
                     formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
+                    timerDisplay.style.display = 'none';
                     
                     // بستن موفقیت آمیز فرم پس از ۲.۵ ثانیه
                     setTimeout(function() { 
