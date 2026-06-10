@@ -361,12 +361,13 @@ body{
     box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
 }
 
-/* استایل 5 کادر برای کد OTP */
+/* استایل 5 کادر برای کد OTP - RTL */
 .otp-inputs-container {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin: 12px 0;
+    flex-direction: row-reverse;
 }
 
 .otp-input {
@@ -631,11 +632,11 @@ body{
             
             <div id="otpSection" style="display: none;">
                 <div class="otp-inputs-container">
-                    <input type="number" class="otp-input" id="otp1" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp2" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp3" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp4" maxlength="1" inputmode="numeric" min="0" max="9">
-                    <input type="number" class="otp-input" id="otp5" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp5" data-index="4" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp4" data-index="3" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp3" data-index="2" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp2" data-index="1" maxlength="1" inputmode="numeric" min="0" max="9">
+                    <input type="number" class="otp-input" id="otp1" data-index="0" maxlength="1" inputmode="numeric" min="0" max="9">
                 </div>
             </div>
             
@@ -721,8 +722,14 @@ body{
     var formFeedback = document.getElementById('formFeedback');
     var timerDisplay = document.getElementById('timerDisplay');
 
-    // کادرهای OTP
-    var otpInputs = document.querySelectorAll('.otp-input');
+    // کادرهای OTP - ترتیب از چپ به راست (از 1 تا 5)
+    var otpInputs = [
+        document.getElementById('otp1'),
+        document.getElementById('otp2'),
+        document.getElementById('otp3'),
+        document.getElementById('otp4'),
+        document.getElementById('otp5')
+    ];
 
     // متغیرهای وضعیت دهی به مراحل تایید فرم
     var currentStep = 1; // 1: وارد کردن شماره، 2: وارد کردن کد OTP
@@ -733,7 +740,7 @@ body{
     var timerInterval = null;
     var remainingSeconds = 0;
 
-    // مدیریت OTP Inputs - جابجایی اتوماتیک بین کادرها
+    // مدیریت OTP Inputs - جابجایی اتوماتیک بین کادرها (از چپ به راست)
     otpInputs.forEach(function(input, index) {
         input.addEventListener('input', function(e) {
             var value = e.target.value;
@@ -788,6 +795,8 @@ body{
                 resetOtpInputs();
                 formFeedback.className = 'form-feedback error';
                 formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
+                currentStep = 1;
+                otpSection.style.display = 'none';
             }
         }, 1000);
     }
@@ -902,6 +911,60 @@ body{
                     // تغییر فاز به فاز دوم (دریافت OTP)
                     currentStep = 2;
                     otpSection.style.display = 'block';
+                    otpInputs[0].focus();
+                    
+                    formFeedback.className = 'form-feedback success';
+                    formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
+                } else {
+                    submitPhoneBtn.disabled = false;
+                    formFeedback.className = 'form-feedback error';
+                    formFeedback.innerText = data.message || 'خطا در ارسال کد.';
+                }
+            })
+            .catch(function(error) {
+                submitPhoneBtn.disabled = false;
+                formFeedback.className = 'form-feedback error';
+                formFeedback.innerText = 'خطا: سرور پاسخ نداد. لطفاً اتصال اینترنت را بررسی کنید.';
+                console.error('خطا در درخواست:', error);
+            });
+
+        // ========================================
+        // 🛑 درخواست کد جدید (وقتی تایمر تمام شود)
+        // ========================================
+        } else if (currentStep === 1 && submitPhoneBtn.textContent === 'دریافت کد جدید') {
+            // این بخش برای درخواست کد جدید است
+            var phone = clientPhoneInput.value.trim();
+            phone = toEnglishDigits(phone);
+            
+            var phoneRegex = /^09\d{9}$/;
+            if (!phoneRegex.test(phone)) {
+                formFeedback.className = 'form-feedback error';
+                formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
+                return;
+            }
+
+            formFeedback.className = 'form-feedback loading';
+            formFeedback.innerText = 'در حال بررسی و ارسال کد تایید... ⏳';
+            submitPhoneBtn.disabled = true;
+
+            fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', {
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('خطا: ' + response.status);
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.success === true) {
+                    currentToken = data.token;
+                    currentExpires = data.expires;
+                    verifiedPhone = phone;
+                    
+                    startTimer();
+                    currentStep = 2;
+                    otpSection.style.display = 'block';
+                    resetOtpInputs();
                     otpInputs[0].focus();
                     
                     formFeedback.className = 'form-feedback success';
