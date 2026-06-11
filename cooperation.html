@@ -1,41 +1,120 @@
-<div class="modal-title" style="text-align: center;">درخواست همکاری</div>
-<div class="modal-subtitle" style="text-align: right; margin-bottom: 15px;">لطفا اطلاعات زیر را تکمیل نمایید تا در اسرع وقت با شما تماس بگیریم.</div>
-
-<div class="club-form-group">
-    <div id="coopFieldsSection">
-        <label style="display: block; text-align: right; font-size: 13px;">نام و نام خانوادگـ‌ی*</label>
-        <input type="text" id="coopName" class="club-input" placeholder="نام و نام خانوادگی" maxlength="30" onkeypress="return (event.charCode >= 1776 && event.charCode <= 1785) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || event.charCode == 32" style="margin-bottom: 10px;">
-
-        <label style="display: block; text-align: right; font-size: 13px;">تلفن همراه‌*</label>
-        <input type="text" id="coopPhone" class="club-input" placeholder="09XXXXXXXXX" maxlength="11" inputmode="numeric" style="margin-bottom: 10px;">
-
-        <label style="display: block; text-align: right; font-size: 13px;">سال تولد*</label>
-        <input type="text" id="coopBirth" class="club-input" placeholder="مثال: 1380" maxlength="4" inputmode="numeric" style="margin-bottom: 10px;">
-
-        <label style="display: block; text-align: right; font-size: 13px;">عنوان شغلی*</label>
-        <select id="coopJob" class="club-input" style="margin-bottom: 15px; width: 100%; padding: 10px;">
-            <option value="مدیر داخلی">مدیر داخلی</option>
-            <option value="صندوقدار">صندوقدار</option>
-            <option value="کارشناس فروش" selected>کارشناس فروش</option>
-            <option value="انباردار">انباردار</option>
-        </select>
-    </div>
-
-    <div id="coopOtpSection" style="display: none; text-align: center;">
-        <div style="font-size: 13px; color: #475569; margin-bottom: 10px;">کد تایید پیامک شده را وارد کنید:</div>
-        <div class="otp-inputs-container" style="display: flex; justify-content: center; gap: 8px; direction: ltr; margin-bottom: 10px;">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp1" maxlength="1" inputmode="numeric">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp2" maxlength="1" inputmode="numeric">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp3" maxlength="1" inputmode="numeric">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp4" maxlength="1" inputmode="numeric">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp5" maxlength="1" inputmode="numeric">
-        </div>
-        <div id="coopTimerDisplay" class="timer-badge" style="font-size: 12px; margin-bottom: 5px;"></div>
-        <button id="resendCoopOtpBtn" class="club-submit-btn" style="background: #64748b; margin-bottom: 10px;" disabled>درخواست رمز جدید</button>
-    </div>
+<style>
+    /* استایل‌های اختصاصی فرم همکاری */
+    .coop-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+        text-align: center; /* وسط‌چین شدن تیتر اصلی */
+    }
+    .coop-subtitle {
+        font-size: 12.5px;
+        color: #64748b;
+        margin-bottom: 16px;
+        line-height: 1.6;
+        text-align: right; /* راست‌چین ماندن متن زیرین */
+    }
+    .coop-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    .coop-input {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 14px;
+        text-align: right;
+        letter-spacing: normal;
+        color: #0f172a;
+        outline: none;
+        transition: all 0.2s ease;
+        background: #f8fafc;
+    }
+    .coop-input:focus {
+        border-color: #0f172a;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+    }
     
-    <button id="coopSubmitBtn" class="club-submit-btn">ارسال کد تایید</button>
-    <div id="coopFeedback" class="form-feedback" style="margin-top: 10px;"></div>
-</div>
+    /* حل مشکل موقعیت ستاره و جهت تایپ شماره تلفن */
+    .coop-input.phone-field {
+        direction: rtl;
+    }
+    .coop-input.phone-field:not(:placeholder-shown) {
+        direction: ltr;
+        text-align: left;
+    }
 
-<button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 10px;">انصراف</button>
+    select.coop-input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: left 14px center;
+        background-size: 18px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="coop-title">درخواست همکاری</div>
+<div class="coop-subtitle">لطفا اطلاعات زیر را تکمیل کنید تا دراولین فرصت با شما تماس بگیریم</div>
+
+<form id="coopForm" class="coop-form-group" novalidate>
+    
+    <!-- نام و نام خانوادگی -->
+    <input type="text" class="coop-input" placeholder="نام و نام خانوادگی *" required>
+    
+    <!-- تلفن همراه -->
+    <input type="text" id="coopPhone" class="coop-input phone-field" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
+    
+    <!-- سال تولد -->
+    <input type="text" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
+    
+    <!-- زمینه همکاری -->
+    <select class="coop-input" required>
+        <option value="کارشناس فروش" selected>کارشناس فروش</option>
+        <option value="مدیرداخلی">مدیرداخلی</option>
+        <option value="صندوقدار">صندوقدار</option>
+        <option value="انباردار">انباردار</option>
+    </select>
+    
+    <!-- بخش فیدبک خطاها و موفقیت -->
+    <div id="coopFeedback" class="form-feedback"></div>
+    
+    <!-- دکمه ثبت با منطق بررسی خالی بودن و فرمت شماره همراه -->
+    <button type="submit" class="club-submit-btn" style="padding: 12px; margin-top: 4px;" 
+            onclick="
+                var form = this.form;
+                var inputs = form.querySelectorAll('input[required], select[required]');
+                var isEmpty = false;
+                
+                inputs.forEach(function(input) {
+                    if(!input.value.trim()) { isEmpty = true; }
+                });
+                
+                var fb = document.getElementById('coopFeedback');
+                
+                if(isEmpty) {
+                    event.preventDefault();
+                    fb.className = 'form-feedback error';
+                    fb.innerHTML = 'پرکردن همه فیلدها الزامی هست';
+                } else {
+                    var phoneVal = document.getElementById('coopPhone').value.trim();
+                    var phoneRegex = /^09\d{9}$/;
+                    if(!phoneRegex.test(phoneVal)) {
+                        event.preventDefault();
+                        fb.className = 'form-feedback error';
+                        fb.innerHTML = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
+                    }
+                }
+            ">
+        ثبت درخواست
+    </button>
+</form>
+
+<button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 12px;">انصراف</button>
