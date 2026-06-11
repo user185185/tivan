@@ -1,5 +1,5 @@
 <style>
-    /* استایل‌های اختصاصی فرم همکاری */
+    /* استایل‌های اختصاصی فرم همکاری تیوان */
     .coop-title-secure {
         font-size: 18px;
         font-weight: 700;
@@ -28,7 +28,6 @@
         font-family: inherit;
         font-size: 14px;
         text-align: right;
-        letter-spacing: normal;
         color: #0f172a;
         outline: none;
         transition: all 0.2s ease;
@@ -88,7 +87,7 @@
 <div class="coop-title-secure">درخواست همکاری</div>
 <div class="coop-subtitle-secure">لطفا اطلاعات زیر را تکمیل کنید تا دراولین فرصت با شما تماس بگیریم</div>
 
-<form id="coopFormSecure" class="coop-form-group-secure" onsubmit="event.preventDefault();" novalidate>
+<form id="coopFormSecure" class="coop-form-group-secure" onsubmit="window.tivanCoopSubmit(event);" novalidate>
     
     <input type="text" id="coopNameSecure" class="coop-input-secure" placeholder="نام و نام خانوادگی *" required>
     <input type="text" id="coopPhoneSecure" class="coop-input-secure phone-field-secure" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
@@ -104,11 +103,11 @@
     <div id="coopOtpSectionSecure" style="display: none; margin-bottom: 5px;">
         <div class="coop-subtitle-secure" style="text-align: center; margin-bottom: 10px; color: #0f172a;">کد تایید ۵ رقمی ارسال شده را وارد کنید:</div>
         <div class="coop-otp-container-secure">
-            <input type="text" id="coopOtpSecure1" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtpSecure2" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtpSecure3" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtpSecure4" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtpSecure5" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
+            <input type="text" id="coopOtpSecure1" class="coop-otp-input-secure" maxlength="1" inputmode="numeric" oninput="window.tivanCoopOtpInput(this, 1);" onkeydown="window.tivanCoopOtpKeydown(event, 1);">
+            <input type="text" id="coopOtpSecure2" class="coop-otp-input-secure" maxlength="1" inputmode="numeric" oninput="window.tivanCoopOtpInput(this, 2);" onkeydown="window.tivanCoopOtpKeydown(event, 2);">
+            <input type="text" id="coopOtpSecure3" class="coop-otp-input-secure" maxlength="1" inputmode="numeric" oninput="window.tivanCoopOtpInput(this, 3);" onkeydown="window.tivanCoopOtpKeydown(event, 3);">
+            <input type="text" id="coopOtpSecure4" class="coop-otp-input-secure" maxlength="1" inputmode="numeric" oninput="window.tivanCoopOtpInput(this, 4);" onkeydown="window.tivanCoopOtpKeydown(event, 4);">
+            <input type="text" id="coopOtpSecure5" class="coop-otp-input-secure" maxlength="1" inputmode="numeric" oninput="window.tivanCoopOtpInput(this, 5);" onkeydown="window.tivanCoopOtpKeydown(event, 5);">
         </div>
         <div id="coopTimerDisplaySecure" style="text-align: center; font-size: 12px; color: #64748b; margin-top: 10px;"></div>
     </div>
@@ -123,25 +122,14 @@
 <button class="close-modal-btn" id="closeCoopModalBtnSecure" style="margin-top: 12px;">انصراف</button>
 
 <script>
-// اجرای مطمئن کدها پس از بارگذاری کامل DOM برای جلوگیری از کرش اسکریپت
-document.addEventListener('DOMContentLoaded', function() {
+// قرار دادن توابع در بالاترین سطح دسترسی (Window) جهت هماهنگی با بارگذاری پویا
+(function() {
     var coopStep = 1;
     var coopTok = '';
     var coopExp = '';
     var coopVPhone = '';
     var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir'; 
     var coopTimer = null;
-
-    var formEl = document.getElementById('coopFormSecure');
-    if (!formEl) return; // لایه محافظتی
-
-    var otpInputsSec = [
-        document.getElementById('coopOtpSecure1'),
-        document.getElementById('coopOtpSecure2'),
-        document.getElementById('coopOtpSecure3'),
-        document.getElementById('coopOtpSecure4'),
-        document.getElementById('coopOtpSecure5')
-    ];
 
     function toEngDigits(str) {
         var p = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
@@ -152,30 +140,31 @@ document.addEventListener('DOMContentLoaded', function() {
         return str;
     }
 
-    otpInputsSec.forEach(function(input, index) {
-        if(!input) return;
-        input.addEventListener('input', function(e) {
-            var val = toEngDigits(e.target.value);
-            e.target.value = val;
-            if (val && index < otpInputsSec.length - 1) {
-                otpInputsSec[index + 1].focus();
-            }
-            checkAndSubmitSecOtp();
-        });
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && this.value === '' && index > 0) {
-                otpInputsSec[index - 1].focus();
-            }
-        });
-    });
-
-    function checkAndSubmitSecOtp() {
+    window.tivanCoopOtpInput = function(element, index) {
+        var val = toEngDigits(element.value);
+        element.value = val;
+        if (val && index < 5) {
+            var nextInput = document.getElementById('coopOtpSecure' + (index + 1));
+            if(nextInput) nextInput.focus();
+        }
+        
+        // چک کردن اتمام کد ۵ رقمی
         var otp = '';
-        otpInputsSec.forEach(function(i) { if(i) otp += i.value; });
+        for(var i=1; i<=5; i++) {
+            var inp = document.getElementById('coopOtpSecure' + i);
+            if(inp) otp += inp.value;
+        }
         if (otp.length === 5) {
             processSecVerify(otp);
         }
-    }
+    };
+
+    window.tivanCoopOtpKeydown = function(event, index) {
+        if (event.key === 'Backspace' && document.getElementById('coopOtpSecure' + index).value === '' && index > 1) {
+            var prevInput = document.getElementById('coopOtpSecure' + (index - 1));
+            if(prevInput) prevInput.focus();
+        }
+    };
 
     function startSecTimer() {
         var remains = 120;
@@ -203,14 +192,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function toggleSecInputs(disabled) {
-        document.getElementById('coopNameSecure').disabled = disabled;
-        document.getElementById('coopPhoneSecure').disabled = disabled;
-        document.getElementById('coopBirthSecure').disabled = disabled;
-        document.getElementById('coopJobSecure').disabled = disabled;
+        if(document.getElementById('coopNameSecure')) document.getElementById('coopNameSecure').disabled = disabled;
+        if(document.getElementById('coopPhoneSecure')) document.getElementById('coopPhoneSecure').disabled = disabled;
+        if(document.getElementById('coopBirthSecure')) document.getElementById('coopBirthSecure').disabled = disabled;
+        if(document.getElementById('coopJobSecure')) document.getElementById('coopJobSecure').disabled = disabled;
     }
 
-    formEl.addEventListener('submit', function(e) {
-        e.preventDefault();
+    window.tivanCoopSubmit = function(e) {
+        if(e) e.preventDefault();
         
         if (coopStep === 1) {
             var name = document.getElementById('coopNameSecure').value.trim();
@@ -246,8 +235,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     coopStep = 2;
                     toggleSecInputs(true);
                     document.getElementById('coopOtpSectionSecure').style.display = 'block';
-                    otpInputsSec.forEach(function(i) { if(i) i.value = ''; });
-                    if(otpInputsSec[0]) otpInputsSec[0].focus();
+                    
+                    for(var i=1; i<=5; i++) {
+                        var inp = document.getElementById('coopOtpSecure' + i);
+                        if(inp) inp.value = '';
+                    }
+                    if(document.getElementById('coopOtpSecure1')) document.getElementById('coopOtpSecure1').focus();
+                    
                     btn.textContent = 'تایید نهایی کدتایید';
                     startSecTimer();
                     fb.className = 'form-feedback success';
@@ -265,7 +259,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } else if (coopStep === 2) {
             var otp = '';
-            otpInputsSec.forEach(function(i) { if(i) otp += i.value; });
+            for(var i=1; i<=5; i++) {
+                var inp = document.getElementById('coopOtpSecure' + i);
+                if(inp) otp += inp.value;
+            }
             if (otp.length < 5) {
                 document.getElementById('coopFeedbackSecure').className = 'form-feedback error';
                 document.getElementById('coopFeedbackSecure').innerHTML = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
@@ -273,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             processSecVerify(otp);
         }
-    });
+    };
 
     function processSecVerify(otp) {
         var fb = document.getElementById('coopFeedbackSecure');
@@ -307,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('coopOtpSectionSecure').style.display = 'none';
                 fb.className = 'form-feedback success';
                 fb.innerHTML = 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید. ✨';
-                formEl.reset();
+                document.getElementById('coopFormSecure').reset();
                 document.getElementById('coopJobSecure').value = "کارشناس فروش";
                 coopStep = 1;
                 toggleSecInputs(false);
@@ -323,5 +320,5 @@ document.addEventListener('DOMContentLoaded', function() {
             fb.innerHTML = 'خطا در تایید اطلاعات.';
         });
     }
-});
+})();
 </script>
