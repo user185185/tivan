@@ -258,6 +258,7 @@ body{
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     cursor: pointer;
+    font-family: inherit;
 }
 
 .btn:hover{
@@ -570,10 +571,10 @@ body{
 
         <div class="footer-section">
             <div class="button-group">
-                <a href="cooperation.html" class="btn">
+                <button type="button" class="btn" id="openCoopBtn">
                     <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
                     <span>درخواست همکاری</span>
-                </a>
+                </button>
                 <a href="gallery.html" class="btn">
                     <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
                     <span>گالری تصاویر</span>
@@ -581,6 +582,12 @@ body{
             </div>
             <div class="branch-divider" style="margin-top: 12px;"></div>
         </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="coopModalOverlay">
+    <div class="custom-modal" id="coopModalDynamicTarget">
+        <div style="padding:20px; color:#64748b; font-size:14px;">در حال بارگذاری فرم...</div>
     </div>
 </div>
 
@@ -635,6 +642,7 @@ body{
 
 <script>
 (function() {
+    // --- منطق پاپ‌آپ مسیریابی روی نقشه ---
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
     var closeMapBtn = document.getElementById('closeMapModalBtn');
@@ -657,8 +665,60 @@ body{
         mapOverlay.classList.remove('active'); 
     });
 
+    // --- منطق بارگذاری داینامیک فرم از فایل cooperation.html ---
+    var openCoopBtn = document.getElementById('openCoopBtn');
+    var coopOverlay = document.getElementById('coopModalOverlay');
+    var dynamicTarget = document.getElementById('coopModalDynamicTarget');
+
+    openCoopBtn.addEventListener('click', function() {
+        coopOverlay.classList.add('active');
+        
+        // درخواست زنده برای خواندن محتویات فایل خارجی
+        fetch('cooperation.html')
+            .then(response => {
+                if (!response.ok) throw new Error('فایل یافت نشد');
+                return response.text();
+            })
+            .then(htmlContent => {
+                // تزریق کدها به پاپ‌آپ
+                dynamicTarget.innerHTML = htmlContent;
+                // متصل کردن رویدادهای دکمه انصراف و سابمیت فرم لود شده
+                initDynamicFormEvents();
+            })
+            .catch(error => {
+                dynamicTarget.innerHTML = '<div style="padding:20px; color:#dc2626; font-size:14px;">خطا در بارگذاری فرم. لطفاً مجدداً تلاش کنید.</div>';
+            });
+    });
+
+    function initDynamicFormEvents() {
+        var closeCoopBtn = document.getElementById('closeCoopModalBtn');
+        var coopForm = document.getElementById('coopForm');
+        var coopFeedback = document.getElementById('coopFeedback');
+
+        if (closeCoopBtn) {
+            closeCoopBtn.addEventListener('click', function() {
+                coopOverlay.classList.remove('active');
+            });
+        }
+
+        if (coopForm) {
+            coopForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if(coopFeedback) {
+                    coopFeedback.className = 'form-feedback success';
+                    coopFeedback.innerHTML = 'درخواست شما با موفقیت ثبت شد. به‌زودی با شما تماس می‌گیریم.';
+                }
+                setTimeout(function() {
+                    coopOverlay.classList.remove('active');
+                }, 2500);
+            });
+        }
+    }
+
+    // بستن پاپ‌آپ‌ها با کلیک روی فضای خالی و تاریک محیط خارج کادر
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
+        if (e.target === coopOverlay) coopOverlay.classList.remove('active');
     });
 })();
 </script>
