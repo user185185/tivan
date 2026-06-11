@@ -37,17 +37,17 @@ document.addEventListener('DOMContentLoaded', function() {
         return str;
     }
 
-    // کنترل وضعیت محرومیت‌های ۱ ساعته، ۳ ساعته و ۲۴ ساعته بر اساس دستگاه و شماره
+    // کنترل وضعیت محرومیت‌های ۱۰ دقیقه، ۱ ساعته و ۲۴ ساعته بر اساس دستگاه و شماره
     function checkBlockStatus() {
         var blockedUntil = localStorage.getItem('club_blocked_until');
         if (blockedUntil) {
             var timeLeft = parseInt(blockedUntil) - Date.now();
             if (timeLeft > 0) {
                 var minutesLeft = Math.ceil(timeLeft / (1000 * 60));
-                var hoursLeft = Math.ceil(minutesLeft / 60);
                 
                 var msg = '';
                 if (minutesLeft > 60) {
+                    var hoursLeft = Math.ceil(minutesLeft / 60);
                     msg = '⚠️ شما به دلیل تلاش‌های ناموفق مکرر، تا ' + hoursLeft + ' ساعت آینده از دریافت کد محروم هستید.';
                 } else {
                     msg = '⚠️ شما به دلیل تلاش‌های ناموفق مکرر، تا ' + minutesLeft + ' دقیقه آینده از دریافت کد محروم هستید.';
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // تایید کد و ثبت نهایی در دیتابیس ورکر
+    // تایید کد و ثبت نهایی در کانتکت‌بوک از طریق ورکر ارور
     function submitOTP(otp) {
         isVerifying = true;
         formFeedback.className = 'form-feedback loading';
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 formFeedback.innerText = data.message || 'عضویت شما در باشگاه مشتریان تیوان با موفقیت ثبت شد. ✨';
                 timerDisplay.style.display = 'none';
                 
-                // ریست کردن شمارنده‌های اسپم بعد از عضویت موفقیت‌آمیز
+                // ریست کردن کامل شمارنده‌های اسپم بعد از عضویت موفقیت‌آمیز
                 localStorage.removeItem('club_attempts');
                 localStorage.removeItem('club_block_count');
                 localStorage.removeItem('club_blocked_until');
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     closeClubBtn.addEventListener('click', function() { clubOverlay.classList.remove('active'); });
     window.addEventListener('click', function(e) { if (e.target === clubOverlay) clubOverlay.classList.remove('active'); });
 
-    // فرآیند کلیک روی دکمه اصلی دریافت کد / تایید
+    // فرآیند کلیک روی دکمه اصلی دریافت کد / تایید نهایی
     submitPhoneBtn.addEventListener('click', function() {
         if (checkBlockStatus()) return;
 
@@ -214,15 +214,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // شمارش تعداد تلاش‌های ناموفق و اعمال محرومیت‌های پله‌ای
+            // شمارش پله‌ای بومی با هماهنگی سقف مجاز ۳تایی سرور
             var attempts = parseInt(localStorage.getItem('club_attempts') || '0');
-            if (attempts >= 5) {
+            if (attempts >= 3) {
                 var blockCount = parseInt(localStorage.getItem('club_block_count') || '0') + 1;
                 localStorage.setItem('club_block_count', blockCount);
                 
-                var duration = 1 * 60 * 60 * 1000; // بار اول: ۱ ساعت محرومیت
-                if (blockCount === 2) duration = 3 * 60 * 60 * 1000; // بار دوم: ۳ ساعت محرومیت
-                if (blockCount >= 3) duration = 24 * 60 * 60 * 1000; // بار سوم به بعد: ۲۴ ساعت (۱ روز) محرومیت
+                var duration = 10 * 60 * 1000; // بار اول: ۱۰ دقیقه محرومیت مطابق سرور
+                if (blockCount === 2) duration = 1 * 60 * 60 * 1000; // بار دوم: ۱ ساعت محرومیت
+                if (blockCount >= 3) duration = 24 * 60 * 60 * 1000; // بار سوم: ۲۴ ساعت محرومیت
                 
                 localStorage.setItem('club_blocked_until', Date.now() + duration);
                 localStorage.setItem('club_attempts', '0'); 
@@ -242,14 +242,21 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(function(data) {
                 submitPhoneBtn.disabled = false;
                 
-                // منطق ۱: اگر از قبل ثبت بود، پیام داده و متوقف می‌شود (پیامک نمی‌رود)
-                if (data.registered === true || data.alreadyRegistered === true) {
-                    formFeedback.className = 'form-feedback success';
-                    formFeedback.innerText = data.message || 'شماره شما قبلاً در باشگاه مشتریان ثبت شده است و فعال می‌باشد. ✨';
+                // بررسی پیام سرور برای پیشگیری از ارسال مجدد اس‌ام‌اس به شماره‌های موجود
+                if (data.success === false && data.alreadyRegistered === true) {
+                    formFeedback.className = 'form-feedback error';
+                    formFeedback.innerText = data.message || 'این شماره از قبل در باشگاه مشتریان موجود است.';
                     return;
                 }
 
-                // منطق ۲: اگر ثبت نبود، کد می‌رود و تایمر ۲ دقیقه‌ای راه می‌افتد
+                // در صورت مسدود بودن از سمت سرور
+                if (data.success === false && data.message.includes("مسدود")) {
+                    formFeedback.className = 'form-feedback error';
+                    formFeedback.innerText = data.message;
+                    return;
+                }
+
+                // ارسال موفقیت‌آمیز کد تایید
                 if (data.success === true) {
                     localStorage.setItem('club_attempts', attempts + 1);
 
