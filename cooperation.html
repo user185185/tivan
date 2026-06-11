@@ -1,10 +1,18 @@
 <style>
-    /* استایل‌های اختصاصی فرم همکاری برای راست‌چین بودن و ارتفاع کم */
+    /* استایل‌های اختصاصی فرم همکاری */
     .coop-title {
         font-size: 18px;
         font-weight: 700;
         color: #0f172a;
+        margin-bottom: 4px;
+        text-align: right;
+    }
+    .coop-subtitle {
+        font-size: 12.5px;
+        color: #64748b;
         margin-bottom: 16px;
+        line-height: 1.6;
+        text-align: right;
     }
     .coop-form-group {
         display: flex;
@@ -31,10 +39,16 @@
         background: #fff;
         box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
     }
+    
+    /* حل مشکل موقعیت ستاره و جهت تایپ شماره تلفن */
     .coop-input.phone-field {
-        direction: ltr;
-        text-align: right;
+        direction: rtl; /* زمان خالی بودن راست‌چین است تا ستاره درست قرار بگیرد */
     }
+    .coop-input.phone-field:not(:placeholder-shown) {
+        direction: ltr; /* زمان تایپ چپ‌چین می‌شود تا شماره درست وارد شود */
+        text-align: left;
+    }
+
     select.coop-input {
         appearance: none;
         -webkit-appearance: none;
@@ -48,15 +62,15 @@
 </style>
 
 <div class="coop-title">درخواست همکاری</div>
+<div class="coop-subtitle">لطفا اطلاعات زیر را تکمیل کنید دراولین فرصت با شما تماس خواهیم گرفت</div>
 
-<!-- اضافه کردن ویژگی novalidate برای کنترل دستی خطای خالی بودن فیلدها -->
 <form id="coopForm" class="coop-form-group" novalidate>
     
     <!-- نام و نام خانوادگی -->
     <input type="text" class="coop-input" placeholder="نام و نام خانوادگی *" required>
     
     <!-- تلفن همراه -->
-    <input type="text" class="coop-input phone-field" placeholder="* تلفن همراه" maxlength="11" inputmode="numeric" required>
+    <input type="text" id="coopPhone" class="coop-input phone-field" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
     
     <!-- سال تولد -->
     <input type="text" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
@@ -69,23 +83,34 @@
         <option value="انباردار">انباردار</option>
     </select>
     
-    <!-- بخش فیدبک و پیام‌های خطا یا موفقیت -->
+    <!-- بخش فیدبک خطاها و موفقیت -->
     <div id="coopFeedback" class="form-feedback"></div>
     
-    <!-- دکمه ثبت همراه با بررسی آنی خالی بودن فیلدها -->
+    <!-- دکمه ثبت با منطق بررسی خالی بودن و فرمت شماره همراه -->
     <button type="submit" class="club-submit-btn" style="padding: 12px; margin-top: 4px;" 
             onclick="
                 var form = this.form;
                 var inputs = form.querySelectorAll('input[required], select[required]');
                 var isEmpty = false;
+                
                 inputs.forEach(function(input) {
                     if(!input.value.trim()) { isEmpty = true; }
                 });
+                
+                var fb = document.getElementById('coopFeedback');
+                
                 if(isEmpty) {
                     event.preventDefault();
-                    var fb = document.getElementById('coopFeedback');
                     fb.className = 'form-feedback error';
                     fb.innerHTML = 'پرکردن همه فیلدها الزامی هست';
+                } else {
+                    var phoneVal = document.getElementById('coopPhone').value.trim();
+                    var phoneRegex = /^09\d{9}$/;
+                    if(!phoneRegex.test(phoneVal)) {
+                        event.preventDefault();
+                        fb.className = 'form-feedback error';
+                        fb.innerHTML = 'شماره همراه باید با ۰۹ شروع شده و ۱۱ رقم باشد';
+                    }
                 }
             ">
         ثبت درخواست
