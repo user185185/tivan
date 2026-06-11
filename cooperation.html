@@ -1,194 +1,82 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>درخواست همکاری - تیوان</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: transparent; /* هماهنگی کامل با پس‌زمینه محو صفحه اصلی */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 16px;
-        }
-        .form-card {
-            background: #ffffff;
-            width: 100%;
-            max-width: 390px;
-            padding: 32px 24px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
-        }
-        .form-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .form-title {
-            font-size: 19px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 6px;
-        }
-        .form-subtitle {
-            font-size: 13px;
-            color: #64748b;
-            line-height: 1.6;
-        }
-        .form-body {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        .input-group {
-            width: 100%;
-        }
-        .input-row {
-            display: flex;
-            gap: 12px;
-            width: 100%;
-        }
-        /* فیلد تخصص بزرگ‌تر و فیلد سال تولد کوچک‌تر */
-        .field-role {
-            flex: 2.5;
-        }
-        .field-birth {
-            flex: 1;
-        }
-        .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 14px;
-            color: #0f172a;
-            outline: none;
-            background: #f8fafc;
-            transition: all 0.2s ease;
-            text-align: right;
-        }
-        .form-control::placeholder {
-            color: #94a3b8;
-        }
-        .form-control:focus {
-            border-color: #0f172a;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
-        }
-        .text-center {
-            text-align: center;
-        }
-        textarea.form-control {
-            resize: none;
-            height: 90px;
-            line-height: 1.6;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: #0f172a;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 14.5px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 6px;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-        }
-        .submit-btn:hover {
-            background: #1e293b;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
-        }
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-        .feedback {
-            font-size: 13px;
-            text-align: center;
-            margin-top: 8px;
-            font-weight: 500;
-            min-height: 20px;
-        }
-        .feedback.success { color: #16a34a; }
-        .feedback.error { color: #dc2626; }
+<style>
+    /* استایل‌های اختصاصی فرم همکاری برای راست‌چین بودن و ارتفاع کم */
+    .coop-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 16px;
+    }
+    .coop-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* فاصله کم بین فیلدها برای کاهش ارتفاع */
+        width: 100%;
+    }
+    .coop-input {
+        width: 100%;
+        padding: 11px 14px; /* پدینگ بهینه برای جمع‌وجور شدن */
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        font-family: inherit;
+        font-size: 14px;
+        text-align: right; /* راست‌چین برای فیلدهای متنی */
+        letter-spacing: normal;
+        color: #0f172a;
+        outline: none;
+        transition: all 0.2s ease;
+        background: #f8fafc;
+    }
+    .coop-input:focus {
+        border-color: #0f172a;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+    }
+    /* استایل خاص برای شماره همراه جهت نمایش بهتر اعداد */
+    .coop-input.phone-field {
+        direction: ltr;
+        text-align: right;
+    }
+    /* سفارشی‌سازی فلش لیست کشویی */
+    select.coop-input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: left 14px center;
+        background-size: 18px;
+        cursor: pointer;
+    }
+</style>
 
-        /* بهینه‌سازی دقیق برای نمایشگرهای کوچک موبایل */
-        @media (max-width: 480px) {
-            .form-card {
-                padding: 24px 18px;
-                border-radius: 16px;
-            }
-            .form-title { font-size: 17px; }
-            .form-subtitle { font-size: 12px; }
-            .form-control { padding: 12px 14px; font-size: 13.5px; }
-            .submit-btn { padding: 12px; font-size: 14px; }
-        }
-    </style>
-</head>
-<body>
+<div class="coop-title">درخواست همکاری</div>
 
-    <div class="form-card">
-        <div class="form-header">
-            <h1 class="form-title">فرم درخواست همکاری</h1>
-            <p class="form-subtitle">لطفاً اطلاعات خود را وارد کنید تا در اسرع وقت با شما تماس بگیریم.</p>
-        </div>
+<form id="coopForm" class="coop-form-group">
+    
+    <!-- نام و نام خانوادگی -->
+    <input type="text" class="coop-input" placeholder="نام و نام خانوادگی (الزامی)" required>
+    
+    <!-- تلفن همراه -->
+    <input type="text" class="coop-input phone-field" placeholder="تلفن همراه (الزامی)" maxlength="11" inputmode="numeric" pattern="09[0-9]{9}" required>
+    
+    <!-- سال تولد -->
+    <input type="text" class="coop-input" placeholder="سال تولد (الزامی)" maxlength="4" inputmode="numeric" required>
+    
+    <!-- زمینه همکاری -->
+    <select class="coop-input" required>
+        <option value="" disabled selected hidden>زمینه همکاری (الزامی)</option>
+        <option value="مدیرداخلی">مدیرداخلی</option>
+        <option value="صندوقدار">صندوقدار</option>
+        <option value="کارشناس فروش">کارشناس فروش</option>
+        <option value="انباردار">انباردار</option>
+    </select>
+    
+    <!-- بخش فیدبک ثبت موفقیت‌آمیز -->
+    <div id="coopFeedback" class="form-feedback"></div>
+    
+    <!-- دکمه ثبت نهایی -->
+    <button type="submit" class="club-submit-btn" style="padding: 12px; margin-top: 4px;">ثبت درخواست</button>
+</form>
 
-        <form id="cooperationForm" class="form-body">
-            <div class="input-group">
-                <input type="text" id="fullName" class="form-control" placeholder="نام و نام خانوادگی" required>
-            </div>
-            
-            <div class="input-group">
-                <input type="tel" id="phoneNumber" class="form-control text-center" placeholder="شماره تماس (۰۹XXXXXXXXX)" maxlength="11" inputmode="numeric" required>
-            </div>
-            
-            <div class="input-row">
-                <div class="input-group field-role">
-                    <input type="text" id="jobRole" class="form-control" placeholder="زمینه همکاری (مثلاً فروشنده)" required>
-                </div>
-                <div class="input-group field-birth">
-                    <input type="text" id="birthYear" class="form-control text-center" placeholder="سال تولد" maxlength="4" inputmode="numeric" required>
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <textarea id="resumeDetails" class="form-control" placeholder="سوابق کاری یا توضیحات کوتاه..."></textarea>
-            </div>
-            
-            <button type="submit" class="submit-btn">ثبت درخواست همکاری</button>
-            <div id="formFeedback" class="feedback"></div>
-        </form>
-    </div>
-
-    <script>
-        document.getElementById('cooperationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var feedback = document.getElementById('formFeedback');
-            
-            feedback.className = 'feedback success';
-            feedback.innerHTML = 'درخواست شما با موفقیت ثبت شد. به‌زودی با شما تماس می‌گیریم.';
-            
-            // ارسال سیگنال به صفحه اصلی (index.html) برای بستن خودکار پاپ‌آپ بعد از ۲ ثانیه
-            if (window.parent && window.parent.postMessage) {
-                setTimeout(function() {
-                    window.parent.postMessage('close_coop_modal', '*');
-                }, 2000);
-            }
-        });
-    </script>
-</body>
-</html>
+<!-- دکمه انصراف و بستن پاپ‌آپ -->
+<button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 12px;">انصراف</button>
