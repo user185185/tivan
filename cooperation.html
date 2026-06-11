@@ -67,16 +67,16 @@
 <form id="coopForm" class="coop-form-group" novalidate>
     
     <!-- نام و نام خانوادگی -->
-    <input type="text" class="coop-input" placeholder="نام و نام خانوادگی *" required>
+    <input type="text" id="coopName" class="coop-input" placeholder="نام و نام خانوادگی *" required>
     
     <!-- تلفن همراه -->
     <input type="text" id="coopPhone" class="coop-input phone-field" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
     
     <!-- سال تولد -->
-    <input type="text" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
+    <input type="text" id="coopBirth" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
     
     <!-- زمینه همکاری -->
-    <select class="coop-input" required>
+    <select id="coopJob" class="coop-input" required>
         <option value="کارشناس فروش" selected>کارشناس فروش</option>
         <option value="مدیرداخلی">مدیرداخلی</option>
         <option value="صندوقدار">صندوقدار</option>
@@ -86,35 +86,83 @@
     <!-- بخش فیدبک خطاها و موفقیت -->
     <div id="coopFeedback" class="form-feedback"></div>
     
-    <!-- دکمه ثبت با منطق بررسی خالی بودن و فرمت شماره همراه -->
-    <button type="submit" class="club-submit-btn" style="padding: 12px; margin-top: 4px;" 
-            onclick="
-                var form = this.form;
-                var inputs = form.querySelectorAll('input[required], select[required]');
-                var isEmpty = false;
-                
-                inputs.forEach(function(input) {
-                    if(!input.value.trim()) { isEmpty = true; }
-                });
-                
-                var fb = document.getElementById('coopFeedback');
-                
-                if(isEmpty) {
-                    event.preventDefault();
-                    fb.className = 'form-feedback error';
-                    fb.innerHTML = 'پرکردن همه فیلدها الزامی هست';
-                } else {
-                    var phoneVal = document.getElementById('coopPhone').value.trim();
-                    var phoneRegex = /^09\d{9}$/;
-                    if(!phoneRegex.test(phoneVal)) {
-                        event.preventDefault();
-                        fb.className = 'form-feedback error';
-                        fb.innerHTML = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
-                    }
-                }
-            ">
+    <!-- دکمه ثبت -->
+    <button type="submit" id="coopSubmitBtn" class="club-submit-btn" style="padding: 12px; margin-top: 4px;">
         ثبت درخواست
     </button>
 </form>
 
 <button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 12px;">انصراف</button>
+
+<script>
+document.getElementById('coopForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // جلوگیری از رفرش شدن پیش‌فرض صفحه
+    
+    var name = document.getElementById('coopName').value.trim();
+    var phone = document.getElementById('coopPhone').value.trim();
+    var birth = document.getElementById('coopBirth').value.trim();
+    var job = document.getElementById('coopJob').value;
+    var fb = document.getElementById('coopFeedback');
+    var submitBtn = document.getElementById('coopSubmitBtn');
+    
+    // ۱. بررسی خالی نبودن فیلدها
+    if (!name || !phone || !birth || !job) {
+        fb.className = 'form-feedback error';
+        fb.innerHTML = 'پرکردن همه فیلدها الزامی هست';
+        return;
+    }
+    
+    // ۲. بررسی فرمت شماره همراه (شروع با 09 و 11 رقم)
+    var phoneRegex = /^09\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+        fb.className = 'form-feedback error';
+        fb.innerHTML = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
+        return;
+    }
+    
+    // تغییر وضعیت دکمه به حالت در حال ارسال
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'در حال ارسال...';
+    fb.innerHTML = '';
+    
+    // ۳. ارسال اطلاعات به یو‌آر‌ال آروان (دقیقا مشابه کدهای باشگاه مشتریان شما)
+    // آدرس وب‌هوک یا کدهای سرورلس آروان خودت رو جایگزین آدرس فرضی زیر کن
+    var arvanEndpoint = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir'; 
+    
+    fetch(arvanEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            phone: phone,
+            birthYear: birth,
+            jobTitle: job
+        })
+    })
+    .then(function(response) {
+        if (response.ok) {
+            fb.className = 'form-feedback success';
+            fb.innerHTML = 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید.';
+            document.getElementById('coopForm').reset(); // پاک کردن فرم پس از موفقیت
+            // بازگرداندن مقدار پیش‌فرض کارشناس فروش بعد از ریست
+            document.getElementById('coopJob').value = "کارشناس فروش";
+        } else {
+            throw new Error('خطا در ارسال');
+        }
+    })
+    .catch(function(error) {
+        fb.className = 'form-feedback error';
+        fb.innerHTML = 'متاسفانه خطایی رخ داد. لطفا دوباره تلاش کنید.';
+    })
+    .finally(function() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'ثبت درخواست';
+    });
+});
+</script>
+نکته نهایی برای ست کردن پنل فراز اس ام اس:
+داخل کدهای سمت آروان، پترن (Pattern) جدیدی در فراز اس ام اس بساز که خروجی‌اش این شکلی ارسال شود:
+
+"مدیر محترم، یک درخواست همکاری جدید ثبت شد.\nنام: %name%\nهمراه: %phone%\nمتولد: %birthYear%\nسمت: %jobTitle%"
