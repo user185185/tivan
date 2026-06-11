@@ -9,17 +9,17 @@
     .coop-form-group {
         display: flex;
         flex-direction: column;
-        gap: 10px; /* فاصله کم بین فیلدها برای کاهش ارتفاع */
+        gap: 10px;
         width: 100%;
     }
     .coop-input {
         width: 100%;
-        padding: 11px 14px; /* پدینگ بهینه برای جمع‌وجور شدن */
+        padding: 11px 14px;
         border: 1.5px solid #e2e8f0;
         border-radius: 12px;
         font-family: inherit;
         font-size: 14px;
-        text-align: right; /* راست‌چین برای فیلدهای متنی */
+        text-align: right;
         letter-spacing: normal;
         color: #0f172a;
         outline: none;
@@ -31,12 +31,10 @@
         background: #fff;
         box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
     }
-    /* استایل خاص برای شماره همراه جهت نمایش بهتر اعداد */
     .coop-input.phone-field {
         direction: ltr;
         text-align: right;
     }
-    /* سفارشی‌سازی فلش لیست کشویی */
     select.coop-input {
         appearance: none;
         -webkit-appearance: none;
@@ -51,32 +49,47 @@
 
 <div class="coop-title">درخواست همکاری</div>
 
-<form id="coopForm" class="coop-form-group">
+<!-- اضافه کردن ویژگی novalidate برای کنترل دستی خطای خالی بودن فیلدها -->
+<form id="coopForm" class="coop-form-group" novalidate>
     
     <!-- نام و نام خانوادگی -->
-    <input type="text" class="coop-input" placeholder="نام و نام خانوادگی (الزامی)" required>
+    <input type="text" class="coop-input" placeholder="نام و نام خانوادگی *" required>
     
     <!-- تلفن همراه -->
-    <input type="text" class="coop-input phone-field" placeholder="تلفن همراه (الزامی)" maxlength="11" inputmode="numeric" pattern="09[0-9]{9}" required>
+    <input type="text" class="coop-input phone-field" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
     
     <!-- سال تولد -->
-    <input type="text" class="coop-input" placeholder="سال تولد (الزامی)" maxlength="4" inputmode="numeric" required>
+    <input type="text" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
     
     <!-- زمینه همکاری -->
     <select class="coop-input" required>
-        <option value="" disabled selected hidden>زمینه همکاری (الزامی)</option>
+        <option value="کارشناس فروش" selected>کارشناس فروش</option>
         <option value="مدیرداخلی">مدیرداخلی</option>
         <option value="صندوقدار">صندوقدار</option>
-        <option value="کارشناس فروش">کارشناس فروش</option>
         <option value="انباردار">انباردار</option>
     </select>
     
-    <!-- بخش فیدبک ثبت موفقیت‌آمیز -->
+    <!-- بخش فیدبک و پیام‌های خطا یا موفقیت -->
     <div id="coopFeedback" class="form-feedback"></div>
     
-    <!-- دکمه ثبت نهایی -->
-    <button type="submit" class="club-submit-btn" style="padding: 12px; margin-top: 4px;">ثبت درخواست</button>
+    <!-- دکمه ثبت همراه با بررسی آنی خالی بودن فیلدها -->
+    <button type="submit" class="club-submit-btn" style="padding: 12px; margin-top: 4px;" 
+            onclick="
+                var form = this.form;
+                var inputs = form.querySelectorAll('input[required], select[required]');
+                var isEmpty = false;
+                inputs.forEach(function(input) {
+                    if(!input.value.trim()) { isEmpty = true; }
+                });
+                if(isEmpty) {
+                    event.preventDefault();
+                    var fb = document.getElementById('coopFeedback');
+                    fb.className = 'form-feedback error';
+                    fb.innerHTML = 'پرکردن همه فیلدها الزامی هست';
+                }
+            ">
+        ثبت درخواست
+    </button>
 </form>
 
-<!-- دکمه انصراف و بستن پاپ‌آپ -->
 <button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 12px;">انصراف</button>
