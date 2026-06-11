@@ -1,26 +1,26 @@
 <style>
     /* استایل‌های اختصاصی فرم همکاری */
-    .coop-title {
+    .coop-title-secure {
         font-size: 18px;
         font-weight: 700;
         color: #0f172a;
         margin-bottom: 6px;
         text-align: center;
     }
-    .coop-subtitle {
+    .coop-subtitle-secure {
         font-size: 12.5px;
         color: #64748b;
         margin-bottom: 16px;
         line-height: 1.6;
         text-align: right;
     }
-    .coop-form-group {
+    .coop-form-group-secure {
         display: flex;
         flex-direction: column;
         gap: 10px;
         width: 100%;
     }
-    .coop-input {
+    .coop-input-secure {
         width: 100%;
         padding: 11px 14px;
         border: 1.5px solid #e2e8f0;
@@ -34,22 +34,21 @@
         transition: all 0.2s ease;
         background: #f8fafc;
     }
-    .coop-input:focus {
+    .coop-input-secure:focus {
         border-color: #0f172a;
         background: #fff;
         box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
     }
     
-    /* حل مشکل موقعیت ستاره و جهت تایپ شماره تلفن */
-    .coop-input.phone-field {
+    .coop-input-secure.phone-field-secure {
         direction: rtl;
     }
-    .coop-input.phone-field:not(:placeholder-shown) {
+    .coop-input-secure.phone-field-secure:not(:placeholder-shown) {
         direction: ltr;
         text-align: left;
     }
 
-    select.coop-input {
+    select.coop-input-secure {
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -61,14 +60,14 @@
     }
 
     /* استایل فیلدهای OTP */
-    .coop-otp-container {
+    .coop-otp-container-secure {
         display: flex;
         gap: 8px;
         justify-content: center;
         direction: ltr;
         margin-top: 5px;
     }
-    .coop-otp-input {
+    .coop-otp-input-secure {
         width: 45px;
         height: 45px;
         border: 1.5px solid #e2e8f0;
@@ -80,44 +79,46 @@
         outline: none;
         transition: all 0.2s;
     }
-    .coop-otp-input:focus {
+    .coop-otp-input-secure:focus {
         border-color: #0f172a;
         background: #fff;
         box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.05);
     }
 </style>
 
-<div class="coop-title">درخواست همکاری</div>
-<div class="coop-subtitle" id="coopSubtitle">لطفا اطلاعات زیر را تکمیل کنید تا دراولین فرصت با شما تماس بگیریم</div>
+<div class="coop-title-secure">درخواست همکاری</div>
+<div class="coop-subtitle-secure">لطفا اطلاعات زیر را تکمیل کنید تا دراولین فرصت با شما تماس بگیریم</div>
 
-<form id="coopForm" class="coop-form-group" novalidate>
+<form id="coopFormSecure" class="coop-form-group-secure" novalidate>
     
-    <input type="text" id="coopName" class="coop-input" placeholder="نام و نام خانوادگی *" required>
-    <input type="text" id="coopPhone" class="coop-input phone-field" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
-    <input type="text" id="coopBirth" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
+    <!-- اطلاعات متقاضی -->
+    <input type="text" id="coopNameSecure" class="coop-input-secure" placeholder="نام و نام خانوادگی *" required>
+    <input type="text" id="coopPhoneSecure" class="coop-input-secure phone-field-secure" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
+    <input type="text" id="coopBirthSecure" class="coop-input-secure" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
     
-    <select id="coopJob" class="coop-input" required>
+    <select id="coopJobSecure" class="coop-input-secure" required>
         <option value="کارشناس فروش" selected>کارشناس فروش</option>
         <option value="مدیرداخلی">مدیرداخلی</option>
         <option value="صندوقدار">صندوقدار</option>
         <option value="انباردار">انباردار</option>
     </select>
     
-    <div id="coopOtpSection" style="display: none; margin-bottom: 5px;">
-        <div class="coop-subtitle" style="text-align: center; margin-bottom: 10px; color: #0f172a;">کد تایید ۵ رقمی ارسال شده را وارد کنید:</div>
-        <div class="coop-otp-container">
-            <input type="text" id="coopOtp1" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp2" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp3" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp4" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp5" class="coop-otp-input" maxlength="1" inputmode="numeric">
+    <!-- بخش ورود کد تایید ۵ رقمی (در ابتدا مخفی است) -->
+    <div id="coopOtpSectionSecure" style="display: none; margin-bottom: 5px;">
+        <div class="coop-subtitle-secure" style="text-align: center; margin-bottom: 10px; color: #0f172a;">کد تایید ۵ رقمی ارسال شده را وارد کنید:</div>
+        <div class="coop-otp-container-secure">
+            <input type="text" id="coopOtpSecure1" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
+            <input type="text" id="coopOtpSecure2" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
+            <input type="text" id="coopOtpSecure3" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
+            <input type="text" id="coopOtpSecure4" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
+            <input type="text" id="coopOtpSecure5" class="coop-otp-input-secure" maxlength="1" inputmode="numeric">
         </div>
-        <div id="coopTimerDisplay" style="text-align: center; font-size: 12px; color: #64748b; margin-top: 10px;"></div>
+        <div id="coopTimerDisplaySecure" style="text-align: center; font-size: 12px; color: #64748b; margin-top: 10px;"></div>
     </div>
 
-    <div id="coopFeedback" class="form-feedback"></div>
+    <div id="coopFeedbackSecure" class="form-feedback"></div>
     
-    <button type="submit" id="coopSubmitBtn" class="club-submit-btn" style="padding: 12px; margin-top: 4px;">
+    <button type="submit" id="coopSubmitBtnSecure" class="club-submit-btn" style="padding: 12px; margin-top: 4px;">
         دریافت کد تایید
     </button>
 </form>
@@ -126,95 +127,96 @@
 
 <script>
 (function() {
-    var coopCurrentStep = 1;
-    var coopToken = '';
-    var coopExpires = '';
-    var coopVerifiedPhone = '';
-    var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir'; // آدرس ورکر شما
-    var coopTimerInterval = null;
+    var coopStep = 1;
+    var coopTok = '';
+    var coopExp = '';
+    var coopVPhone = '';
+    var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir'; 
+    var coopTimer = null;
 
-    var coopOtpInputs = [
-        document.getElementById('coopOtp1'),
-        document.getElementById('coopOtp2'),
-        document.getElementById('coopOtp3'),
-        document.getElementById('coopOtp4'),
-        document.getElementById('coopOtp5')
+    var otpInputsSec = [
+        document.getElementById('coopOtpSecure1'),
+        document.getElementById('coopOtpSecure2'),
+        document.getElementById('coopOtpSecure3'),
+        document.getElementById('coopOtpSecure4'),
+        document.getElementById('coopOtpSecure5')
     ];
 
-    function toEnglishDigits(str) {
-        var persianDigits = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
-        var arabicDigits = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
+    function toEngDigits(str) {
+        var p = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
+        var a = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
         for (var i = 0; i < 10; i++) {
-            str = str.replace(persianDigits[i], i).replace(arabicDigits[i], i);
+            str = str.replace(p[i], i).replace(a[i], i);
         }
         return str;
     }
 
-    // فوکوس خودکار فیلدهای OTP فرم همکاری
-    coopOtpInputs.forEach(function(input, index) {
+    otpInputsSec.forEach(function(input, index) {
         input.addEventListener('input', function(e) {
-            var val = toEnglishDigits(e.target.value);
+            var val = toEngDigits(e.target.value);
             e.target.value = val;
-            if (val && index < coopOtpInputs.length - 1) {
-                coopOtpInputs[index + 1].focus();
+            if (val && index < otpInputsSec.length - 1) {
+                otpInputsSec[index + 1].focus();
             }
-            checkAndSubmitCoopOtp();
+            checkAndSubmitSecOtp();
         });
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Backspace' && this.value === '' && index > 0) {
-                coopOtpInputs[index - 1].focus();
+                otpInputsSec[index - 1].focus();
             }
         });
     });
 
-    function checkAndSubmitCoopOtp() {
+    function checkAndSubmitSecOtp() {
         var otp = '';
-        coopOtpInputs.forEach(function(i) { otp += i.value; });
+        otpInputsSec.forEach(function(i) { otp += i.value; });
         if (otp.length === 5) {
-            processCoopVerify(otp);
+            processSecVerify(otp);
         }
     }
 
-    function startCoopTimer() {
+    function startSecTimer() {
         var remains = 120;
-        var display = document.getElementById('coopTimerDisplay');
+        var display = document.getElementById('coopTimerDisplaySecure');
         display.style.display = 'block';
         
-        if(coopTimerInterval) clearInterval(coopTimerInterval);
+        if(coopTimer) clearInterval(coopTimer);
         
-        coopTimerInterval = setInterval(function() {
+        coopTimer = setInterval(function() {
             remains--;
             var m = Math.floor(remains / 60);
             var s = remains % 60;
             display.innerText = 'زمان باقی مانده ' + m + ':' + (s < 10 ? '0' : '') + s + ' تا امکان درخواست مجدد';
             
             if (remains <= 0) {
-                clearInterval(coopTimerInterval);
+                clearInterval(coopTimer);
                 display.style.display = 'none';
-                document.getElementById('coopSubmitBtn').textContent = 'درخواست کد جدید';
-                coopCurrentStep = 1;
-                toggleInputs(false);
-                document.getElementById('coopOtpSection').style.display = 'none';
+                document.getElementById('coopSubmitBtnSecure').textContent = 'درخواست کد جدید';
+                coopStep = 1;
+                toggleSecInputs(false);
+                document.getElementById('coopOtpSectionSecure').style.display = 'none';
             }
         }, 1000);
     }
 
-    function toggleInputs(disabled) {
-        document.getElementById('coopName').disabled = disabled;
-        document.getElementById('coopPhone').disabled = disabled;
-        document.getElementById('coopBirth').disabled = disabled;
-        document.getElementById('coopJob').disabled = disabled;
+    function toggleSecInputs(disabled) {
+        document.getElementById('coopNameSecure').disabled = disabled;
+        document.getElementById('coopPhoneSecure').disabled = disabled;
+        document.getElementById('coopBirthSecure').disabled = disabled;
+        document.getElementById('coopJobSecure').disabled = disabled;
     }
 
-    document.getElementById('coopForm').addEventListener('submit', function(e) {
+    document.getElementById('coopFormSecure').addEventListener('submit', function(e) {
         e.preventDefault();
-        if (coopCurrentStep === 1) {
-            var name = document.getElementById('coopName').value.trim();
-            var phone = toEnglishDigits(document.getElementById('coopPhone').value.trim());
-            var birth = document.getElementById('coopBirth').value.trim();
-            var job = document.getElementById('coopJob').value;
-            var fb = document.getElementById('coopFeedback');
-            var btn = document.getElementById('coopSubmitBtn');
+        e.stopPropagation(); // جلوی نفوذ کدهای بیرونی قدیمی رو کاملا می‌گیره
+        
+        if (coopStep === 1) {
+            var name = document.getElementById('coopNameSecure').value.trim();
+            var phone = toEngDigits(document.getElementById('coopPhoneSecure').value.trim());
+            var birth = document.getElementById('coopBirthSecure').value.trim();
+            var job = document.getElementById('coopJobSecure').value;
+            var fb = document.getElementById('coopFeedbackSecure');
+            var btn = document.getElementById('coopSubmitBtnSecure');
 
             if (!name || !phone || !birth || !job) {
                 fb.className = 'form-feedback error';
@@ -236,16 +238,16 @@
             .then(function(data) {
                 btn.disabled = false;
                 if (data.success) {
-                    coopToken = data.token;
-                    coopExpires = data.expires;
-                    coopVerifiedPhone = phone;
-                    coopCurrentStep = 2;
-                    toggleInputs(true);
-                    document.getElementById('coopOtpSection').style.display = 'block';
-                    coopOtpInputs.forEach(function(i) { i.value = ''; });
-                    coopOtpInputs[0].focus();
+                    coopTok = data.token;
+                    coopExp = data.expires;
+                    coopVPhone = phone;
+                    coopStep = 2;
+                    toggleSecInputs(true);
+                    document.getElementById('coopOtpSectionSecure').style.display = 'block';
+                    otpInputsSec.forEach(function(i) { i.value = ''; });
+                    otpInputsSec[0].focus();
                     btn.textContent = 'تایید نهایی کدتایید';
-                    startCoopTimer();
+                    startSecTimer();
                     fb.className = 'form-feedback success';
                     fb.innerHTML = 'کد تایید ۵ رقمی برای شما پیامک شد.';
                 } else {
@@ -256,38 +258,38 @@
             .catch(function() {
                 btn.disabled = false;
                 fb.className = 'form-feedback error';
-                fb.innerHTML = 'خطا در ارتباط با سرور.';
+                fb.innerHTML = 'خطا در ارتباط با سرور آروان.';
             });
 
-        } else if (coopCurrentStep === 2) {
+        } else if (coopStep === 2) {
             var otp = '';
-            coopOtpInputs.forEach(function(i) { otp += i.value; });
+            otpInputsSec.forEach(function(i) { otp += i.value; });
             if (otp.length < 5) {
-                document.getElementById('coopFeedback').className = 'form-feedback error';
-                document.getElementById('coopFeedback').innerHTML = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
+                document.getElementById('coopFeedbackSecure').className = 'form-feedback error';
+                document.getElementById('coopFeedbackSecure').innerHTML = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
                 return;
             }
-            processCoopVerify(otp);
+            processSecVerify(otp);
         }
     });
 
-    function processCoopVerify(otp) {
-        var fb = document.getElementById('coopFeedback');
-        var btn = document.getElementById('coopSubmitBtn');
-        var name = document.getElementById('coopName').value.trim();
-        var birth = document.getElementById('coopBirth').value.trim();
-        var job = document.getElementById('coopJob').value;
+    function processSecVerify(otp) {
+        var fb = document.getElementById('coopFeedbackSecure');
+        var btn = document.getElementById('coopSubmitBtnSecure');
+        var name = document.getElementById('coopNameSecure').value.trim();
+        var birth = document.getElementById('coopBirthSecure').value.trim();
+        var job = document.getElementById('coopJobSecure').value;
 
         fb.className = 'form-feedback loading';
         fb.innerHTML = 'در حال تایید نهایی اطلاعات... ⏳';
         btn.disabled = true;
 
         var params = new URLSearchParams({
-            phone: coopVerifiedPhone,
+            phone: coopVPhone,
             action: 'coop-verify',
             otp: otp,
-            token: coopToken,
-            expires: coopExpires,
+            token: coopTok,
+            expires: coopExp,
             name: name,
             birthYear: birth,
             jobTitle: job
@@ -298,15 +300,15 @@
         .then(function(data) {
             btn.disabled = false;
             if (data.success) {
-                clearInterval(coopTimerInterval);
-                document.getElementById('coopTimerDisplay').style.display = 'none';
-                document.getElementById('coopOtpSection').style.display = 'none';
+                clearInterval(coopTimer);
+                document.getElementById('coopTimerDisplaySecure').style.display = 'none';
+                document.getElementById('coopOtpSectionSecure').style.display = 'none';
                 fb.className = 'form-feedback success';
                 fb.innerHTML = 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید. ✨';
-                document.getElementById('coopForm').reset();
-                document.getElementById('coopJob').value = "کارشناس فروش";
-                coopCurrentStep = 1;
-                toggleInputs(false);
+                document.getElementById('coopFormSecure').reset();
+                document.getElementById('coopJobSecure').value = "کارشناس فروش";
+                coopStep = 1;
+                toggleSecInputs(false);
                 btn.textContent = 'دریافت کد تایید';
             } else {
                 fb.className = 'form-feedback error';
