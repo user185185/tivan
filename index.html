@@ -275,7 +275,6 @@ body{
     flex-shrink: 0;
 }
 
-/* استایل‌های پایه مودال */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -356,7 +355,6 @@ body{
     box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
 }
 
-/* استایل کادرهای پیامک تایید تکی */
 .otp-inputs-container {
     display: flex;
     justify-content: center;
@@ -386,7 +384,6 @@ body{
     box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
 }
 
-/* استایل دکمه ارسال داخل مودال باشگاه */
 .club-submit-btn {
     width: 100%;
     padding: 14px;
@@ -405,7 +402,6 @@ body{
 .club-submit-btn:hover { background: #1e293b; }
 .club-submit-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
 
-/* استایل وضعیت‌ها و پیام‌های خطا/موفقیت */
 .form-feedback {
     font-size: 13px;
     margin-top: 8px;
@@ -415,15 +411,12 @@ body{
 .form-feedback.error { color: #dc2626; }
 .form-feedback.loading { color: #2563eb; }
 
-/* استایل ثانیه‌شمار تایمر پیامک */
 .timer-badge {
     font-size: 12px;
     color: #64748b;
     margin-top: 6px;
 }
-.timer-badge.warning { color: #dc2626; font-weight: 700; }
 
-/* استایل‌های لیست انتخاب مسیریاب‌ها */
 .apps-list {
     display: flex;
     flex-direction: column;
@@ -484,7 +477,7 @@ body{
     .logo-section{ height:150px; }
     .branch-address{ font-size:14px; }
     .branch-link{ font-size:14px; }
-    .club-btn { padding: 9px 16px; font-size: 12px; max-width: 200px; }
+    .club-btn { padding: 9px 16px; font-size: 12px; max-width: 200px; animation: none;}
     .club-btn svg { width: 16px; height: 16px; }
     .button-group{ gap: 8px; }
     .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
@@ -642,9 +635,7 @@ body{
 
 <script>
 (function() {
-    // =========================================
-    // مدیریت مودال مسیریابی دکمه‌های مپ
-    // =========================================
+    // مدیریت مودال مسیریابی دکمه‌های مپ (مختصر و سبک)
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
     var closeMapBtn = document.getElementById('closeMapModalBtn');
@@ -667,340 +658,12 @@ body{
         mapOverlay.classList.remove('active'); 
     });
 
-    // =========================================
-    // تبدیل اعداد فارسی/عربی به انگلیسی
-    // =========================================
-    function toEnglishDigits(str) {
-        var persianDigits = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
-        var arabicDigits = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
-        for (var i = 0; i < 10; i++) {
-            str = str.replace(persianDigits[i], i).replace(arabicDigits[i], i);
-        }
-        return str;
-    }
-
-    // =========================================
-    // باشگاه مشتریان و تایمر پیامک تایید
-    // =========================================
-    var openClubBtn = document.getElementById('openClubBtn');
-    var clubOverlay = document.getElementById('clubModalOverlay');
-    var closeClubBtn = document.getElementById('closeClubModalBtn');
-    var submitPhoneBtn = document.getElementById('submitPhoneBtn');
-    var clientPhoneInput = document.getElementById('clientPhone');
-    var otpSection = document.getElementById('otpSection');
-    var formFeedback = document.getElementById('formFeedback');
-    var timerDisplay = document.getElementById('timerDisplay');
-
-    var otpInputs = [
-        document.getElementById('otp1'),
-        document.getElementById('otp2'),
-        document.getElementById('otp3'),
-        document.getElementById('otp4'),
-        document.getElementById('otp5')
-    ];
-
-    var currentStep = 1; 
-    var currentToken = '';
-    var currentExpires = '';
-    var verifiedPhone = '';
-    var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir';
-    var timerInterval = null;
-    var remainingSeconds = 0;
-    var isVerifying = false;
-
-    otpInputs.forEach(function(input, index) {
-        input.addEventListener('input', function(e) {
-            var value = e.target.value;
-            value = toEnglishDigits(value);
-            e.target.value = value;
-
-            if (!/^\d$/.test(value) && value !== '') {
-                e.target.value = '';
-                return;
-            }
-
-            if (value && index < otpInputs.length - 1) {
-                otpInputs[index + 1].focus();
-            }
-
-            checkAndSubmitOTP();
-        });
-
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && this.value === '' && index > 0) {
-                otpInputs[index - 1].focus();
-            }
-        });
-
-        input.addEventListener('keyup', function(e) {
-            if (e.key === 'Delete' && this.value === '' && index > 0) {
-                otpInputs[index - 1].focus();
-            }
-        });
-    });
-
-    function checkAndSubmitOTP() {
-        var otp = '';
-        otpInputs.forEach(function(input) {
-            otp += input.value;
-        });
-
-        if (otp.length === 5 && !isVerifying) {
-            submitOTP(otp);
-        }
-    }
-
-    function submitOTP(otp) {
-        isVerifying = true;
-        formFeedback.className = 'form-feedback loading';
-        formFeedback.innerText = 'در حال تایید کد و ثبت نام... ⏳';
-
-        var params = new URLSearchParams({
-            phone: verifiedPhone,
-            action: 'verify',
-            otp: otp,
-            token: currentToken,
-            expires: currentExpires
-        });
-
-        fetch(arvanWorkerUrl + '?' + params.toString(), {
-            method: 'GET',
-            mode: 'cors'
-        })
-        .then(function(response) {
-            if (!response.ok) throw new Error('خطا: ' + response.status);
-            return response.json();
-        })
-        .then(function(data) {
-            isVerifying = false;
-            if (data.success === true) {
-                clearInterval(timerInterval);
-                formFeedback.className = 'form-feedback success';
-                formFeedback.innerText = data.message || 'تبریک! شما با موفقیت ثبت شدید.';
-                timerDisplay.style.display = 'none';
-                
-                setTimeout(function() { 
-                    clubOverlay.classList.remove('active'); 
-                    resetClubForm();
-                }, 2500);
-            } else {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = data.message || 'کد تایید نادرست است. دوباره سعی کنید.';
-            }
-        })
-        .catch(function(error) {
-            isVerifying = false;
-            formFeedback.className = 'form-feedback error';
-            formFeedback.innerText = 'خطا در تایید. لطفاً اتصال خود را بررسی و دوباره سعی کنید.';
-            console.error('خطا در درخواست:', error);
-        });
-    }
-
-    function startTimer() {
-        remainingSeconds = 120; 
-        timerDisplay.style.display = 'block';
-        submitPhoneBtn.textContent = 'تایید نهایی';
-        submitPhoneBtn.disabled = false;
-        
-        updateTimerDisplay();
-        
-        timerInterval = setInterval(function() {
-            remainingSeconds--;
-            updateTimerDisplay();
-            
-            if (remainingSeconds <= 0) {
-                clearInterval(timerInterval);
-                timerDisplay.style.display = 'none';
-                submitPhoneBtn.disabled = false;
-                submitPhoneBtn.textContent = 'درخواست کد جدید';
-                resetOtpInputs();
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'کد تایید منقضی شد. لطفاً دوباره درخواست کنید.';
-                currentStep = 1;
-                clientPhoneInput.disabled = false;
-                otpSection.style.display = 'none';
-            }
-        }, 1000);
-    }
-
-    function updateTimerDisplay() {
-        var minutes = Math.floor(remainingSeconds / 60);
-        var seconds = remainingSeconds % 60;
-        var display = 'زمان باقی مانده ' + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' تا انقضاء کد تایید';
-        timerDisplay.innerText = display;
-        
-        if (remainingSeconds <= 10) {
-            timerDisplay.classList.add('warning');
-        } else {
-            timerDisplay.classList.remove('warning');
-        }
-    }
-
-    function resetOtpInputs() {
-        otpInputs.forEach(function(input) { input.value = ''; });
-        otpInputs[0].focus();
-    }
-
-    function resetClubForm() {
-        currentStep = 1;
-        currentToken = '';
-        currentExpires = '';
-        verifiedPhone = '';
-        isVerifying = false;
-        formFeedback.className = 'form-feedback';
-        formFeedback.innerText = '';
-        clientPhoneInput.value = '';
-        clientPhoneInput.disabled = false;
-        otpSection.style.display = 'none';
-        resetOtpInputs();
-        submitPhoneBtn.innerText = 'دریافت کد تایید';
-        submitPhoneBtn.disabled = false;
-        timerDisplay.style.display = 'none';
-        timerDisplay.classList.remove('warning');
-        
-        if (timerInterval) { clearInterval(timerInterval); }
-    }
-
-    openClubBtn.addEventListener('click', function() {
-        resetClubForm();
-        clubOverlay.classList.add('active');
-    });
-
-    closeClubBtn.addEventListener('click', function() { 
-        resetClubForm(); 
-        clubOverlay.classList.remove('active'); 
-    });
-
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
-        if (e.target === clubOverlay) { 
-            resetClubForm(); 
-            clubOverlay.classList.remove('active'); 
-        }
-    });
-
-    // عملکرد دکمه فرم
-    submitPhoneBtn.addEventListener('click', function() {
-        
-        // درخواست اول: ارسال پیامک
-        if (currentStep === 1 && submitPhoneBtn.textContent === 'دریافت کد تایید') {
-            var phone = clientPhoneInput.value.trim();
-            phone = toEnglishDigits(phone);
-            
-            var phoneRegex = /^09\d{9}$/;
-            if (!phoneRegex.test(phone)) {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
-                return;
-            }
-
-            formFeedback.className = 'form-feedback loading';
-            formFeedback.innerText = 'در حال بررسی و ارسال کد تایید... ⏳';
-            submitPhoneBtn.disabled = true;
-
-            fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', {
-                method: 'GET',
-                mode: 'cors'
-            })
-            .then(function(response) {
-                if (!response.ok) throw new Error('خطا: ' + response.status);
-                return response.json();
-            })
-            .then(function(data) {
-                submitPhoneBtn.disabled = false;
-                if (data.success === true) {
-                    currentToken = data.token;
-                    currentExpires = data.expires;
-                    verifiedPhone = phone;
-                    clientPhoneInput.disabled = true;
-                    
-                    startTimer();
-                    currentStep = 2;
-                    otpSection.style.display = 'block';
-                    resetOtpInputs();
-                    otpInputs[0].focus();
-                    
-                    formFeedback.className = 'form-feedback success';
-                    formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
-                } else {
-                    formFeedback.className = 'form-feedback error';
-                    formFeedback.innerText = data.message || 'خطا در ارسال کد.';
-                }
-            })
-            .catch(function(error) {
-                submitPhoneBtn.disabled = false;
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'خطا: سرور پاسخ نداد. لطفاً اتصال اینترنت را بررسی کنید.';
-                console.error('خطا در درخواست:', error);
-            });
-
-        // درخواست مجدد بعد از پایان تایمر
-        } else if (currentStep === 1 && submitPhoneBtn.textContent === 'درخواست کد جدید') {
-            var phone = clientPhoneInput.value.trim();
-            phone = toEnglishDigits(phone);
-            
-            var phoneRegex = /^09\d{9}$/;
-            if (!phoneRegex.test(phone)) {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'لطفاً یک شماره موبایل معتبر ۱۱ رقمی وارد کنید.';
-                return;
-            }
-
-            formFeedback.className = 'form-feedback loading';
-            formFeedback.innerText = 'در حال بررسی و ارسال کد تایید... ⏳';
-            submitPhoneBtn.disabled = true;
-
-            fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', {
-                method: 'GET',
-                mode: 'cors'
-            })
-            .then(function(response) {
-                if (!response.ok) throw new Error('خطا: ' + response.status);
-                return response.json();
-            })
-            .then(function(data) {
-                submitPhoneBtn.disabled = false;
-                if (data.success === true) {
-                    currentToken = data.token;
-                    currentExpires = data.expires;
-                    verifiedPhone = phone;
-                    clientPhoneInput.disabled = true;
-                    
-                    startTimer();
-                    currentStep = 2;
-                    otpSection.style.display = 'block';
-                    resetOtpInputs();
-                    otpInputs[0].focus();
-                    
-                    formFeedback.className = 'form-feedback success';
-                    formFeedback.innerText = data.message || 'کد تایید برای شما ارسال شد.';
-                } else {
-                    formFeedback.className = 'form-feedback error';
-                    formFeedback.innerText = data.message || 'خطا در ارسال کد.';
-                }
-            })
-            .catch(function(error) {
-                submitPhoneBtn.disabled = false;
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'خطا: سرور پاسخ نداد. لطفاً اتصال اینترنت را بررسی کنید.';
-                console.error('خطا در درخواست:', error);
-            });
-
-        // تایید نهایی به صورت دستی
-        } else if (currentStep === 2 && submitPhoneBtn.textContent === 'تایید نهایی') {
-            var otp = '';
-            otpInputs.forEach(function(input) { otp += input.value; });
-
-            if (otp.length < 5) {
-                formFeedback.className = 'form-feedback error';
-                formFeedback.innerText = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
-                return;
-            }
-
-            submitOTP(otp);
-        }
     });
 })();
 </script>
+
+<script src="club.js"></script>
 </body>
 </html>
