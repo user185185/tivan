@@ -1,28 +1,41 @@
-<div class="modal-title">فرصت‌های همکاری</div>
-<div class="modal-subtitle">جهت ارسال درخواست استخدام، فرم زیر را تکمیل نمایید.</div>
+<div class="modal-title" style="text-align: center;">درخواست همکاری</div>
+<div class="modal-subtitle" style="text-align: right; margin-bottom: 15px;">لطفا اطلاعات زیر را تکمیل نمایید تا در اسرع وقت با شما تماس بگیریم.</div>
 
 <div class="club-form-group">
     <div id="coopFieldsSection">
-        <input type="text" id="coopName" class="club-input" placeholder="نام و نام خانوادگی" style="margin-bottom: 10px; text-align: right; letter-spacing: normal; font-size: 14px;">
-        <input type="text" id="coopBirth" class="club-input" placeholder="سال تولد (مثال: ۱۳۸۰)" maxlength="4" inputmode="numeric" style="margin-bottom: 10px; font-size: 14px;">
-        <input type="text" id="coopJob" class="club-input" placeholder="عنوان شغلی مدنظر (مثال: فروشنده)" style="margin-bottom: 10px; text-align: right; letter-spacing: normal; font-size: 14px;">
-        <input type="text" id="coopPhone" class="club-input" placeholder="شماره همراه: ۰۹XXXXXXXXX" maxlength="11" inputmode="numeric" style="margin-bottom: 10px; font-size: 14px;">
+        <label style="display: block; text-align: right; font-size: 13px;">نام و نام خانوادگـ‌ی*</label>
+        <input type="text" id="coopName" class="club-input" placeholder="نام و نام خانوادگی" maxlength="30" onkeypress="return (event.charCode >= 1776 && event.charCode <= 1785) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || event.charCode == 32" style="margin-bottom: 10px;">
+
+        <label style="display: block; text-align: right; font-size: 13px;">تلفن همراه‌*</label>
+        <input type="text" id="coopPhone" class="club-input" placeholder="09XXXXXXXXX" maxlength="11" inputmode="numeric" style="margin-bottom: 10px;">
+
+        <label style="display: block; text-align: right; font-size: 13px;">سال تولد*</label>
+        <input type="text" id="coopBirth" class="club-input" placeholder="مثال: 1380" maxlength="4" inputmode="numeric" style="margin-bottom: 10px;">
+
+        <label style="display: block; text-align: right; font-size: 13px;">عنوان شغلی*</label>
+        <select id="coopJob" class="club-input" style="margin-bottom: 15px; width: 100%; padding: 10px;">
+            <option value="مدیر داخلی">مدیر داخلی</option>
+            <option value="صندوقدار">صندوقدار</option>
+            <option value="کارشناس فروش" selected>کارشناس فروش</option>
+            <option value="انباردار">انباردار</option>
+        </select>
     </div>
 
-    <div id="coopOtpSection" style="display: none;">
-        <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">کد تایید پیامک شده را وارد کنید:</div>
-        <div class="otp-inputs-container">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp1" data-index="0" maxlength="1" inputmode="numeric" pattern="\d*">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp2" data-index="1" maxlength="1" inputmode="numeric" pattern="\d*">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp3" data-index="2" maxlength="1" inputmode="numeric" pattern="\d*">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp4" data-index="3" maxlength="1" inputmode="numeric" pattern="\d*">
-            <input type="text" class="otp-input coop-otp-field" id="cOtp5" data-index="4" maxlength="1" inputmode="numeric" pattern="\d*">
+    <div id="coopOtpSection" style="display: none; text-align: center;">
+        <div style="font-size: 13px; color: #475569; margin-bottom: 10px;">کد تایید پیامک شده را وارد کنید:</div>
+        <div class="otp-inputs-container" style="display: flex; justify-content: center; gap: 8px; direction: ltr; margin-bottom: 10px;">
+            <input type="text" class="otp-input coop-otp-field" id="cOtp1" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input coop-otp-field" id="cOtp2" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input coop-otp-field" id="cOtp3" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input coop-otp-field" id="cOtp4" maxlength="1" inputmode="numeric">
+            <input type="text" class="otp-input coop-otp-field" id="cOtp5" maxlength="1" inputmode="numeric">
         </div>
+        <div id="coopTimerDisplay" class="timer-badge" style="font-size: 12px; margin-bottom: 5px;"></div>
+        <button id="resendCoopOtpBtn" class="club-submit-btn" style="background: #64748b; margin-bottom: 10px;" disabled>درخواست رمز جدید</button>
     </div>
     
-    <button id="coopSubmitBtn" class="club-submit-btn">ارسال درخواست و دریافت کد</button>
-    <div id="coopTimerDisplay" class="timer-badge" style="display: none;"></div>
-    <div id="coopFeedback" class="form-feedback"></div>
+    <button id="coopSubmitBtn" class="club-submit-btn">ارسال کد تایید</button>
+    <div id="coopFeedback" class="form-feedback" style="margin-top: 10px;"></div>
 </div>
 
-<button class="close-modal-btn" id="closeCoopModalBtn">انصراف</button>
+<button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 10px;">انصراف</button>
