@@ -4,15 +4,15 @@
         font-size: 18px;
         font-weight: 700;
         color: #0f172a;
-        margin-bottom: 4px;
-        text-align: right;
+        margin-bottom: 6px;
+        text-align: center; /* وسط‌چین شدن تیتر اصلی */
     }
     .coop-subtitle {
         font-size: 12.5px;
         color: #64748b;
         margin-bottom: 16px;
         line-height: 1.6;
-        text-align: right;
+        text-align: right; /* راست‌چین ماندن متن زیرین */
     }
     .coop-form-group {
         display: flex;
@@ -42,10 +42,10 @@
     
     /* حل مشکل موقعیت ستاره و جهت تایپ شماره تلفن */
     .coop-input.phone-field {
-        direction: rtl; /* زمان خالی بودن راست‌چین است تا ستاره درست قرار بگیرد */
+        direction: rtl;
     }
     .coop-input.phone-field:not(:placeholder-shown) {
-        direction: ltr; /* زمان تایپ چپ‌چین می‌شود تا شماره درست وارد شود */
+        direction: ltr;
         text-align: left;
     }
 
@@ -62,7 +62,7 @@
 </style>
 
 <div class="coop-title">درخواست همکاری</div>
-<div class="coop-subtitle">لطفا اطلاعات زیر را تکمیل کنید دراولین فرصت با شما تماس خواهیم گرفت</div>
+<div class="coop-subtitle">لطفا اطلاعات زیر را تکمیل کنید تا دراولین فرصت با شما تماس بگیریم</div>
 
 <form id="coopForm" class="coop-form-group" novalidate>
     
@@ -109,7 +109,7 @@
                     if(!phoneRegex.test(phoneVal)) {
                         event.preventDefault();
                         fb.className = 'form-feedback error';
-                        fb.innerHTML = 'شماره همراه باید با ۰۹ شروع شده و ۱۱ رقم باشد';
+                        fb.innerHTML = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
                     }
                 }
             ">
