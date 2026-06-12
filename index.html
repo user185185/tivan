@@ -690,30 +690,60 @@ body{
             });
     });
 
-    function initDynamicFormEvents() {
-        var closeCoopBtn = document.getElementById('closeCoopModalBtn');
-        var coopForm = document.getElementById('coopForm');
-        var coopFeedback = document.getElementById('coopFeedback');
+function initDynamicFormEvents() {
+    var closeCoopBtn = document.getElementById('closeCoopModalBtn');
+    var coopForm = document.getElementById('coopForm');
+    var coopFeedback = document.getElementById('coopFeedback');
 
-        if (closeCoopBtn) {
-            closeCoopBtn.addEventListener('click', function() {
-                coopOverlay.classList.remove('active');
-            });
-        }
+    if (closeCoopBtn) {
+        closeCoopBtn.addEventListener('click', function() {
+            coopOverlay.classList.remove('active');
+        });
+    }
 
-        if (coopForm) {
-            coopForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+    if (coopForm) {
+        coopForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // جلوگیری از رفرش شدن صفحه
+            
+            if(coopFeedback) {
+                coopFeedback.className = 'form-feedback loading';
+                coopFeedback.innerHTML = 'در حال ارسال اطلاعات...';
+            }
+
+            // جمع‌آوری اطلاعات وارد شده در فرم همکاری
+            var formData = new FormData(coopForm);
+
+            // ارسال اطلاعات به آدرس سرور شما (سمت دیگه)
+            // آدرس فایل پردازش‌کننده خود (مثلا یک فایل php یا api) را به جای 'process-cooperation.php' قرار دهید
+            fetch('process-cooperation.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('خطا در پاسخ سرور');
+                return response.json(); // یا response.text() بسته به خروجی سرور شما
+            })
+            .then(data => {
+                // فرض می‌کنیم سرور در صورت موفقیت یک وضعیت success برمی‌گرداند
                 if(coopFeedback) {
                     coopFeedback.className = 'form-feedback success';
                     coopFeedback.innerHTML = 'درخواست شما با موفقیت ثبت شد. به‌زودی با شما تماس می‌گیریم.';
                 }
+                // بستن پاپ‌آپ بعد از ۲.۵ ثانیه
                 setTimeout(function() {
                     coopOverlay.classList.remove('active');
                 }, 2500);
+            })
+            .catch(error => {
+                // مدیریت خطاها در صورت بروز مشکل در اتصال یا سرور
+                if(coopFeedback) {
+                    coopFeedback.className = 'form-feedback error';
+                    coopFeedback.innerHTML = 'خطایی در ارسال اطلاعات رخ داد. لطفاً مجدداً تلاش کنید.';
+                }
             });
-        }
+        });
     }
+}
 
     // بستن پاپ‌آپ‌ها با کلیک روی فضای خالی و تاریک محیط خارج کادر
     window.addEventListener('click', function(e) {
