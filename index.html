@@ -575,10 +575,10 @@ body{
                     <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
                     <span>درخواست همکاری</span>
                 </button>
-                <a href="gallery.html" class="btn">
-                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                    <span>گالری تصاویر</span>
-                </a>
+            <button type="button" class="btn" id="openGalleryBtn">
+            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+             <span>گالری تصاویر</span>
+             </button>
             </div>
             <div class="branch-divider" style="margin-top: 12px;"></div>
         </div>
@@ -636,6 +636,11 @@ body{
                 <span>مسیریاب بلد</span>
             </a>
         </div>
+        <div class="modal-overlay" id="galleryModalOverlay">
+        <div class="custom-modal" id="galleryModalDynamicTarget">
+        <div style="padding:20px; color:#64748b; font-size:14px;">در حال بارگذاری گالری...</div>
+        </div>
+</div>
         <button class="close-modal-btn" id="closeMapModalBtn">انصراف</button>
     </div>
 </div>
@@ -912,6 +917,86 @@ function initDynamicFormEvents() {
         if (e.target === coopOverlay) coopOverlay.classList.remove('active');
     });
 })();
+    // --- منطق بارگذاری داینامیک گالری تصاویر ---
+    var openGalleryBtn = document.getElementById('openGalleryBtn');
+    var galleryOverlay = document.getElementById('galleryModalOverlay');
+    var galleryTarget = document.getElementById('galleryModalDynamicTarget');
+
+    if(openGalleryBtn) {
+        openGalleryBtn.addEventListener('click', function() {
+            galleryOverlay.classList.add('active');
+            
+            fetch('gallery.html')
+                .then(response => {
+                    if (!response.ok) throw new Error('فایل یافت نشد');
+                    return response.text();
+                })
+                .then(htmlContent => {
+                    galleryTarget.innerHTML = htmlContent;
+                    initGalleryLogic(); // اجرای کدهای اسلایدر بعد از لود شدن
+                })
+                .catch(error => {
+                    galleryTarget.innerHTML = '<div style="padding:20px; color:#dc2626; font-size:14px;">خطا در بارگذاری گالری.</div>';
+                });
+        });
+    }
+
+    function initGalleryLogic() {
+        var closeGalleryBtn = document.getElementById('closeGalleryModalBtn');
+        var galleryOverlay = document.getElementById('galleryModalOverlay');
+        var slides = document.querySelectorAll('.gallery-slide');
+        var dots = document.querySelectorAll('.gallery-dot');
+        var nextBtn = document.getElementById('nextSlideBtn');
+        var prevBtn = document.getElementById('prevSlideBtn');
+        var currentIndex = 0;
+
+        if (closeGalleryBtn) {
+            closeGalleryBtn.addEventListener('click', function() {
+                if (galleryOverlay) galleryOverlay.classList.remove('active');
+            });
+        }
+
+        if (slides.length === 0) return;
+
+        function showSlide(index) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            if (index >= slides.length) currentIndex = 0;
+            if (index < 0) currentIndex = slides.length - 1;
+
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function() {
+                currentIndex++;
+                showSlide(currentIndex);
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function() {
+                currentIndex--;
+                showSlide(currentIndex);
+            });
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', function() {
+                currentIndex = index;
+                showSlide(currentIndex);
+            });
+        });
+    }
+
+    // اضافه کردن قابلیت بستن پاپ‌آپ گالری با کلیک روی فضای تاریک
+    window.addEventListener('click', function(e) {
+        if (e.target === mapOverlay) mapOverlay.classList.remove('active');
+        if (e.target === coopOverlay) coopOverlay.classList.remove('active');
+        if (e.target === galleryOverlay) galleryOverlay.classList.remove('active'); // این خط اضافه شد
+    });
 </script>
 
 <script src="club.js"></script>
