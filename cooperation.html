@@ -130,7 +130,8 @@
     var coopToken = '';
     var coopExpires = '';
     var coopVerifiedPhone = '';
-    var arvanWorkerUrl = 'https://tivansms.tiva1shop-kh8xv.arvanedge.ir'; // آدرس ورکر شما
+    // 🌐 آدرس دقیق ورکر جدید فرم همکاری شما
+    var arvanWorkerUrl = 'https://hamkariform.tiva1shop-kh8xv.arvanedge.ir'; 
     var coopTimerInterval = null;
 
     var coopOtpInputs = [
@@ -231,7 +232,8 @@
             fb.innerHTML = 'در حال بررسی و ارسال کد... ⏳';
             btn.disabled = true;
 
-            fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=coop-send', { method: 'GET', mode: 'cors' })
+            // ⚡ ارسال اکشن استاندارد send به ورکر جدید همکاری
+            fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', { method: 'GET', mode: 'cors' })
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 btn.disabled = false;
@@ -282,15 +284,16 @@
         fb.innerHTML = 'در حال تایید نهایی اطلاعات... ⏳';
         btn.disabled = true;
 
+        // ⚡ اصلاح پارامترها برای انطباق کامل با کلمات کلیدی ورکر آروان
         var params = new URLSearchParams({
             phone: coopVerifiedPhone,
-            action: 'coop-verify',
+            action: 'verify',
             otp: otp,
             token: coopToken,
             expires: coopExpires,
             name: name,
-            birthYear: birth,
-            jobTitle: job
+            birth: birth,
+            job: job
         });
 
         fetch(arvanWorkerUrl + '?' + params.toString(), { method: 'GET', mode: 'cors' })
@@ -302,7 +305,7 @@
                 document.getElementById('coopTimerDisplay').style.display = 'none';
                 document.getElementById('coopOtpSection').style.display = 'none';
                 fb.className = 'form-feedback success';
-                fb.innerHTML = 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید. ✨';
+                fb.innerHTML = data.message || 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید. ✨';
                 document.getElementById('coopForm').reset();
                 document.getElementById('coopJob').value = "کارشناس فروش";
                 coopCurrentStep = 1;
