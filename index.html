@@ -653,7 +653,6 @@ body{
         <div style="padding:20px; color:#64748b; font-size:14px;">در حال بارگذاری گالری...</div>
     </div>
 </div>
-
 <script>
 (function() {
     // ==========================================
@@ -921,7 +920,7 @@ body{
     }
 
     // ==========================================
-    // ۳. منطق بارگذاری داینامیک گالری تصاویر
+    // ۳. منطق بارگذاری داینامیک گالری تصاویر (اصلاح شده)
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
@@ -938,35 +937,30 @@ body{
                 })
                 .then(htmlContent => {
                     galleryTarget.innerHTML = htmlContent;
-document.addEventListener('DOMContentLoaded', function() {
-    const galleryContainer = document.getElementById('dynamicGallery');
-
-    // بررسی اینکه آیا در صفحه‌ای هستیم که گالری دارد یا نه
-    if (galleryContainer) {
-        
-        // فراخوانی فایل JSON
-        fetch('gallery-data.json')
-            .then(response => response.json())
-            .then(images => {
-                // پاک کردن محتوای قبلی (اگر چیزی بود)
-                galleryContainer.innerHTML = '';
-                
-                // ایجاد و نمایش عکس‌ها
-                images.forEach(imageName => {
-                    const img = document.createElement('img');
-                    img.src = `images/gallery/${imageName}`; // آدرس دهی عکس
-                    img.alt = "تصویر گالری";
-                    img.className = "gallery-item";
-                    galleryContainer.appendChild(img);
-                });
-            })
-            .catch(error => {
-                console.error('خطا در بارگذاری گالری:', error);
-                galleryContainer.innerHTML = '<p style="text-align:center;">تصاویر در حال حاضر در دسترس نیستند.</p>';
-            });
-    }
-});      
-                    initGalleryLogic(); // اجرای کدهای اسلایدر بعد از لود شدن
+                    
+                    // رفع مشکل: اجرای مستقیم لودر تصاویر بدون نیاز به DOMContentLoaded
+                    const galleryContainer = document.getElementById('dynamicGallery');
+                    if (galleryContainer) {
+                        fetch('gallery-data.json')
+                            .then(response => response.json())
+                            .then(images => {
+                                galleryContainer.innerHTML = '';
+                                images.forEach(imageName => {
+                                    const img = document.createElement('img');
+                                    img.src = `images/gallery/${imageName}`;
+                                    img.alt = "تصویر گالری";
+                                    img.className = "gallery-item";
+                                    galleryContainer.appendChild(img);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('خطا در بارگذاری تصاویر گالری:', error);
+                                galleryContainer.innerHTML = '<p style="text-align:center;">تصاویر در حال حاضر در دسترس نیستند.</p>';
+                            });
+                    }
+                    
+                    // فعال‌سازی کدهای اسلایدر و دکمه انصراف/بستن گالری
+                    initGalleryLogic(); 
                 })
                 .catch(error => {
                     galleryTarget.innerHTML = '<div style="padding:20px; color:#dc2626; font-size:14px;">خطا در بارگذاری گالری.</div>';
@@ -1032,9 +1026,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === galleryOverlay) galleryOverlay.classList.remove('active');
     });
 
-})(); // پایان بدنه اصلی جاوااسکریپت
+})();
 </script>
-
 <script src="club.js"></script>
 <script src="analytics.js"></script>
 </body>
