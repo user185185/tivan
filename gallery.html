@@ -1,4 +1,32 @@
 <style>
+    .gallery-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        width: 100%;
+        direction: rtl;
+    }
+    .gallery-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #0f172a;
+    }
+    .close-gallery-top {
+        background: none;
+        border: none;
+        font-size: 28px;
+        font-weight: 300;
+        color: #64748b;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+        transition: color 0.2s ease;
+        order: -1; /* تضمین قرارگیری ضربدر در بالاترین نقطه سمت راست */
+    }
+    .close-gallery-top:hover {
+        color: #0f172a;
+    }
     .gallery-wrapper {
         position: relative;
         width: 100%;
@@ -78,7 +106,10 @@
     }
 </style>
 
-<div class="modal-title" style="margin-bottom: 16px;">گالری تصاویر تیوان</div>
+<div class="gallery-header">
+    <div class="gallery-title">گالری تصاویر</div>
+    <button class="close-gallery-top" id="closeGalleryModalBtn">&times;</button>
+</div>
 
 <div class="gallery-wrapper" id="galleryWrapper">
     <button class="gallery-nav-btn gallery-next" id="nextSlideBtn">
@@ -90,5 +121,3 @@
 </div>
 
 <div class="gallery-dots" id="galleryDotsContainer"></div>
-
-<button class="close-modal-btn" id="closeGalleryModalBtn" style="margin-top: 24px;">بستن گالری</button>
