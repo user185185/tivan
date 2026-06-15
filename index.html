@@ -920,12 +920,12 @@ body{
     }
 
     // ==========================================
-    // ۳. منطق بارگذاری داینامیک گالری تصاویر (اسلایدشو هوشمند)
+    // ۳. منطق بارگذاری داینامیک گالری تصاویر (اسلایدشو هوشمند اصلاح شده)
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
     var galleryTarget = document.getElementById('galleryModalDynamicTarget');
-    var gallerySlideInterval = null; // برای مدیریت سراسری فرآیند اسلایدشو و پاکسازی آن
+    var gallerySlideInterval = null; 
 
     if (openGalleryBtn) {
         openGalleryBtn.addEventListener('click', function() {
@@ -988,12 +988,11 @@ body{
         var nextBtn = document.getElementById('nextSlideBtn');
         var prevBtn = document.getElementById('prevSlideBtn');
         var currentIndex = 0;
-        var isPaused = false;
 
         if (closeGalleryBtn) {
             closeGalleryBtn.addEventListener('click', function() {
                 if (galleryOverlay) galleryOverlay.classList.remove('active');
-                if (gallerySlideInterval) clearInterval(gallerySlideInterval);
+                stopAutoSlideshow();
             });
         }
 
@@ -1010,22 +1009,27 @@ body{
             dots[currentIndex].classList.add('active');
         }
 
-        // عملکرد اسلایدشو خودکار ۲ ثانیه‌ای
+        // ایجاد تایمر تمیز بدون تداخل سرعت
         function startAutoSlideshow() {
-            if (gallerySlideInterval) clearInterval(gallerySlideInterval);
+            stopAutoSlideshow();
             gallerySlideInterval = setInterval(function() {
-                if (!isPaused) {
-                    currentIndex++;
-                    showSlide(currentIndex);
-                }
-            }, 2000);
+                currentIndex++;
+                showSlide(currentIndex);
+            }, 2000); // دقیقاً هر ۲ ثانیه یکبار به صورت یکنواخت
+        }
+
+        function stopAutoSlideshow() {
+            if (gallerySlideInterval) {
+                clearInterval(gallerySlideInterval);
+                gallerySlideInterval = null;
+            }
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', function() {
                 currentIndex++;
                 showSlide(currentIndex);
-                startAutoSlideshow(); // ریست تایمر پس از کلیک کاربر
+                startAutoSlideshow(); // ریست تایمر پس از کلیک دستی
             });
         }
 
@@ -1033,7 +1037,7 @@ body{
             prevBtn.addEventListener('click', function() {
                 currentIndex--;
                 showSlide(currentIndex);
-                startAutoSlideshow(); // ریست تایمر پس از کلیک کاربر
+                startAutoSlideshow(); // ریست تایمر پس از کلیک دستی
             });
         }
 
@@ -1041,20 +1045,20 @@ body{
             dot.addEventListener('click', function() {
                 currentIndex = index;
                 showSlide(currentIndex);
-                startAutoSlideshow(); // ریست تایمر پس از کلیک کاربر
+                startAutoSlideshow(); // ریست تایمر پس از کلیک دستی
             });
         });
 
-        // مدیریت مکث (Pause) اسلایدشو هنگام نگه داشتن موس یا انگشت
+        // مدیریت توقف کامل تایمر هنگام لمس یا نگه داشتن موس (بدون پرش زمان)
         if (wrapper) {
-            wrapper.addEventListener('mouseenter', function() { isPaused = true; });
-            wrapper.addEventListener('mouseleave', function() { isPaused = false; });
+            wrapper.addEventListener('mouseenter', stopAutoSlideshow);
+            wrapper.addEventListener('mouseleave', startAutoSlideshow);
             
-            wrapper.addEventListener('touchstart', function() { isPaused = true; });
-            wrapper.addEventListener('touchend', function() { isPaused = false; });
+            wrapper.addEventListener('touchstart', stopAutoSlideshow);
+            wrapper.addEventListener('touchend', startAutoSlideshow);
         }
 
-        // شروع اسلایدشو
+        // شروع بلافاصله پس از لود کامل پاپ‌آپ (عکس اول دقیقاً بعد از ۲ ثانیه ورق می‌خورد)
         startAutoSlideshow();
     }
 
@@ -1066,7 +1070,10 @@ body{
         if (e.target === coopOverlay) coopOverlay.classList.remove('active');
         if (e.target === galleryOverlay) {
             galleryOverlay.classList.remove('active');
-            if (gallerySlideInterval) clearInterval(gallerySlideInterval); // توقف کامل اسلایدشو پس از خروج
+            if (gallerySlideInterval) {
+                clearInterval(gallerySlideInterval);
+                gallerySlideInterval = null;
+            }
         }
     });
 
