@@ -938,6 +938,34 @@ body{
                 })
                 .then(htmlContent => {
                     galleryTarget.innerHTML = htmlContent;
+document.addEventListener('DOMContentLoaded', function() {
+    const galleryContainer = document.getElementById('dynamicGallery');
+
+    // بررسی اینکه آیا در صفحه‌ای هستیم که گالری دارد یا نه
+    if (galleryContainer) {
+        
+        // فراخوانی فایل JSON
+        fetch('gallery-data.json')
+            .then(response => response.json())
+            .then(images => {
+                // پاک کردن محتوای قبلی (اگر چیزی بود)
+                galleryContainer.innerHTML = '';
+                
+                // ایجاد و نمایش عکس‌ها
+                images.forEach(imageName => {
+                    const img = document.createElement('img');
+                    img.src = `images/gallery/${imageName}`; // آدرس دهی عکس
+                    img.alt = "تصویر گالری";
+                    img.className = "gallery-item";
+                    galleryContainer.appendChild(img);
+                });
+            })
+            .catch(error => {
+                console.error('خطا در بارگذاری گالری:', error);
+                galleryContainer.innerHTML = '<p style="text-align:center;">تصاویر در حال حاضر در دسترس نیستند.</p>';
+            });
+    }
+});      
                     initGalleryLogic(); // اجرای کدهای اسلایدر بعد از لود شدن
                 })
                 .catch(error => {
