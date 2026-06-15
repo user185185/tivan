@@ -920,11 +920,12 @@ body{
     }
 
     // ==========================================
-    // ۳. منطق بارگذاری داینامیک گالری تصاویر (اصلاح شده برای چیدمان اینستاگرام)
+    // ۳. منطق بارگذاری داینامیک گالری تصاویر (اسلایدشو هوشمند)
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
     var galleryTarget = document.getElementById('galleryModalDynamicTarget');
+    var gallerySlideInterval = null; // برای مدیریت سراسری فرآیند اسلایدشو و پاکسازی آن
 
     if (openGalleryBtn) {
         openGalleryBtn.addEventListener('click', function() {
@@ -946,13 +947,10 @@ body{
                         fetch('gallery-data.json')
                             .then(response => response.json())
                             .then(images => {
-                                // پاک کردن داده‌های تستی قدیمی
                                 wrapper.querySelectorAll('.gallery-slide').forEach(el => el.remove());
                                 dotsContainer.innerHTML = '';
                                 
-                                // رندر ساختار لایه‌ای اینستاگرام طبق استایل شما
                                 images.forEach(function(imageName, index) {
-                                    // ساخت تگ اسلاید
                                     var slide = document.createElement('div');
                                     slide.className = 'gallery-slide' + (index === 0 ? ' active' : '');
                                     
@@ -961,16 +959,13 @@ body{
                                     img.alt = 'تصویر گالری';
                                     
                                     slide.appendChild(img);
-                                    // تزریق قبل از دکمه ناوبری تا چیدمان به هم نخورد
                                     wrapper.insertBefore(slide, nextBtn);
 
-                                    // ساخت نقطه‌های پایین صفحه متناسب با تعداد عکس‌ها
                                     var dot = document.createElement('div');
                                     dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
                                     dotsContainer.appendChild(dot);
                                 });
                                 
-                                // اجرای اسلایدر بعد از لود کامل تصاویر در DOM
                                 initGalleryLogic();
                             })
                             .catch(error => {
@@ -987,15 +982,18 @@ body{
 
     function initGalleryLogic() {
         var closeGalleryBtn = document.getElementById('closeGalleryModalBtn');
+        var wrapper = document.getElementById('galleryWrapper');
         var slides = document.querySelectorAll('.gallery-slide');
         var dots = document.querySelectorAll('.gallery-dot');
         var nextBtn = document.getElementById('nextSlideBtn');
         var prevBtn = document.getElementById('prevSlideBtn');
         var currentIndex = 0;
+        var isPaused = false;
 
         if (closeGalleryBtn) {
             closeGalleryBtn.addEventListener('click', function() {
                 if (galleryOverlay) galleryOverlay.classList.remove('active');
+                if (gallerySlideInterval) clearInterval(gallerySlideInterval);
             });
         }
 
@@ -1012,10 +1010,22 @@ body{
             dots[currentIndex].classList.add('active');
         }
 
+        // عملکرد اسلایدشو خودکار ۲ ثانیه‌ای
+        function startAutoSlideshow() {
+            if (gallerySlideInterval) clearInterval(gallerySlideInterval);
+            gallerySlideInterval = setInterval(function() {
+                if (!isPaused) {
+                    currentIndex++;
+                    showSlide(currentIndex);
+                }
+            }, 2000);
+        }
+
         if (nextBtn) {
             nextBtn.addEventListener('click', function() {
                 currentIndex++;
                 showSlide(currentIndex);
+                startAutoSlideshow(); // ریست تایمر پس از کلیک کاربر
             });
         }
 
@@ -1023,6 +1033,7 @@ body{
             prevBtn.addEventListener('click', function() {
                 currentIndex--;
                 showSlide(currentIndex);
+                startAutoSlideshow(); // ریست تایمر پس از کلیک کاربر
             });
         }
 
@@ -1030,8 +1041,21 @@ body{
             dot.addEventListener('click', function() {
                 currentIndex = index;
                 showSlide(currentIndex);
+                startAutoSlideshow(); // ریست تایمر پس از کلیک کاربر
             });
         });
+
+        // مدیریت مکث (Pause) اسلایدشو هنگام نگه داشتن موس یا انگشت
+        if (wrapper) {
+            wrapper.addEventListener('mouseenter', function() { isPaused = true; });
+            wrapper.addEventListener('mouseleave', function() { isPaused = false; });
+            
+            wrapper.addEventListener('touchstart', function() { isPaused = true; });
+            wrapper.addEventListener('touchend', function() { isPaused = false; });
+        }
+
+        // شروع اسلایدشو
+        startAutoSlideshow();
     }
 
     // ==========================================
@@ -1040,7 +1064,10 @@ body{
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
         if (e.target === coopOverlay) coopOverlay.classList.remove('active');
-        if (e.target === galleryOverlay) galleryOverlay.classList.remove('active');
+        if (e.target === galleryOverlay) {
+            galleryOverlay.classList.remove('active');
+            if (gallerySlideInterval) clearInterval(gallerySlideInterval); // توقف کامل اسلایدشو پس از خروج
+        }
     });
 
 })();
