@@ -1150,5 +1150,53 @@ body{
 </script>
 <script src="club.js"></script>
 <script src="analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
+
+<script>
+  // تنظیمات فایربیس شما
+  const webFirebaseConfig = {
+    apiKey: "AIzaSyBMytFNG9rPdBonl1n6NPEBNoM9fgNmQn8",
+    authDomain: "tivan-shop.firebaseapp.com",
+    projectId: "tivan-shop",
+    storageBucket: "tivan-shop.firebasestorage.app",
+    messagingSenderId: "267212800801",
+    appId: "1:267212800801:web:348c00b2ee4d98d8237460"
+  };
+
+  firebase.initializeApp(webFirebaseConfig);
+  const webMessaging = firebase.messaging();
+
+  // ثبت سرویس ورکر و درخواست اجازه از کاربر
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then((registration) => {
+        console.log('سرویس ورکر با موفقیت فعال شد.');
+        
+        // درخواست اجازه دسترسی برای ارسال نوتیفیکیشن
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            console.log('کاربر اجازه ارسال نوتیفیکیشن را صادر کرد.');
+            
+            // فعال‌سازی و دریافت توکن دستگاه کاربر در فایربیس
+            webMessaging.getToken({ 
+              serviceWorkerRegistration: registration,
+              vapidKey: 'BJJ8O2aI7kbH_vF-R5leS1gVAg-D-qpQJXzoPSE70G5GQ4BL-3AC9bDCANDdR4u1UZsQXhOw-m4C9JhDPFRXE7Q' // کلید طولانی مرحله دوم را اینجا بگذارید
+            }).then((currentToken) => {
+              if (currentToken) {
+                console.log('دستگاه کاربر در لیست ارسال فایربیس عضو شد.');
+              }
+            }).catch((err) => {
+              console.error('خطا در تولید توکن دستگاه: ', err);
+            });
+          } else {
+            console.warn('کاربر درخواست نوتیفیکیشن را رد کرد.');
+          }
+        });
+      }).catch((err) => {
+        console.error('خطا در ثبت سرویس ورکر: ', err);
+      });
+  }
+</script>
 </body>
 </html>
