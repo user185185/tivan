@@ -1,7 +1,8 @@
 <style>
     .gallery-header {
+        position: relative;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         margin-bottom: 16px;
         width: 100%;
@@ -11,8 +12,13 @@
         font-size: 18px;
         font-weight: bold;
         color: #0f172a;
+        text-align: center;
     }
     .close-gallery-top {
+        position: absolute;
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
         background: none;
         border: none;
         font-size: 28px;
@@ -21,11 +27,12 @@
         cursor: pointer;
         padding: 0 4px;
         line-height: 1;
-        transition: color 0.2s ease;
-        order: -1; /* تضمین قرارگیری ضربدر در بالاترین نقطه سمت راست */
+        transition: color 0.2s ease, transform 0.2s ease;
     }
-    .close-gallery-top:hover {
-        color: #0f172a;
+    /* تغییر رنگ ضربدر به قرمز هنگام هوور یا لمس شدن */
+    .close-gallery-top:hover,
+    .close-gallery-top:active {
+        color: #dc2626;
     }
     .gallery-wrapper {
         position: relative;
@@ -108,7 +115,7 @@
 
 <div class="gallery-header">
     <div class="gallery-title">گالری تصاویر</div>
-    <button class="close-gallery-top" id="closeGalleryModalBtn">&times;</button>
+    <button class="close-gallery-top" id="closeGalleryModalBtn">×</button>
 </div>
 
 <div class="gallery-wrapper" id="galleryWrapper">
