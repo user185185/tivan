@@ -1134,6 +1134,18 @@ body{
             }
         }
     });
+// ==========================================
+    // ۵. باز شدن خودکار باشگاه مشتریان بعد از ۵ ثانیه
+    // ==========================================
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var clubOverlay = document.getElementById('clubModalOverlay');
+            // اگر پاپ‌آپ قبلاً دستی باز نشده باشد، آن را باز می‌کند
+            if (clubOverlay && !clubOverlay.classList.contains('active')) {
+                clubOverlay.classList.add('active');
+            }
+        }, 5000); // ۵۰۰۰ میلی‌ثانیه معادل ۵ ثانیه پس از لود کامل
+    });
 })();
 </script>
 <script src="club.js"></script>
