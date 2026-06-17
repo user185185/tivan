@@ -1153,13 +1153,10 @@ body{
 </script>
 <script src="club.js"></script>
 <script src="analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 
 <script>
-  // تنظیمات فایربیس
   const webFirebaseConfig = {
     apiKey: "AIzaSyBMytFNG9rPdBonl1n6NPEBNoM9fgNmQn8",
     authDomain: "tivan-shop.firebaseapp.com",
@@ -1172,71 +1169,67 @@ body{
   firebase.initializeApp(webFirebaseConfig);
   const webMessaging = firebase.messaging();
 
-// ثبت سرویس ورکر
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/firebase-messaging-sw.js').then((registration) => {
-        console.log('سرویس ورکر با موفقیت فعال شد.');
+        
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
-        // اگر کاربر هنوز وضعیتی رو انتخاب نکرده (برای همه مرورگرها و دستگاه‌ها)
         if (Notification.permission === 'default') {
-            
-            // با ۳ ثانیه تاخیر نوار درخواست اجازه به کاربر نشان داده می‌شود
             setTimeout(() => {
-                showNotificationPrompt(registration);
+                if (isIOS && !isStandalone) {
+                    showIOSInstallPrompt();
+                } else {
+                    showNotificationPrompt(registration);
+                }
             }, 3000);
         }
-    }).catch((err) => {
-        console.error('خطا در ثبت سرویس ورکر: ', err);
     });
   }
 
-  // تابعی برای ساخت و نمایش پیام درخواست نوتیفیکیشن
   function showNotificationPrompt(registration) {
-      // ساخت یک نوار یا دکمه موقت روی صفحه
       const promptDiv = document.createElement('div');
-      promptDiv.style.cssText = `
-          position: fixed; top: 0; left: 0; width: 100%; background: #0f172a; color: white;
-          padding: 15px; text-align: center; z-index: 3000; font-family: 'Vazirmatn', sans-serif;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px;
-          align-items: center; justify-content: center; direction: rtl;
-      `;
+      promptDiv.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; background: #0f172a; color: white; padding: 15px; text-align: center; z-index: 3000; font-family: 'Vazirmatn', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; direction: rtl;`;
       
       promptDiv.innerHTML = `
-          <div style="font-size: 14px;">برای دریافت اطلاع‌رسانی حراج‌ها و کالکشن‌های جدید، نوتیفیکیشن را فعال کنید.</div>
+          <div style="font-size: 14px;">برای دریافت اطلاع‌رسانی حراج‌ها، نوتیفیکیشن را فعال کنید.</div>
           <div style="display: flex; gap: 10px;">
-              <button id="allowNotifBtn" style="background:#16a34a; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-family:inherit; cursor:pointer;">فعال‌سازی</button>
-              <button id="closeNotifBtn" style="background:#dc2626; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-family:inherit; cursor:pointer;">بعداً</button>
+              <button id="allowNotifBtn" style="background:#16a34a; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;">فعال‌سازی</button>
+              <button id="closeNotifBtn" style="background:#dc2626; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;">بعداً</button>
           </div>
       `;
       document.body.appendChild(promptDiv);
 
-      // وقتی کاربر روی دکمه "فعال‌سازی" کلیک کند، تازه درخواست سیستم عامل را صدا می‌زنیم
       document.getElementById('allowNotifBtn').addEventListener('click', () => {
           Notification.requestPermission().then((permission) => {
               if (permission === 'granted') {
-                  console.log('کاربر اجازه داد.');
-                  promptDiv.remove(); // بستن نوار
-                  
-                  // دریافت توکن
+                  promptDiv.remove();
                   webMessaging.getToken({ 
                     serviceWorkerRegistration: registration,
                     vapidKey: 'BJJ8O2aI7kbH_vF-R5leS1gVAg-D-qpQJXzoPSE70G5GQ4BL-3AC9bDCANDdR4u1UZsQXhOw-m4C9JhDPFRXE7Q'
                   }).then((currentToken) => {
-                    if (currentToken) {
-                      console.log('توکن دستگاه: ', currentToken);
-                      // اینجا می‌تونی توکن رو بفرستی سمت دیتابیست
-                    }
+                    if (currentToken) console.log('توکن دستگاه دریافت شد');
                   });
               } else {
                   promptDiv.remove();
               }
           });
       });
+      document.getElementById('closeNotifBtn').addEventListener('click', () => promptDiv.remove());
+  }
 
-      // دکمه انصراف
-      document.getElementById('closeNotifBtn').addEventListener('click', () => {
-          promptDiv.remove();
-      });
+  function showIOSInstallPrompt() {
+      const promptDiv = document.createElement('div');
+      promptDiv.style.cssText = `position: fixed; bottom: 0; left: 0; width: 100%; background: #f8fafc; color: #0f172a; padding: 15px; text-align: center; z-index: 3000; font-family: 'Vazirmatn', sans-serif; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; direction: rtl; border-top-left-radius: 16px; border-top-right-radius: 16px;`;
+      
+      promptDiv.innerHTML = `
+          <div style="font-size: 14px; font-weight: bold;">دریافت نوتیفیکیشن روی آیفون</div>
+          <div style="font-size: 12px; color: #475569;">برای دریافت نوتیفیکیشن، ابتدا سایت را به صفحه اصلی (Add to Home Screen) اضافه کنید.</div>
+          <button id="closeIOSBtn" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; width: 100px;">متوجه شدم</button>
+      `;
+      document.body.appendChild(promptDiv);
+
+      document.getElementById('closeIOSBtn').addEventListener('click', () => promptDiv.remove());
   }
 </script>
 </body>
