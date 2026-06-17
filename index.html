@@ -1172,18 +1172,15 @@ body{
   firebase.initializeApp(webFirebaseConfig);
   const webMessaging = firebase.messaging();
 
-  // ثبت سرویس ورکر
+// ثبت سرویس ورکر
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/firebase-messaging-sw.js').then((registration) => {
         console.log('سرویس ورکر با موفقیت فعال شد.');
-        
-        // بررسی اینکه آیا سایت از طریق Home Screen (PWA) باز شده است یا خیر
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
-       // اگر کاربر هنوز نه اجازه داده و نه رد کرده است (برای همه مرورگرها و دستگاه‌ها)
-       if (Notification.permission === 'default') {
+        // اگر کاربر هنوز وضعیتی رو انتخاب نکرده (برای همه مرورگرها و دستگاه‌ها)
+        if (Notification.permission === 'default') {
             
-            // با کمی تاخیر (مثلا 3 ثانیه) یک دکمه برای درخواست اجازه به کاربر نشان می‌دهیم
+            // با ۳ ثانیه تاخیر نوار درخواست اجازه به کاربر نشان داده می‌شود
             setTimeout(() => {
                 showNotificationPrompt(registration);
             }, 3000);
