@@ -39,14 +39,15 @@ body{
     overflow:visible;
 }
 
-.logo-wrapper{
-    position:absolute;
-    left:50%;
-    width:120px;
-    opacity:0;
-    animation:logoIntro 2.5s cubic-bezier(0.65,0,0.35,1) forwards;
-    z-index:100;
-    will-change:transform, top, opacity;
+.logo-wrapper {
+    position: absolute;
+    left: 50%;
+    width: 120px;
+    opacity: 0;
+    /* زمان از 2.5s به 1s تغییر کرد */
+    animation: logoIntro 1s cubic-bezier(0.65,0,0.35,1) forwards;
+    z-index: 100;
+    will-change: transform, top, opacity;
 }
 
 .logo-wrapper img{
@@ -54,9 +55,10 @@ body{
     display:block;
 }
 
-.content-section{
-    opacity:0;
-    animation:fadeIn 1s ease forwards 2.5s;
+.content-section {
+    opacity: 0;
+    /* تاخیر از 2.5s به 1s تغییر کرد */
+    animation: fadeIn 0.8s ease forwards 1s;
 }
 
 .branch-item{
@@ -152,11 +154,12 @@ body{
     flex-shrink:0;
 }
 
-.footer-section{
-    opacity:0;
-    animation:fadeIn 1s ease forwards 2.5s;
-    text-align:center;
-    margin-top:20px;
+.footer-section {
+    opacity: 0;
+    /* تاخیر از 2.5s به 1s تغییر کرد */
+    animation: fadeIn 0.8s ease forwards 1s;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .club-section {
