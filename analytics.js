@@ -1,39 +1,46 @@
-// ارسال گزارش کلیک‌ها به گوگل آنالیتیکس
+// analytics.js - ارسال گزارش کلیک‌ها به گوگل آنالیتیکس
+// FIX #1: بررسی وجود عناصر قبل از addEventListener
+// FIX #2: استفاده از event delegation برای .phone-link و .open-map-trigger (کارایی بیشتر)
+
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // تابع کمکی برای ارسال ایمن اطلاعات
+    'use strict';
+
     function trackEvent(eventName) {
         if (typeof gtag === 'function') {
             gtag('event', eventName);
-            console.log('گزارش کلیک ثبت شد: ' + eventName);
         }
     }
 
-    // ۱. کلیک روی شماره تماس‌ها (برای تمامی شعب)
-    const phoneLinks = document.querySelectorAll('.phone-link');
-    phoneLinks.forEach(link => {
-        link.addEventListener('click', () => trackEvent('phone_click'));
+    // FIX #2: Event delegation برای شماره‌ها (به جای loop روی هر عنصر)
+    document.body.addEventListener('click', function(e) {
+        var phoneLink = e.target.closest('.phone-link');
+        if (phoneLink) { trackEvent('phone_click'); return; }
+
+        var mapTrigger = e.target.closest('.open-map-trigger');
+        if (mapTrigger) { trackEvent('location_click'); return; }
     });
 
-    // ۲. کلیک روی مسیریابی‌ها (برای تمامی شعب)
-    const mapTriggers = document.querySelectorAll('.open-map-trigger');
-    mapTriggers.forEach(trigger => {
-        trigger.addEventListener('click', () => trackEvent('location_click'));
-    });
+    // اینستاگرام
+    var instaLink = document.querySelector('.instagram-link');
+    if (instaLink) {
+        instaLink.addEventListener('click', function() { trackEvent('insta_click'); });
+    }
 
-    // ۳. کلیک روی اینستاگرام
-    const instaLink = document.querySelector('.instagram-link');
-    if (instaLink) instaLink.addEventListener('click', () => trackEvent('insta_click'));
+    // باشگاه مشتریان
+    var clubBtn = document.getElementById('openClubBtn');
+    if (clubBtn) {
+        clubBtn.addEventListener('click', function() { trackEvent('club_click'); });
+    }
 
-    // ۴. کلیک روی دکمه باشگاه مشتریان
-    const clubBtn = document.getElementById('openClubBtn');
-    if (clubBtn) clubBtn.addEventListener('click', () => trackEvent('club_click'));
+    // فرم همکاری
+    var coopBtn = document.getElementById('openCoopBtn');
+    if (coopBtn) {
+        coopBtn.addEventListener('click', function() { trackEvent('form_open'); });
+    }
 
-    // ۵. کلیک روی دکمه فرم همکاری
-    const coopBtn = document.getElementById('openCoopBtn');
-    if (coopBtn) coopBtn.addEventListener('click', () => trackEvent('form_open'));
-
-    // ۶. کلیک روی دکمه گالری تصاویر
-    const galleryBtn = document.getElementById('openGalleryBtn');
-    if (galleryBtn) galleryBtn.addEventListener('click', () => trackEvent('gallery_click'));
+    // گالری
+    var galleryBtn = document.getElementById('openGalleryBtn');
+    if (galleryBtn) {
+        galleryBtn.addEventListener('click', function() { trackEvent('gallery_click'); });
+    }
 });
