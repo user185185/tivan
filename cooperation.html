@@ -1,126 +1,160 @@
 <style>
-    /* استایل‌های اختصاصی فرم همکاری */
-    .coop-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 6px;
-        text-align: center;
-    }
-    .coop-subtitle {
-        font-size: 12.5px;
-        color: #64748b;
-        margin-bottom: 16px;
-        line-height: 1.6;
-        text-align: right;
-    }
-    .coop-form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-    .coop-input {
-        width: 100%;
-        padding: 11px 14px;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 12px;
-        font-family: inherit;
-        font-size: 14px;
-        text-align: right;
-        letter-spacing: normal;
-        color: #0f172a;
-        outline: none;
-        transition: all 0.2s ease;
-        background: #f8fafc;
-    }
-    .coop-input:focus {
-        border-color: #0f172a;
-        background: #fff;
-        box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
-    }
-    
-    /* حل مشکل موقعیت ستاره و جهت تایپ شماره تلفن */
-    .coop-input.phone-field {
-        direction: rtl;
-    }
-    .coop-input.phone-field:not(:placeholder-shown) {
-        direction: ltr;
-        text-align: left;
-    }
+/* cooperation.css — اصلاح‌شده */
+.coop-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 6px;
+    text-align: center;
+}
+.coop-subtitle {
+    font-size: 12.5px;
+    color: #64748b;
+    margin-bottom: 16px;
+    line-height: 1.6;
+    text-align: right;
+}
+.coop-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+.coop-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    text-align: right;
+    letter-spacing: normal;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+    /* FIX #1: min-height برای لمس راحت */
+    min-height: 44px;
+}
+.coop-input:focus {
+    border-color: #0f172a;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+}
 
-    select.coop-input {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: left 14px center;
-        background-size: 18px;
-        cursor: pointer;
-    }
+/* FIX #2: جهت تایپ شماره */
+.coop-input.phone-field {
+    direction: rtl;
+}
+.coop-input.phone-field:not(:placeholder-shown) {
+    direction: ltr;
+    text-align: left;
+}
 
-    /* استایل فیلدهای OTP */
-    .coop-otp-container {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        direction: ltr;
-        margin-top: 5px;
-    }
-    .coop-otp-input {
-        width: 45px;
-        height: 45px;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 10px;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        background: #f8fafc;
-        outline: none;
-        transition: all 0.2s;
-    }
-    .coop-otp-input:focus {
-        border-color: #0f172a;
-        background: #fff;
-        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.05);
-    }
+select.coop-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 14px center;
+    background-size: 18px;
+    cursor: pointer;
+}
+
+/* استایل فیلدهای OTP */
+.coop-otp-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    direction: ltr;
+    margin-top: 5px;
+}
+.coop-otp-input {
+    width: 45px;
+    height: 45px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    background: #f8fafc;
+    outline: none;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.coop-otp-input:focus {
+    border-color: #0f172a;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.05);
+}
 </style>
 
 <div class="coop-title">درخواست همکاری</div>
-<div class="coop-subtitle" id="coopSubtitle">لطفا اطلاعات زیر را تکمیل کنید تا دراولین فرصت با شما تماس بگیریم</div>
+<div class="coop-subtitle" id="coopSubtitle">لطفا اطلاعات زیر را تکمیل کنید تا در اولین فرصت با شما تماس بگیریم</div>
 
+<!-- FIX #3: novalidate حفظ شده — اعتبارسنجی سمت JS انجام می‌شه -->
 <form id="coopForm" class="coop-form-group" novalidate>
-    
-    <input type="text" id="coopName" class="coop-input" placeholder="نام و نام خانوادگی *" maxlength="20" required>
-    
-    <input type="text" id="coopPhone" class="coop-input phone-field" placeholder="تلفن همراه *" maxlength="11" inputmode="numeric" required>
-    <input type="text" id="coopBirth" class="coop-input" placeholder="سال تولد *" maxlength="4" inputmode="numeric" required>
-    
-    <select id="coopJob" class="coop-input" required>
+
+    <input
+        type="text"
+        id="coopName"
+        class="coop-input"
+        placeholder="نام و نام خانوادگی *"
+        maxlength="30"
+        autocomplete="name"
+        required
+    >
+
+    <!-- FIX #4: type="tel" برای کیبورد مناسب -->
+    <input
+        type="tel"
+        id="coopPhone"
+        class="coop-input phone-field"
+        placeholder="تلفن همراه *"
+        maxlength="11"
+        inputmode="numeric"
+        autocomplete="tel"
+        dir="ltr"
+        required
+    >
+
+    <input
+        type="text"
+        id="coopBirth"
+        class="coop-input"
+        placeholder="سال تولد (مثال: ۱۳۶۵) *"
+        maxlength="4"
+        inputmode="numeric"
+        required
+    >
+
+    <select id="coopJob" class="coop-input" required aria-label="موقعیت شغلی درخواستی">
         <option value="کارشناس فروش" selected>کارشناس فروش</option>
-        <option value="مدیرداخلی">مدیرداخلی</option>
+        <option value="مدیرداخلی">مدیر داخلی</option>
         <option value="صندوقدار">صندوقدار</option>
         <option value="انباردار">انباردار</option>
     </select>
-    
+
     <div id="coopOtpSection" style="display: none; margin-bottom: 5px;">
         <div class="coop-subtitle" style="text-align: center; margin-bottom: 10px; color: #0f172a;">کد تایید ۵ رقمی ارسال شده را وارد کنید:</div>
         <div class="coop-otp-container">
-            <input type="text" id="coopOtp1" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp2" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp3" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp4" class="coop-otp-input" maxlength="1" inputmode="numeric">
-            <input type="text" id="coopOtp5" class="coop-otp-input" maxlength="1" inputmode="numeric">
+            <input type="text" id="coopOtp1" class="coop-otp-input" maxlength="1" inputmode="numeric" pattern="\d*" autocomplete="one-time-code" aria-label="رقم اول">
+            <input type="text" id="coopOtp2" class="coop-otp-input" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم دوم">
+            <input type="text" id="coopOtp3" class="coop-otp-input" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم سوم">
+            <input type="text" id="coopOtp4" class="coop-otp-input" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم چهارم">
+            <input type="text" id="coopOtp5" class="coop-otp-input" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم پنجم">
         </div>
-        <div id="coopTimerDisplay" style="text-align: center; font-size: 12px; color: #64748b; margin-top: 10px;"></div>
+        <!-- FIX #5: aria-live برای دسترس‌پذیری -->
+        <div id="coopTimerDisplay" style="text-align: center; font-size: 12px; color: #64748b; margin-top: 10px;" aria-live="polite"></div>
     </div>
 
-    <div id="coopFeedback" class="form-feedback"></div>
-    
+    <!-- FIX #6: aria-live برای پیام بازخورد -->
+    <div id="coopFeedback" class="form-feedback" aria-live="polite"></div>
+
     <button type="submit" id="coopSubmitBtn" class="club-submit-btn" style="padding: 12px; margin-top: 4px;">
         دریافت کد تایید
     </button>
 </form>
 
-<button class="close-modal-btn" id="closeCoopModalBtn" style="margin-top: 12px;">انصراف</button>
+<button class="close-modal-btn" id="closeCoopModalBtn" type="button" style="margin-top: 12px;">انصراف</button>
