@@ -1,5 +1,5 @@
 <style>
-/* ==================== گالری اصلاح‌شده ==================== */
+/* gallery.css — اصلاح‌شده */
 .gallery-header {
     position: relative;
     display: flex;
@@ -7,14 +7,14 @@
     align-items: center;
     margin-bottom: 16px;
     width: 100%;
+    direction: rtl;
 }
-
 .gallery-title {
     font-size: 18px;
     font-weight: bold;
     color: #0f172a;
+    text-align: center;
 }
-
 .close-gallery-top {
     position: absolute;
     top: 50%;
@@ -23,27 +23,34 @@
     background: none;
     border: none;
     font-size: 28px;
+    font-weight: 300;
     color: #64748b;
     cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.2s ease;
+    /* FIX #1: اضافه کردن min-width برای لمس راحت‌تر در موبایل */
     min-width: 44px;
     min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
-.close-gallery-top:hover { color: #dc2626; }
-
+.close-gallery-top:hover,
+.close-gallery-top:active {
+    color: #dc2626;
+}
 .gallery-wrapper {
     position: relative;
     width: 100%;
-    height: 420px;           /* ثابت برای ثبات */
+    aspect-ratio: 4 / 5;
     border-radius: 16px;
     overflow: hidden;
     background: #f8fafc;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    /* FIX #2: بهینه‌سازی رندر */
+    will-change: transform;
 }
-
 .gallery-slide {
     position: absolute;
     top: 0;
@@ -51,68 +58,58 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateX(100%);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: scale(1.05);
+    pointer-events: none;
 }
-
 .gallery-slide.active {
     opacity: 1;
-    transform: translateX(0);
-    z-index: 2;
+    transform: scale(1);
+    pointer-events: auto;
 }
-
 .gallery-slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 16px;
+    /* FIX #3: جلوگیری از drag تصویر */
     user-select: none;
     -webkit-user-drag: none;
 }
-
-/* دکمه‌های ناوبری */
 .gallery-nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
     color: #0f172a;
     border: none;
-    width: 46px;
-    height: 46px;
+    width: 40px;  /* FIX #4: بزرگ‌تر برای لمس راحت */
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
-
 .gallery-nav-btn:hover {
     background: #fff;
     transform: translateY(-50%) scale(1.1);
 }
-
-#prevSlideBtn { right: 12px; }   /* دکمه قبلی → سمت راست (در RTL) */
-#nextSlideBtn { left: 12px; }    /* دکمه بعدی → سمت چپ */
-
-.gallery-nav-btn svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-}
+.gallery-prev { right: 12px; }
+.gallery-next { left: 12px; }
+.gallery-nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
 .gallery-dots {
     display: flex;
     justify-content: center;
     gap: 6px;
     margin-top: 16px;
+    direction: ltr;
+    flex-wrap: wrap; /* FIX #5: wrap برای گالری‌های بزرگ */
 }
-
 .gallery-dot {
     width: 8px;
     height: 8px;
@@ -120,39 +117,31 @@
     background: #cbd5e1;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* FIX #6: سطح لمس بزرگ‌تر */
     padding: 4px;
     box-sizing: content-box;
 }
-
 .gallery-dot.active {
     background: #0f172a;
     width: 24px;
     border-radius: 4px;
 }
-
-@media (max-width: 480px) {
-    .gallery-wrapper { height: 360px; }
-    .gallery-nav-btn { width: 42px; height: 42px; }
-    .gallery-nav-btn svg { width: 22px; height: 22px; }
-}
 </style>
 
-<!-- HTML گالری -->
 <div class="gallery-header">
     <div class="gallery-title">گالری تصاویر</div>
+    <!-- FIX #7: aria-label برای دسترس‌پذیری -->
     <button class="close-gallery-top" id="closeGalleryModalBtn" type="button" aria-label="بستن گالری">×</button>
 </div>
 
-<div class="gallery-wrapper" id="galleryWrapper" role="region" aria-label="اسلایدشو">
-    <!-- دکمه بعدی (چپ) -->
-    <button class="gallery-nav-btn" id="nextSlideBtn" type="button" aria-label="تصویر بعدی">
-        <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+<!-- FIX #8: aria-label و role برای wrapper -->
+<div class="gallery-wrapper" id="galleryWrapper" role="region" aria-label="اسلایدشو تصاویر">
+    <button class="gallery-nav-btn gallery-next" id="nextSlideBtn" type="button" aria-label="تصویر بعدی">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
     </button>
-    
-    <!-- دکمه قبلی (راست) -->
-    <button class="gallery-nav-btn" id="prevSlideBtn" type="button" aria-label="تصویر قبلی">
-        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    <button class="gallery-nav-btn gallery-prev" id="prevSlideBtn" type="button" aria-label="تصویر قبلی">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </button>
 </div>
 
-<div class="gallery-dots" id="galleryDotsContainer"></div>
+<div class="gallery-dots" id="galleryDotsContainer" role="tablist" aria-label="انتخاب تصویر"></div>
