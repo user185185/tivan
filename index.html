@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ==========================================
-  FIX #1: تگ description تکراری حذف شد — فقط یک نسخه باید باشد
-  FIX #2: ترتیب صحیح تگ‌های <head>: charset → viewport → title → meta → link → script
-========================================== -->
 <title>فروشگاه پوشاک تیوان</title>
 
 <meta name="description" content="فروشگاه پوشاک تیوان (Tivan Shop) مرجع تخصصی خرید انواع پوشاک زنانه، پوشاک مردانه، شال و روسری، کیف، کفش و چمدان. خرید حضوری در ۳ شعبه اصفهان و خرید اینترنتی.">
@@ -15,19 +11,16 @@
 <meta name="theme-color" content="#ff0000">
 <meta name="apple-mobile-web-app-title" content="TivanShop">
 
-<!-- FIX #3: preconnect برای فونت گوگل → سرعت لود فونت بهتر -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
 
-<!-- FIX #4: ترتیب صحیح آیکون‌ها -->
 <link rel="icon" type="image/png" sizes="32x32" href="logo-32.png">
 <link rel="icon" type="image/png" href="logo-title-red-c.png">
 <link rel="apple-touch-icon" sizes="180x180" href="logo-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="logo-192.png">
 <link rel="manifest" href="manifest.json">
 
-<!-- FIX #5: Google Analytics — async حفظ شد، gtag بعد از تعریف dataLayer -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -36,7 +29,6 @@
   gtag('config', 'G-PW6X64H3JX');
 </script>
 
-<!-- FIX #6: JSON-LD — کلمات typo مثل "jd,hk" از alternateName حذف شد -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -76,7 +68,6 @@
 </script>
 
 <style>
-/* FIX #7: حذف وزن فونت 100 که در CSS استفاده نشده بود (کاهش حجم) */
 *{
     box-sizing:border-box;
     margin:0;
@@ -375,9 +366,15 @@ body{
     box-shadow:0 20px 40px rgba(0,0,0,0.15);
     transform:scale(0.9);
     transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    /* FIX #8: جلوگیری از overflow محتوا در موبایل */
     max-height:90vh;
     overflow-y:auto;
+    /* کدهای جدید برای مخفی کردن کامل اسکرول‌بار */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.custom-modal::-webkit-scrollbar {
+    display: none;
 }
 
 .modal-overlay.active .custom-modal{
@@ -564,7 +561,6 @@ body{
 <div class="main-container">
     <div class="logo-section">
         <div class="logo-wrapper">
-            <!-- FIX #9: loading="eager" برای لوگو — لود اولویت‌دار -->
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان" loading="eager">
         </div>
     </div>
@@ -660,14 +656,12 @@ body{
     </div>
 </div>
 
-<!-- Modal: فرم همکاری -->
 <div class="modal-overlay" id="coopModalOverlay" role="dialog" aria-modal="true" aria-label="فرم درخواست همکاری">
     <div class="custom-modal" id="coopModalDynamicTarget">
         <div style="padding:20px;color:#64748b;font-size:14px;">در حال بارگذاری فرم...</div>
     </div>
 </div>
 
-<!-- Modal: باشگاه مشتریان -->
 <div class="modal-overlay" id="clubModalOverlay" role="dialog" aria-modal="true" aria-label="باشگاه مشتریان">
     <div class="custom-modal">
         <div class="modal-title">عضویت در باشگاه مشتریان</div>
@@ -695,7 +689,6 @@ body{
     </div>
 </div>
 
-<!-- Modal: مسیریابی -->
 <div class="modal-overlay" id="mapModalOverlay" role="dialog" aria-modal="true" aria-label="انتخاب مسیریاب">
     <div class="custom-modal">
         <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
@@ -718,7 +711,6 @@ body{
     </div>
 </div>
 
-<!-- Modal: گالری -->
 <div class="modal-overlay" id="galleryModalOverlay" role="dialog" aria-modal="true" aria-label="گالری تصاویر">
     <div class="custom-modal" id="galleryModalDynamicTarget">
         <div style="padding:20px;color:#64748b;font-size:14px;">در حال بارگذاری گالری...</div>
@@ -731,7 +723,6 @@ body{
 
     // ==========================================
     // ۱. منطق پاپ‌آپ مسیریابی
-    // FIX #10: اعتبارسنجی مقادیر lat/lng قبل از ساخت URL
     // ==========================================
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
@@ -739,7 +730,6 @@ body{
     var googleLink = document.getElementById('link-google');
     var neshanLink = document.getElementById('link-neshan');
     var baladLink = document.getElementById('link-balad');
-
     function isValidCoord(lat, lng) {
         var la = parseFloat(lat), lo = parseFloat(lng);
         return !isNaN(la) && !isNaN(lo) && la >= -90 && la <= 90 && lo >= -180 && lo <= 180;
@@ -755,7 +745,6 @@ body{
             baladLink.href = 'https://balad.ir/location?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng);
             mapOverlay.classList.add('active');
         });
-        // FIX #11: پشتیبانی از کیبورد (Enter/Space) برای دسترس‌پذیری
         trigger.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
         });
@@ -769,17 +758,15 @@ body{
 
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
-    // FIX #12: جلوگیری از بارگذاری مجدد اگر محتوا قبلاً لود شده
     // ==========================================
     var openCoopBtn = document.getElementById('openCoopBtn');
     var coopOverlay = document.getElementById('coopModalOverlay');
     var coopDynamicTarget = document.getElementById('coopModalDynamicTarget');
     var coopLoaded = false;
-
     if (openCoopBtn) {
         openCoopBtn.addEventListener('click', function() {
             coopOverlay.classList.add('active');
-            if (coopLoaded) return; // جلوگیری از fetch تکراری
+            if (coopLoaded) return; 
 
             fetch('cooperation.html')
                 .then(function(response) {
@@ -816,7 +803,7 @@ body{
         var coopVerifiedPhone = '';
         var arvanWorkerUrl = 'https://hamkariform.tiva1shop-kh8xv.arvanedge.ir';
         var coopTimerInterval = null;
-        var coopIsVerifying = false; // FIX #13: جلوگیری از ارسال دوتایی OTP
+        var coopIsVerifying = false;
 
         var coopOtpInputs = [
             document.getElementById('coopOtp1'),
@@ -825,7 +812,6 @@ body{
             document.getElementById('coopOtp4'),
             document.getElementById('coopOtp5')
         ];
-
         function toEnglishDigits(str) {
             if (!str) return '';
             var persianDigits = [/۰/g,/۱/g,/۲/g,/۳/g,/۴/g,/۵/g,/۶/g,/۷/g,/۸/g,/۹/g];
@@ -839,8 +825,8 @@ body{
         coopOtpInputs.forEach(function(input, index) {
             if (!input) return;
             input.addEventListener('input', function(e) {
-                var val = toEnglishDigits(e.target.value).replace(/\D/g, ''); // فقط عدد
-                e.target.value = val.slice(-1); // فقط آخرین کاراکتر
+                var val = toEnglishDigits(e.target.value).replace(/\D/g, ''); 
+                e.target.value = val.slice(-1); 
                 if (val && index < coopOtpInputs.length - 1) {
                     coopOtpInputs[index + 1].focus();
                 }
@@ -852,7 +838,6 @@ body{
                 }
             });
         });
-
         function checkAndSubmitCoopOtp() {
             if (coopIsVerifying) return;
             var otp = '';
@@ -868,7 +853,6 @@ body{
             if (!display) return;
             display.style.display = 'block';
             if (coopTimerInterval) clearInterval(coopTimerInterval);
-
             coopTimerInterval = setInterval(function() {
                 remains--;
                 var m = Math.floor(remains / 60);
@@ -920,7 +904,6 @@ body{
                     fb.textContent = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
                     return;
                 }
-                // FIX #14: اعتبارسنجی سال تولد واقعی
                 var birthYear = parseInt(birth);
                 if (!/^\d{4}$/.test(birth) || birthYear < 1320 || birthYear > 1390) {
                     fb.className = 'form-feedback error';
@@ -931,7 +914,6 @@ body{
                 fb.className = 'form-feedback loading';
                 fb.textContent = 'در حال بررسی و ارسال کد... ⏳';
                 btn.disabled = true;
-
                 fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', { method: 'GET', mode: 'cors' })
                     .then(function(res) { return res.json(); })
                     .then(function(data) {
@@ -960,7 +942,6 @@ body{
                         fb.className = 'form-feedback error';
                         fb.textContent = 'خطا در ارتباط با سرور. اینترنت خود را چک کنید.';
                     });
-
             } else if (coopCurrentStep === 2) {
                 var otp = '';
                 coopOtpInputs.forEach(function(i) { if(i) otp += i.value; });
@@ -974,19 +955,16 @@ body{
         });
 
         function processCoopVerify(otp) {
-            if (coopIsVerifying) return; // FIX #13: محافظت از ارسال دوتایی
+            if (coopIsVerifying) return;
             coopIsVerifying = true;
-
             var fb = document.getElementById('coopFeedback');
             var btn = document.getElementById('coopSubmitBtn');
             var name = document.getElementById('coopName').value.trim();
             var birth = toEnglishDigits(document.getElementById('coopBirth').value.trim());
             var job = document.getElementById('coopJob').value;
-
             fb.className = 'form-feedback loading';
             fb.textContent = 'در حال تایید نهایی اطلاعات... ⏳';
             btn.disabled = true;
-
             var params = new URLSearchParams({
                 phone: coopVerifiedPhone,
                 action: 'verify',
@@ -997,7 +975,6 @@ body{
                 birth: birth,
                 job: job
             });
-
             fetch(arvanWorkerUrl + '?' + params.toString(), { method: 'GET', mode: 'cors' })
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
@@ -1015,7 +992,7 @@ body{
                         var jobEl = document.getElementById('coopJob');
                         if (jobEl) jobEl.value = 'کارشناس فروش';
                         coopCurrentStep = 1;
-                        coopLoaded = false; // اجازه لود مجدد برای دفعه بعد
+                        coopLoaded = false;
                         toggleInputs(false);
                         btn.textContent = 'دریافت کد تایید';
                         setTimeout(function() {
@@ -1037,16 +1014,12 @@ body{
 
     // ==========================================
     // ۳. گالری تصاویر (اسلایدشو هوشمند)
-    // FIX #15: lazy loading تصاویر گالری
-    // FIX #16: پشتیبانی از swipe موبایل
-    // FIX #17: جلوگیری از fetch مجدد گالری
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
     var galleryTarget = document.getElementById('galleryModalDynamicTarget');
     var gallerySlideInterval = null;
     var galleryLoaded = false;
-
     if (openGalleryBtn) {
         openGalleryBtn.addEventListener('click', function() {
             galleryOverlay.classList.add('active');
@@ -1079,7 +1052,6 @@ body{
                                     var img = document.createElement('img');
                                     img.src = 'images/gallery/' + imageName;
                                     img.alt = 'تصویر گالری ' + (index + 1);
-                                    // FIX #15: lazy load برای تصاویر بعدی
                                     if (index > 1) img.loading = 'lazy';
 
                                     slide.appendChild(img);
@@ -1089,7 +1061,6 @@ body{
                                     dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
                                     dotsContainer.appendChild(dot);
                                 });
-
                                 initGalleryLogic();
                             })
                             .catch(function() {
@@ -1120,7 +1091,6 @@ body{
         }
 
         if (slides.length === 0) return;
-
         function showSlide(index) {
             if (index >= slides.length) currentIndex = 0;
             else if (index < 0) currentIndex = slides.length - 1;
@@ -1136,7 +1106,7 @@ body{
             stopAutoSlideshow();
             gallerySlideInterval = setInterval(function() {
                 showSlide(currentIndex + 1);
-            }, 3000); // FIX #18: 3 ثانیه به جای 2 — مناسب‌تر برای تجربه کاربری
+            }, 3000);
         }
 
         function stopAutoSlideshow() {
@@ -1166,12 +1136,9 @@ body{
                 startAutoSlideshow();
             });
         });
-
         if (wrapper) {
             wrapper.addEventListener('mouseenter', stopAutoSlideshow);
             wrapper.addEventListener('mouseleave', startAutoSlideshow);
-
-            // FIX #16: پشتیبانی swipe موبایل
             var touchStartX = 0;
             wrapper.addEventListener('touchstart', function(e) {
                 touchStartX = e.changedTouches[0].screenX;
@@ -1191,7 +1158,6 @@ body{
 
     // ==========================================
     // ۴. بستن مودال‌ها با کلیک روی فضای تاریک
-    // FIX #19: یکپارچه‌سازی با stopAutoSlideshow
     // ==========================================
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
@@ -1204,8 +1170,6 @@ body{
             }
         }
     });
-
-    // FIX #20: بستن مودال‌ها با کلید Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             [mapOverlay, coopOverlay, galleryOverlay].forEach(function(overlay) {
@@ -1217,7 +1181,6 @@ body{
 
     // ==========================================
     // ۵. باز شدن خودکار باشگاه مشتریان
-    // FIX #21: استفاده از sessionStorage به جای باز شدن هر بار بی‌دلیل
     // ==========================================
     window.addEventListener('load', function() {
         if (sessionStorage.getItem('club_popup_shown')) return;
@@ -1229,20 +1192,16 @@ body{
             }
         }, 5000);
     });
-
 })();
 </script>
 
-<!-- FIX #22: Firebase SDK بعد از محتوای صفحه بارگذاری می‌شود (defer) -->
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 <script defer src="club.js"></script>
 <script defer src="analytics.js"></script>
 
 <script>
-// FIX #23: Firebase init داخل DOMContentLoaded تا SDK لود شده باشد
 document.addEventListener('DOMContentLoaded', function() {
-    // اگر firebase لود نشده باشد صبر می‌کنیم
     if (typeof firebase === 'undefined') return;
 
     var webFirebaseConfig = {
@@ -1254,7 +1213,6 @@ document.addEventListener('DOMContentLoaded', function() {
         appId: "1:267212800801:web:348c00b2ee4d98d8237460"
     };
 
-    // FIX #24: جلوگیری از خطای "Firebase already initialized"
     if (!firebase.apps.length) {
         firebase.initializeApp(webFirebaseConfig);
     }
@@ -1288,7 +1246,6 @@ function showNotificationPrompt(registration, webMessaging) {
     var promptDiv = document.createElement('div');
     promptDiv.setAttribute('role', 'alert');
     promptDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#0f172a;color:white;padding:15px;text-align:center;z-index:3000;font-family:\'Vazirmatn\',sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;direction:rtl;';
-
     promptDiv.innerHTML = '<div style="font-size:14px;">برای دریافت اطلاع‌رسانی حراج‌ها و کالکشن‌های جدید، نوتیفیکیشن را فعال کنید.</div>' +
         '<div style="display:flex;gap:10px;">' +
         '<button id="allowNotifBtn" style="background:#16a34a;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:inherit;">فعال‌سازی</button>' +
