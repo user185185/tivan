@@ -554,7 +554,7 @@ body{
 }
 </style>
 <!-- Google Maps API -->
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-rlwRfg8ri3gJEUkKzdh4a_kEYP_kPi8&libraries=geometry,directions&language=fa&region=IR"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?libraries=geometry,directions&language=fa&region=IR"></script>
 </head>
 
 <body>
@@ -715,77 +715,79 @@ body{
     'use strict';
 
       // ==========================================
-    // ۱. نقشه گوگل با مسیر (دقیق و سریع)
+    // نقشه گوگل — نسخه پایدارتر
     // ==========================================
-    let currentGoogleMap = null;
-    let directionsService = null;
-    let directionsRenderer = null;
+    let googleMapInstance = null;
 
     function initGoogleMap(storeLat, storeLng) {
-        const mapContainer = document.getElementById('mapContainer');
+        const container = document.getElementById('mapContainer');
         
-        if (currentGoogleMap) currentGoogleMap = null;
+        // اگر قبلاً نقشه ساخته شده، پاک کن
+        if (googleMapInstance) googleMapInstance = null;
 
-        currentGoogleMap = new google.maps.Map(mapContainer, {
+        googleMapInstance = new google.maps.Map(container, {
             center: { lat: storeLat, lng: storeLng },
             zoom: 15,
             mapTypeControl: false,
             streetViewControl: false,
+            fullscreenControl: false
         });
 
         // نشان فروشگاه
         new google.maps.Marker({
             position: { lat: storeLat, lng: storeLng },
-            map: currentGoogleMap,
-            title: "فروشگاه تیوان",
-            animation: google.maps.Animation.DROP
+            map: googleMapInstance,
+            title: "فروشگاه تیوان"
         });
 
-        // فعال کردن Directions
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer({
-            map: currentGoogleMap,
-            suppressMarkers: true,
-            polylineOptions: { strokeColor: '#b20808', strokeWeight: 6 }
-        });
-
-        // گرفتن موقعیت کاربر
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
 
-                // نشان کاربر
                 new google.maps.Marker({
-                    position: { lat: userLat, lng: userLng },
-                    map: currentGoogleMap,
-                    title: "موقعیت شما",
-                    animation: google.maps.Animation.DROP
+                    position: userPos,
+                    map: googleMapInstance,
+                    title: "موقعیت شما"
                 });
 
-                // محاسبه و نمایش مسیر
-                const request = {
-                    origin: { lat: userLat, lng: userLng },
-                    destination: { lat: storeLat, lng: storeLng },
-                    travelMode: google.maps.TravelMode.DRIVING,
-                    provideRouteAlternatives: true
-                };
+                const directionsService = new google.maps.DirectionsService();
+                const directionsRenderer = new google.maps.DirectionsRenderer({
+                    map: googleMapInstance,
+                    suppressMarkers: true,
+                    polylineOptions: { strokeColor: "#b20808", strokeWeight: 6 }
+                });
 
-                directionsService.route(request, function(result, status) {
-                    if (status === 'OK') {
+                directionsService.route({
+                    origin: userPos,
+                    destination: { lat: storeLat, lng: storeLng },
+                    travelMode: google.maps.TravelMode.DRIVING
+                }, (result, status) => {
+                    if (status === "OK") {
                         directionsRenderer.setDirections(result);
                     } else {
-                        alert('متأسفانه نتوانستیم مسیر را پیدا کنیم.');
+                        console.error("خطای Directions:", status);
+                        alert("نمایش مسیر با خطا مواجه شد.");
                     }
                 });
-
-            }, function() {
-                alert('لطفاً دسترسی به موقعیت مکانی را فعال کنید.');
+            }, () => {
+                alert("لطفاً مجوز دسترسی به موقعیت مکانی را بدهید.");
             });
-        } else {
-            alert('مرورگر شما از قابلیت موقعیت مکانی پشتیبانی نمی‌کند.');
         }
     }
+
+    // اتصال دکمه‌ها
+    document.querySelectorAll('.open-map-trigger').forEach(trigger => {
+        trigger.addEventListener('click', function() {
+            const lat = parseFloat(this.dataset.lat);
+            const lng = parseFloat(this.dataset.lng);
+
+            document.getElementById('mapModalOverlay').classList.add('active');
+
+            setTimeout(() => {
+                initGoogleMap(lat, lng);
+            }, 600);
+        });
+    });
 
     // اتصال دکمه‌های مسیریابی
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
