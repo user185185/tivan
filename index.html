@@ -1183,34 +1183,45 @@ body{
             if (gallerySlideInterval) { clearInterval(gallerySlideInterval); gallerySlideInterval = null; }
         }
     });
-
-  // ==========================================
-    // ۵. باز شدن خودکار باشگاه مشتریان (با قابلیت توقف هوشمند)
+// ==========================================
+    // ۵. باشگاه مشتریان — اصلاح رفتار تایمر
     // ==========================================
+    var clubPopupShown = false;
+
+    // باز کردن دستی
+    var openClubBtn = document.getElementById('openClubBtn');
+    var clubOverlay = document.getElementById('clubModalOverlay');
+    var closeClubBtn = document.getElementById('closeClubModalBtn');
+
+    if (openClubBtn) {
+        openClubBtn.addEventListener('click', function() {
+            clubOverlay.classList.add('active');
+            clubPopupShown = true; // کاربر خودش باز کرده
+            sessionStorage.setItem('club_popup_shown', '1');
+        });
+    }
+
+    if (closeClubBtn) {
+        closeClubBtn.addEventListener('click', function() {
+            clubOverlay.classList.remove('active');
+        });
+    }
+
+    // باز شدن خودکار فقط در بار اول صفحه (اگر قبلاً تعامل نکرده باشد)
     window.addEventListener('load', function() {
-        if (sessionStorage.getItem('club_popup_shown')) return;
+        if (sessionStorage.getItem('club_popup_shown') || clubPopupShown) return;
         
-        // ذخیره تایمر در یک متغیر
-        var clubAutoTimer = setTimeout(function() {
-            var clubOverlay = document.getElementById('clubModalOverlay');
-            if (clubOverlay && !clubOverlay.classList.contains('active')) {
+        setTimeout(function() {
+            if (!clubOverlay.classList.contains('active')) {
                 clubOverlay.classList.add('active');
+                clubPopupShown = true;
                 sessionStorage.setItem('club_popup_shown', '1');
             }
         }, 5000);
-
-        // لغو کردن تایمر در صورت کلیک دستی روی دکمه
-        var openClubBtn = document.getElementById('openClubBtn');
-        if (openClubBtn) {
-            openClubBtn.addEventListener('click', function() {
-                clearTimeout(clubAutoTimer); // توقف شمارنده
-                sessionStorage.setItem('club_popup_shown', '1'); // ذخیره در سشن
-            });
-        }
     });
+
 })();
 </script>
-
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 <script defer src="club.js"></script>
