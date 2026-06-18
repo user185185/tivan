@@ -553,9 +553,8 @@ body{
     .otp-inputs-container{ gap:6px; }
 }
 </style>
-<!-- Neshan Map -->
-<link rel="stylesheet" href="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.css" />
-<script src="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.js"></script>
+<!-- Google Maps API -->
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-rlwRfg8ri3gJEUkKzdh4a_kEYP_kPi8&libraries=geometry,directions&language=fa&region=IR"></script>
 </head>
 
 <body>
@@ -696,14 +695,12 @@ body{
     </div>
 </div>
 
-<!-- Modal نقشه -->
-<div class="modal-overlay" id="mapModalOverlay">
-    <div class="custom-modal" style="width:95%; max-width:520px; padding:10px;">
-        <div style="margin-bottom:10px; text-align:center;">
-            <strong>نقشه و مسیر فروشگاه</strong>
-        </div>
-        <div id="mapContainer" style="height:420px; border-radius:12px; overflow:hidden;"></div>
-        <button class="close-modal-btn" id="closeMapBtn" style="margin-top:12px;">بستن</button>
+<!-- Modal: نقشه گوگل -->
+<div class="modal-overlay" id="mapModalOverlay" role="dialog" aria-modal="true">
+    <div class="custom-modal" style="width:95%; max-width:520px; padding:15px;">
+        <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
+        <div id="mapContainer" style="height:420px; border-radius:12px;"></div>
+        <button class="close-modal-btn" id="closeMapBtn" style="margin-top:15px; width:100%;">بستن نقشه</button>
     </div>
 </div>
 
@@ -717,68 +714,76 @@ body{
 (function() {
     'use strict';
 
+      // ==========================================
+    // ۱. نقشه گوگل با مسیر (دقیق و سریع)
     // ==========================================
-    // ۱. نقشه ایرانی (نشان) با مسیر
-    // ==========================================
-    let currentMap = null;
+    let currentGoogleMap = null;
+    let directionsService = null;
+    let directionsRenderer = null;
 
-    function initNeshanMap(storeLat, storeLng) {
-        if (currentMap) currentMap.remove();
+    function initGoogleMap(storeLat, storeLng) {
+        const mapContainer = document.getElementById('mapContainer');
+        
+        if (currentGoogleMap) currentGoogleMap = null;
 
-        currentMap = L.map('mapContainer', {
-            zoomControl: true,
-            attributionControl: false
-        }).setView([storeLat, storeLng], 15);
-
-        // لایه نقشه نشان
-        L.tileLayer('https://tile.neshan.org/tile/2.2.0/vector/{z}/{x}/{y}.png', {
-            attribution: '© نشان',
-            subdomains: '1234',
-            maxZoom: 19,
-        }).addTo(currentMap);
+        currentGoogleMap = new google.maps.Map(mapContainer, {
+            center: { lat: storeLat, lng: storeLng },
+            zoom: 15,
+            mapTypeControl: false,
+            streetViewControl: false,
+        });
 
         // نشان فروشگاه
-        L.marker([storeLat, storeLng], {
-            icon: L.icon({
-                iconUrl: 'https://static.neshan.org/sdk/leaflet/1.4.0/images/marker-icon.png',
-                shadowUrl: 'https://static.neshan.org/sdk/leaflet/1.4.0/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41]
-            })
-        }).addTo(currentMap)
-          .bindPopup('<b>فروشگاه تیوان</b>')
-          .openPopup();
+        new google.maps.Marker({
+            position: { lat: storeLat, lng: storeLng },
+            map: currentGoogleMap,
+            title: "فروشگاه تیوان",
+            animation: google.maps.Animation.DROP
+        });
 
-        // موقعیت کاربر + رسم مسیر
+        // فعال کردن Directions
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({
+            map: currentGoogleMap,
+            suppressMarkers: true,
+            polylineOptions: { strokeColor: '#b20808', strokeWeight: 6 }
+        });
+
+        // گرفتن موقعیت کاربر
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(pos) {
-                const userLat = pos.coords.latitude;
-                const userLng = pos.coords.longitude;
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
 
-                L.marker([userLat, userLng]).addTo(currentMap)
-                    .bindPopup('موقعیت شما');
+                // نشان کاربر
+                new google.maps.Marker({
+                    position: { lat: userLat, lng: userLng },
+                    map: currentGoogleMap,
+                    title: "موقعیت شما",
+                    animation: google.maps.Animation.DROP
+                });
 
-                // رسم مسیر با Neshan Routing
-                L.Routing.control({
-                    waypoints: [
-                        L.latLng(userLat, userLng),
-                        L.latLng(storeLat, storeLng)
-                    ],
-                    router: L.Routing.neshan({
-                        serviceUrl: 'https://api.neshan.org/v4/direction',
-                        apiKey: 'YOUR_NESHAN_API_KEY'   // ← اگر API Key داری بذار، иначе خالی بذار
-                    }),
-                    lineOptions: {
-                        styles: [{ color: '#b20808', weight: 6, opacity: 0.9 }]
-                    },
-                    showAlternatives: false,
-                    language: 'fa'
-                }).addTo(currentMap);
+                // محاسبه و نمایش مسیر
+                const request = {
+                    origin: { lat: userLat, lng: userLng },
+                    destination: { lat: storeLat, lng: storeLng },
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    provideRouteAlternatives: true
+                };
 
-            }, function(err) {
-                console.log(err);
+                directionsService.route(request, function(result, status) {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(result);
+                    } else {
+                        alert('متأسفانه نتوانستیم مسیر را پیدا کنیم.');
+                    }
+                });
+
+            }, function() {
                 alert('لطفاً دسترسی به موقعیت مکانی را فعال کنید.');
             });
+        } else {
+            alert('مرورگر شما از قابلیت موقعیت مکانی پشتیبانی نمی‌کند.');
         }
     }
 
@@ -791,9 +796,15 @@ body{
             document.getElementById('mapModalOverlay').classList.add('active');
 
             setTimeout(() => {
-                initNeshanMap(lat, lng);
-            }, 400);
+                initGoogleMap(lat, lng);
+            }, 500);
         });
+    });
+
+    // بستن مودال
+    document.getElementById('closeMapBtn').addEventListener('click', function() {
+        document.getElementById('mapModalOverlay').classList.remove('active');
+        if (directionsRenderer) directionsRenderer.setMap(null);
     });
 
     // بستن مودال
