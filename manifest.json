@@ -1,10 +1,14 @@
 {
   "name": "فروشگاه پوشاک تیوان",
   "short_name": "TivanShop",
+  "description": "فروشگاه پوشاک تیوان با ۳ شعبه در اصفهان",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ff0000",
+  "theme_color": "#b20808",
+  "lang": "fa",
+  "dir": "rtl",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "logo-192.png",
@@ -15,7 +19,10 @@
     {
       "src": "logo-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
-  ]
+  ],
+  "screenshots": [],
+  "categories": ["shopping"]
 }
