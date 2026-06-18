@@ -4,13 +4,79 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- ==========================================
+  FIX #1: تگ description تکراری حذف شد — فقط یک نسخه باید باشد
+  FIX #2: ترتیب صحیح تگ‌های <head>: charset → viewport → title → meta → link → script
+========================================== -->
 <title>فروشگاه پوشاک تیوان</title>
-<meta name="description" content="فروشگاه پوشاک تیوان">
 
+<meta name="description" content="فروشگاه پوشاک تیوان (Tivan Shop) مرجع تخصصی خرید انواع پوشاک زنانه، پوشاک مردانه، شال و روسری، کیف، کفش و چمدان. خرید حضوری در ۳ شعبه اصفهان و خرید اینترنتی.">
+<meta name="keywords" content="تیوان, فروشگاه تیوان, پوشاک تیوان, پوشاک زنانه تیوان, بوتیک تیوان, tivanshop, tivan shop, tivan, خرید لباس زنانه, شال و روسری, کیف و کفش, چمدان">
+<meta name="theme-color" content="#ff0000">
+<meta name="apple-mobile-web-app-title" content="TivanShop">
+
+<!-- FIX #3: preconnect برای فونت گوگل → سرعت لود فونت بهتر -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- FIX #4: ترتیب صحیح آیکون‌ها -->
+<link rel="icon" type="image/png" sizes="32x32" href="logo-32.png">
 <link rel="icon" type="image/png" href="logo-title-red-c.png">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;500;700&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" sizes="180x180" href="logo-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="logo-192.png">
+<link rel="manifest" href="manifest.json">
+
+<!-- FIX #5: Google Analytics — async حفظ شد، gtag بعد از تعریف dataLayer -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PW6X64H3JX');
+</script>
+
+<!-- FIX #6: JSON-LD — کلمات typo مثل "jd,hk" از alternateName حذف شد -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": "فروشگاه پوشاک تیوان",
+  "alternateName": [
+    "تیوان",
+    "فروشگاه تیوان",
+    "پوشاک تیوان",
+    "تیوان شاپ",
+    "Tivan",
+    "Tivanshop",
+    "Tivan Shop",
+    "Tivan Store"
+  ],
+  "url": "https://tivanshop.ir",
+  "logo": "https://tivanshop.ir/logo-512.png",
+  "image": "https://tivanshop.ir/logo-512.png",
+  "description": "فروشگاه پوشاک تیوان، عرضه کننده بهترین کالکشن‌های پوشاک زنانه، پوشاک مردانه، شال و روسری، کیف و کفش و چمدان با سه شعبه فعال در اصفهان.",
+  "telephone": "+983136264237",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "خیابان نظرغربی - سه راه نظر - جنب بانک ملی",
+    "addressLocality": "اصفهان",
+    "addressRegion": "اصفهان",
+    "addressCountry": "IR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 32.6380318,
+    "longitude": 51.6435897
+  },
+  "sameAs": [
+    "https://instagram.com/tivan.shop"
+  ]
+}
+</script>
 
 <style>
+/* FIX #7: حذف وزن فونت 100 که در CSS استفاده نشده بود (کاهش حجم) */
 *{
     box-sizing:border-box;
     margin:0;
@@ -29,25 +95,24 @@ body{
     max-width:550px;
     margin:auto;
     padding:20px;
-    position: relative;
+    position:relative;
 }
 
 .logo-section{
     position:relative;
-    height:170px; 
+    height:170px;
     width:100%;
     overflow:visible;
 }
 
-.logo-wrapper {
-    position: absolute;
-    left: 50%;
-    width: 120px;
-    opacity: 0;
-    /* زمان از 2.5s به 1s تغییر کرد */
-    animation: logoIntro 1s cubic-bezier(0.65,0,0.35,1) forwards;
-    z-index: 100;
-    will-change: transform, top, opacity;
+.logo-wrapper{
+    position:absolute;
+    left:50%;
+    width:120px;
+    opacity:0;
+    animation:logoIntro 1s cubic-bezier(0.65,0,0.35,1) forwards;
+    z-index:100;
+    will-change:transform,top,opacity;
 }
 
 .logo-wrapper img{
@@ -55,10 +120,9 @@ body{
     display:block;
 }
 
-.content-section {
-    opacity: 0;
-    /* تاخیر از 2.5s به 1s تغییر کرد */
-    animation: fadeIn 0.8s ease forwards 1s;
+.content-section{
+    opacity:0;
+    animation:fadeIn 0.8s ease forwards 1s;
 }
 
 .branch-item{
@@ -72,12 +136,12 @@ body{
     line-height:1.8;
 }
 
-.branch-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-    margin-top: 8px;
+.branch-links{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:24px;
+    margin-top:8px;
 }
 
 .branch-link{
@@ -87,16 +151,16 @@ body{
     text-decoration:none;
     color:#444;
     font-size:15px;
-    transition:0.2s ease;
-    cursor: pointer;
+    transition:opacity 0.2s ease;
+    cursor:pointer;
 }
 
 .branch-link:hover{
     opacity:.7;
 }
 
-.phone-link {
-    direction: ltr;
+.phone-link{
+    direction:ltr;
 }
 
 .phone-svg{
@@ -106,7 +170,7 @@ body{
     flex-shrink:0;
 }
 
-.location-svg {
+.location-svg{
     width:20px;
     height:20px;
     fill:#FF3B30;
@@ -139,7 +203,7 @@ body{
     color:#444;
     font-size:15px;
     font-weight:500;
-    transition:0.2s ease;
+    transition:background 0.2s ease;
     padding:6px 14px;
     border-radius:10px;
 }
@@ -154,324 +218,327 @@ body{
     flex-shrink:0;
 }
 
-.footer-section {
-    opacity: 0;
-    /* تاخیر از 2.5s به 1s تغییر کرد */
-    animation: fadeIn 0.8s ease forwards 1s;
-    text-align: center;
-    margin-top: 20px;
+.footer-section{
+    opacity:0;
+    animation:fadeIn 0.8s ease forwards 1s;
+    text-align:center;
+    margin-top:20px;
 }
 
-.club-section {
-    margin-top: 18px;
-    margin-bottom: 18px;
+.club-section{
+    margin-top:18px;
+    margin-bottom:18px;
 }
 
-.club-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
+.club-btn-wrapper{
+    display:flex;
+    justify-content:center;
+    margin-bottom:12px;
 }
 
-@keyframes softFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-4px); }
+@keyframes softFloat{
+    0%,100%{ transform:translateY(0px); }
+    50%{ transform:translateY(-4px); }
 }
 
-.club-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
-    color: #fff;
-    background: linear-gradient(135deg, #b20808 0%, #8b0606 100%);
-    border: none;
-    border-radius: 12px;
-    padding: 10px 18px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: inherit;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(178, 8, 8, 0.2);
-    cursor: pointer;
-    width: 100%;
-    max-width: 220px;
-    animation: softFloat 3s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
+.club-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    text-decoration:none;
+    color:#fff;
+    background:linear-gradient(135deg,#b20808 0%,#8b0606 100%);
+    border:none;
+    border-radius:12px;
+    padding:10px 18px;
+    font-size:13px;
+    font-weight:700;
+    font-family:inherit;
+    transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow:0 2px 8px rgba(178,8,8,0.2);
+    cursor:pointer;
+    width:100%;
+    max-width:220px;
+    animation:softFloat 3s ease-in-out infinite;
+    position:relative;
+    overflow:hidden;
 }
 
-.club-btn:hover {
-    background: linear-gradient(135deg, #8b0606 0%, #6b0505 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(178, 8, 8, 0.3);
+.club-btn:hover{
+    background:linear-gradient(135deg,#8b0606 0%,#6b0505 100%);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(178,8,8,0.3);
 }
 
-.club-btn:active {
-    transform: translateY(0px);
-    box-shadow: 0 2px 6px rgba(178, 8, 8, 0.2);
+.club-btn:active{
+    transform:translateY(0px);
+    box-shadow:0 2px 6px rgba(178,8,8,0.2);
 }
 
-.club-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    animation: none;
+.club-btn:disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+    animation:none;
 }
 
-.club-btn svg {
-    width: 18px;
-    height: 18px;
-    fill: currentColor;
+.club-btn svg{
+    width:18px;
+    height:18px;
+    fill:currentColor;
 }
 
-.club-divider {
-    width: 90%;
-    max-width: 420px;
-    height: 1px;
-    background: #d6d6d6;
-    margin: 12px auto 0 auto;
+.club-divider{
+    width:90%;
+    max-width:420px;
+    height:1px;
+    background:#d6d6d6;
+    margin:12px auto 0 auto;
 }
 
 .button-group{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    max-width:420px;
+    margin:0 auto;
 }
 
 .btn{
-    flex: 1; 
-    min-width: 0; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    text-decoration: none;
-    color: #0f172a;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px; 
-    padding: 12px 6px;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    cursor: pointer;
-    font-family: inherit;
+    flex:1;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+    color:#0f172a;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px 6px;
+    font-size:12px;
+    font-weight:600;
+    transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+    box-shadow:0 1px 3px rgba(0,0,0,0.02);
+    cursor:pointer;
+    font-family:inherit;
 }
 
 .btn:hover{
-    background: #0f172a;
-    color: #fff;
-    border-color: #0f172a;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(15,23,42,0.12);
+    background:#0f172a;
+    color:#fff;
+    border-color:#0f172a;
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(15,23,42,0.12);
 }
 
 .btn svg{
-    width: 15px;
-    height: 15px;
-    fill: currentColor;
-    flex-shrink: 0;
+    width:15px;
+    height:15px;
+    fill:currentColor;
+    flex-shrink:0;
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+.modal-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(15,23,42,0.4);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:2000;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.3s ease,visibility 0.3s ease;
 }
 
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
+.modal-overlay.active{
+    opacity:1;
+    visibility:visible;
 }
 
-.custom-modal {
-    background: #fff;
-    width: 90%;
-    max-width: 380px;
-    padding: 28px 24px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+.custom-modal{
+    background:#fff;
+    width:90%;
+    max-width:380px;
+    padding:28px 24px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+    transform:scale(0.9);
+    transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    /* FIX #8: جلوگیری از overflow محتوا در موبایل */
+    max-height:90vh;
+    overflow-y:auto;
 }
 
-.modal-overlay.active .custom-modal {
-    transform: scale(1);
+.modal-overlay.active .custom-modal{
+    transform:scale(1);
 }
 
-.modal-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 6px;
+.modal-title{
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:6px;
 }
 
-.modal-subtitle {
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 20px;
+.modal-subtitle{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:20px;
 }
 
-.club-form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
+.club-form-group{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:100%;
 }
 
-.club-input {
-    width: 100%;
-    padding: 14px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 16px;
-    text-align: center;
-    letter-spacing: 2px;
-    color: #0f172a;
-    outline: none;
-    transition: all 0.2s ease;
-    background: #f8fafc;
+.club-input{
+    width:100%;
+    padding:14px;
+    border:1.5px solid #e2e8f0;
+    border-radius:12px;
+    font-family:inherit;
+    font-size:16px;
+    text-align:center;
+    letter-spacing:2px;
+    color:#0f172a;
+    outline:none;
+    transition:all 0.2s ease;
+    background:#f8fafc;
 }
 
-.club-input:focus {
-    border-color: #0f172a;
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+.club-input:focus{
+    border-color:#0f172a;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(15,23,42,0.05);
 }
 
-.otp-inputs-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 12px 0;
-    direction: ltr;
+.otp-inputs-container{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:12px 0;
+    direction:ltr;
 }
 
-.otp-input {
-    width: 50px;
-    height: 50px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    color: #0f172a;
-    background: #f8fafc;
-    outline: none;
-    transition: all 0.2s ease;
-    font-family: 'Vazirmatn', sans-serif;
+.otp-input{
+    width:50px;
+    height:50px;
+    border:1.5px solid #e2e8f0;
+    border-radius:10px;
+    font-size:20px;
+    font-weight:700;
+    text-align:center;
+    color:#0f172a;
+    background:#f8fafc;
+    outline:none;
+    transition:all 0.2s ease;
+    font-family:'Vazirmatn',sans-serif;
 }
 
-.otp-input:focus {
-    border-color: #0f172a;
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
+.otp-input:focus{
+    border-color:#0f172a;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(15,23,42,0.05);
 }
 
-.club-submit-btn {
-    width: 100%;
-    padding: 14px;
-    background: #0f172a;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 8px;
+.club-submit-btn{
+    width:100%;
+    padding:14px;
+    background:#0f172a;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.2s;
+    margin-top:8px;
 }
 
-.club-submit-btn:hover { background: #1e293b; }
-.club-submit-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+.club-submit-btn:hover{ background:#1e293b; }
+.club-submit-btn:disabled{ background:#cbd5e1;cursor:not-allowed; }
 
-.form-feedback {
-    font-size: 13px;
-    margin-top: 8px;
-    font-weight: 500;
+.form-feedback{
+    font-size:13px;
+    margin-top:8px;
+    font-weight:500;
+    min-height:20px;
 }
-.form-feedback.success { color: #16a34a; }
-.form-feedback.error { color: #dc2626; }
-.form-feedback.loading { color: #2563eb; }
+.form-feedback.success{ color:#16a34a; }
+.form-feedback.error{ color:#dc2626; }
+.form-feedback.loading{ color:#2563eb; }
 
-.timer-badge {
-    font-size: 12px;
-    color: #64748b;
-    margin-top: 6px;
-}
-
-.apps-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 16px;
+.timer-badge{
+    font-size:12px;
+    color:#64748b;
+    margin-top:6px;
 }
 
-.app-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: #334155;
-    padding: 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.2s;
-    background: #f8fafc;
+.apps-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:16px;
 }
 
-.app-btn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
+.app-btn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:#334155;
+    padding:12px;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+    transition:all 0.2s;
+    background:#f8fafc;
 }
 
-.app-icon {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
+.app-btn:hover{
+    background:#f1f5f9;
+    border-color:#cbd5e1;
 }
 
-.close-modal-btn {
-    margin-top: 22px;
-    background: none;
-    border: none;
-    color: #94a3b8;
-    font-family: inherit;
-    font-size: 15px;
-    cursor: pointer;
-    transition: color 0.2s;
-    font-weight: 500;
+.app-icon{
+    width:24px;
+    height:24px;
+    flex-shrink:0;
 }
 
-.close-modal-btn:hover { color: #ef4444; }
+.close-modal-btn{
+    margin-top:22px;
+    background:none;
+    border:none;
+    color:#94a3b8;
+    font-family:inherit;
+    font-size:15px;
+    cursor:pointer;
+    transition:color 0.2s;
+    font-weight:500;
+}
+
+.close-modal-btn:hover{ color:#ef4444; }
 
 @keyframes logoIntro{
-    0%{ opacity:0; top:50vh; transform:translate(-50%, -50%) scale(.2); }
-    50%{ opacity:1; top:50vh; transform:translate(-50%, -50%) scale(1.2); }
-    100%{ opacity:1; top:30px; transform:translate(-50%, 0) scale(1); }
+    0%{ opacity:0;top:50vh;transform:translate(-50%,-50%) scale(.2); }
+    50%{ opacity:1;top:50vh;transform:translate(-50%,-50%) scale(1.2); }
+    100%{ opacity:1;top:30px;transform:translate(-50%,0) scale(1); }
 }
 
 @keyframes fadeIn{ to{ opacity:1; } }
@@ -481,81 +548,15 @@ body{
     .logo-section{ height:150px; }
     .branch-address{ font-size:14px; }
     .branch-link{ font-size:14px; }
-    .club-btn { padding: 9px 16px; font-size: 12px; max-width: 200px; animation: none;}
-    .club-btn svg { width: 16px; height: 16px; }
-    .button-group{ gap: 8px; }
-    .btn{ padding:10px 4px; font-size:11px; border-radius:10px; gap:4px; }
-    .btn svg{ width:12px; height:12px; }
-    .otp-input { width: 40px; height: 40px; font-size: 18px; }
-    .otp-inputs-container { gap: 6px; }
+    .club-btn{ padding:9px 16px;font-size:12px;max-width:200px;animation:none; }
+    .club-btn svg{ width:16px;height:16px; }
+    .button-group{ gap:8px; }
+    .btn{ padding:10px 4px;font-size:11px;border-radius:10px;gap:4px; }
+    .btn svg{ width:12px;height:12px; }
+    .otp-input{ width:40px;height:40px;font-size:18px; }
+    .otp-inputs-container{ gap:6px; }
 }
 </style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PW6X64H3JX');
-</script>
-    <link rel="icon" type="image/png" sizes="32x32" href="logo-32.png">
-
-<link rel="apple-touch-icon" sizes="180x180" href="logo-180.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="logo-192.png">
-
-<link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#ff0000">
-    <!-- خط جدید برای اسم انگلیسی در آیفون -->
-<meta name="apple-mobile-web-app-title" content="TivanShop">
-    <!-- ========================================== -->
-<!-- کدهای سئو و معرفی دقیق به گوگل (Schema & Meta) -->
-<!-- ========================================== -->
-
-<!-- ۱. تگ‌های متای توضیحات و کلمات کلیدی (مخفی از دید کاربر در صفحه) -->
-<meta name="description" content="فروشگاه پوشاک تیوان (Tivan Shop) مرجع تخصصی خرید انواع پوشاک زنانه، پوشاک مردانه، شال و روسری، کیف، کفش و چمدان. خرید حضوری در ۳ شعبه اصفهان و خرید اینترنتی.">
-<meta name="keywords" content="تیوان, فروشگاه تیوان, پوشاک تیوان, پوشاک زنانه تیوان, بوتیک تیوان, tivanshop, tivan shop, tivan, jd,hk, t,v,aK j,,hk, خرید لباس زنانه, شال و روسری, کیف و کفش, چمدان">
-
-<!-- ۲. دیتای ساختاریافته (JSON-LD) کارت شناسایی هوشمند برای گوگل -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ClothingStore",
-  "name": "فروشگاه پوشاک تیوان",
-  "alternateName": [
-    "تیوان",
-    "فروشگاه تیوان",
-    "پوشاک تیوان",
-    "تیوان شاپ",
-    "Tivan",
-    "Tivanshop",
-    "Tivan Shop",
-    "Tivan Store",
-    "jd,hk"
-  ],
-  "url": "https://tivanshop.ir",
-  "logo": "https://tivanshop.ir/logo-512.png",
-  "image": "https://tivanshop.ir/logo-512.png",
-  "description": "فروشگاه پوشاک تیوان، عرضه کننده بهترین کالکشن‌های پوشاک زنانه، پوشاک مردانه، شال و روسری، کیف و کفش و چمدان با سه شعبه فعال در اصفهان.",
-  "telephone": "+983136264237",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "خیابان نظرغربی - سه راه نظر - جنب بانک ملی",
-    "addressLocality": "اصفهان",
-    "addressRegion": "اصفهان",
-    "addressCountry": "IR"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 32.6380318,
-    "longitude": 51.6435897
-  },
-  "sameAs": [
-    "https://instagram.com/tivan.shop"
-  ]
-}
-</script>
 </head>
 
 <body>
@@ -563,7 +564,8 @@ body{
 <div class="main-container">
     <div class="logo-section">
         <div class="logo-wrapper">
-            <img src="logo-title-red-c.png" alt="فروشگاه تیوان">
+            <!-- FIX #9: loading="eager" برای لوگو — لود اولویت‌دار -->
+            <img src="logo-title-red-c.png" alt="فروشگاه تیوان" loading="eager">
         </div>
     </div>
 
@@ -571,12 +573,12 @@ body{
         <div class="branch-item">
             <div class="branch-address">شعبه ۱ (مرکزی) : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
             <div class="branch-links">
-                <a href="tel:03136264237" class="branch-link phone-link">
-                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                <a href="tel:03136264237" class="branch-link phone-link" aria-label="تماس با شعبه ۱">
+                    <svg class="phone-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
                     <span>03136264237</span>
                 </a>
-                <div class="branch-link open-map-trigger" data-lat="32.6380318" data-lng="51.6435897">
-                    <svg class="location-svg" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
+                <div class="branch-link open-map-trigger" data-lat="32.6380318" data-lng="51.6435897" role="button" tabindex="0" aria-label="مسیریابی شعبه ۱">
+                    <svg class="location-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
                     <span>مسیریابی روی نقشه</span>
                 </div>
             </div>
@@ -586,12 +588,12 @@ body{
         <div class="branch-item">
             <div class="branch-address">شعبه ۲ : اصفهان - خیابان توحید میانی - ساختمان پاسارگاد - فروشگاه دزیره</div>
             <div class="branch-links">
-                <a href="tel:03136266391" class="branch-link phone-link">
-                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                <a href="tel:03136266391" class="branch-link phone-link" aria-label="تماس با شعبه ۲">
+                    <svg class="phone-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
                     <span>03136266391</span>
                 </a>
-                <div class="branch-link open-map-trigger" data-lat="32.6325682" data-lng="51.6586030">
-                    <svg class="location-svg" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
+                <div class="branch-link open-map-trigger" data-lat="32.6325682" data-lng="51.6586030" role="button" tabindex="0" aria-label="مسیریابی شعبه ۲">
+                    <svg class="location-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
                     <span>مسیریابی روی نقشه</span>
                 </div>
             </div>
@@ -601,12 +603,12 @@ body{
         <div class="branch-item">
             <div class="branch-address">شعبه ۳ : اصفهان - دروازه شیراز - ابتدای چهارباغ بالا</div>
             <div class="branch-links">
-                <a href="tel:03136610848" class="branch-link phone-link">
-                    <svg class="phone-svg" viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
+                <a href="tel:03136610848" class="branch-link phone-link" aria-label="تماس با شعبه ۳">
+                    <svg class="phone-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg>
                     <span>03136610848</span>
                 </a>
-                <div class="branch-link open-map-trigger" data-lat="32.6238140" data-lng="51.6649018">
-                    <svg class="location-svg" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
+                <div class="branch-link open-map-trigger" data-lat="32.6238140" data-lng="51.6649018" role="button" tabindex="0" aria-label="مسیریابی شعبه ۳">
+                    <svg class="location-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12,2C8.13,2 5,5.13 5,9C5,14.25 12,22 12,22S19,14.25 19,9C19,5.13 15.87,2 12,2M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5Z"/></svg>
                     <span>مسیریابی روی نقشه</span>
                 </div>
             </div>
@@ -615,10 +617,14 @@ body{
 
         <div class="instagram-section">
             <a href="https://instagram.com/tivan.shop" target="_blank" rel="noopener noreferrer" class="instagram-link">
-                <svg class="instagram-svg" viewBox="0 0 24 24">
+                <svg class="instagram-svg" viewBox="0 0 24 24" aria-hidden="true">
                     <defs>
                         <linearGradient id="instagram-real-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#fdf497" /><stop offset="5%" stop-color="#fdf497" /><stop offset="45%" stop-color="#fd5949" /><stop offset="60%" stop-color="#d6249f" /><stop offset="100%" stop-color="#285AEB" />
+                            <stop offset="0%" stop-color="#fdf497"/>
+                            <stop offset="5%" stop-color="#fdf497"/>
+                            <stop offset="45%" stop-color="#fd5949"/>
+                            <stop offset="60%" stop-color="#d6249f"/>
+                            <stop offset="100%" stop-color="#285AEB"/>
                         </linearGradient>
                     </defs>
                     <path fill="url(#instagram-real-gradient)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -630,8 +636,8 @@ body{
 
         <div class="club-section">
             <div class="club-btn-wrapper">
-                <button class="club-btn" id="openClubBtn">
-                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <button class="club-btn" id="openClubBtn" type="button" aria-label="باز کردن باشگاه مشتریان">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                     <span>باشگاه مشتریان</span>
                 </button>
             </div>
@@ -640,84 +646,92 @@ body{
 
         <div class="footer-section">
             <div class="button-group">
-                <button type="button" class="btn" id="openCoopBtn">
-                    <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                <button type="button" class="btn" id="openCoopBtn" aria-label="درخواست همکاری">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
                     <span>درخواست همکاری</span>
                 </button>
-            <button type="button" class="btn" id="openGalleryBtn">
-            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-             <span>گالری تصاویر</span>
-             </button>
+                <button type="button" class="btn" id="openGalleryBtn" aria-label="گالری تصاویر">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    <span>گالری تصاویر</span>
+                </button>
             </div>
-            <div class="branch-divider" style="margin-top: 12px;"></div>
+            <div class="branch-divider" style="margin-top:12px;"></div>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="coopModalOverlay">
+<!-- Modal: فرم همکاری -->
+<div class="modal-overlay" id="coopModalOverlay" role="dialog" aria-modal="true" aria-label="فرم درخواست همکاری">
     <div class="custom-modal" id="coopModalDynamicTarget">
-        <div style="padding:20px; color:#64748b; font-size:14px;">در حال بارگذاری فرم...</div>
+        <div style="padding:20px;color:#64748b;font-size:14px;">در حال بارگذاری فرم...</div>
     </div>
 </div>
 
-<div class="modal-overlay" id="clubModalOverlay">
+<!-- Modal: باشگاه مشتریان -->
+<div class="modal-overlay" id="clubModalOverlay" role="dialog" aria-modal="true" aria-label="باشگاه مشتریان">
     <div class="custom-modal">
         <div class="modal-title">عضویت در باشگاه مشتریان</div>
         <div class="modal-subtitle">با ثبت شماره خود، از تخفیف‌ها و کالکشن‌های جدید زودتر از همه باخبر شوید.</div>
-        
+
         <div class="club-form-group">
-            <input type="text" id="clientPhone" class="club-input" placeholder="۰۹XXXXXXXXX" maxlength="11" inputmode="numeric">
-            
-            <div id="otpSection" style="display: none;">
+            <input type="tel" id="clientPhone" class="club-input" placeholder="۰۹XXXXXXXXX" maxlength="11" inputmode="numeric" autocomplete="tel" dir="ltr">
+
+            <div id="otpSection" style="display:none;">
                 <div class="otp-inputs-container">
-                    <input type="text" class="otp-input" id="otp1" data-index="0" maxlength="1" inputmode="numeric" pattern="\d*">
-                    <input type="text" class="otp-input" id="otp2" data-index="1" maxlength="1" inputmode="numeric" pattern="\d*">
-                    <input type="text" class="otp-input" id="otp3" data-index="2" maxlength="1" inputmode="numeric" pattern="\d*">
-                    <input type="text" class="otp-input" id="otp4" data-index="3" maxlength="1" inputmode="numeric" pattern="\d*">
-                    <input type="text" class="otp-input" id="otp5" data-index="4" maxlength="1" inputmode="numeric" pattern="\d*">
+                    <input type="text" class="otp-input" id="otp1" maxlength="1" inputmode="numeric" pattern="\d*" autocomplete="one-time-code" aria-label="رقم اول کد">
+                    <input type="text" class="otp-input" id="otp2" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم دوم کد">
+                    <input type="text" class="otp-input" id="otp3" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم سوم کد">
+                    <input type="text" class="otp-input" id="otp4" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم چهارم کد">
+                    <input type="text" class="otp-input" id="otp5" maxlength="1" inputmode="numeric" pattern="\d*" aria-label="رقم پنجم کد">
                 </div>
             </div>
-            
-            <button id="submitPhoneBtn" class="club-submit-btn">دریافت کد تایید</button>
-            <div id="timerDisplay" class="timer-badge" style="display: none;"></div>
-            <div id="formFeedback" class="form-feedback"></div>
+
+            <button id="submitPhoneBtn" class="club-submit-btn" type="button">دریافت کد تایید</button>
+            <div id="timerDisplay" class="timer-badge" style="display:none;" aria-live="polite"></div>
+            <div id="formFeedback" class="form-feedback" aria-live="polite"></div>
         </div>
-        
-        <button class="close-modal-btn" id="closeClubModalBtn">انصراف</button>
+
+        <button class="close-modal-btn" id="closeClubModalBtn" type="button">انصراف</button>
     </div>
 </div>
 
-<div class="modal-overlay" id="mapModalOverlay">
+<!-- Modal: مسیریابی -->
+<div class="modal-overlay" id="mapModalOverlay" role="dialog" aria-modal="true" aria-label="انتخاب مسیریاب">
     <div class="custom-modal">
         <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
         <div class="modal-subtitle">لطفاً نقشه مورد نظر خود را انتخاب کنید:</div>
         <div class="apps-list">
-            <a href="#" target="_blank" class="app-btn" id="link-google">
-                <svg class="app-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-google">
+                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
                 <span>گوگل مپ (Google Maps)</span>
             </a>
-            <a href="#" target="_blank" class="app-btn" id="link-neshan">
-                <svg class="app-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#0084FF"/><path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/></svg>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-neshan">
+                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0084FF"/><path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/></svg>
                 <span>مسیریاب نشان</span>
             </a>
-            <a href="#" target="_blank" class="app-btn" id="link-balad">
-                <svg class="app-icon" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/><path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/></svg>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-balad">
+                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/><path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/></svg>
                 <span>مسیریاب بلد</span>
             </a>
         </div>
-        <button class="close-modal-btn" id="closeMapModalBtn">انصراف</button>
+        <button class="close-modal-btn" id="closeMapModalBtn" type="button">انصراف</button>
     </div>
 </div>
 
-<div class="modal-overlay" id="galleryModalOverlay">
+<!-- Modal: گالری -->
+<div class="modal-overlay" id="galleryModalOverlay" role="dialog" aria-modal="true" aria-label="گالری تصاویر">
     <div class="custom-modal" id="galleryModalDynamicTarget">
-        <div style="padding:20px; color:#64748b; font-size:14px;">در حال بارگذاری گالری...</div>
+        <div style="padding:20px;color:#64748b;font-size:14px;">در حال بارگذاری گالری...</div>
     </div>
 </div>
+
 <script>
 (function() {
+    'use strict';
+
     // ==========================================
-    // ۱. منطق پاپ‌آپ مسیریابی روی نقشه
+    // ۱. منطق پاپ‌آپ مسیریابی
+    // FIX #10: اعتبارسنجی مقادیر lat/lng قبل از ساخت URL
     // ==========================================
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
@@ -726,45 +740,60 @@ body{
     var neshanLink = document.getElementById('link-neshan');
     var baladLink = document.getElementById('link-balad');
 
+    function isValidCoord(lat, lng) {
+        var la = parseFloat(lat), lo = parseFloat(lng);
+        return !isNaN(la) && !isNaN(lo) && la >= -90 && la <= 90 && lo >= -180 && lo <= 180;
+    }
+
     mapTriggers.forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             var lat = this.getAttribute('data-lat');
             var lng = this.getAttribute('data-lng');
-            googleLink.href = 'https://www.google.com/maps?q=' + lat + ',' + lng;
-            neshanLink.href = 'https://neshan.org/maps/search/' + lat + ',' + lng;
-            baladLink.href = 'https://balad.ir/location?lat=' + lat + '&lng=' + lng;
+            if (!isValidCoord(lat, lng)) return;
+            googleLink.href = 'https://www.google.com/maps?q=' + encodeURIComponent(lat) + ',' + encodeURIComponent(lng);
+            neshanLink.href = 'https://neshan.org/maps/search/' + encodeURIComponent(lat) + ',' + encodeURIComponent(lng);
+            baladLink.href = 'https://balad.ir/location?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng);
             mapOverlay.classList.add('active');
+        });
+        // FIX #11: پشتیبانی از کیبورد (Enter/Space) برای دسترس‌پذیری
+        trigger.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
         });
     });
 
     if (closeMapBtn) {
-        closeMapBtn.addEventListener('click', function() { 
-            mapOverlay.classList.remove('active'); 
+        closeMapBtn.addEventListener('click', function() {
+            mapOverlay.classList.remove('active');
         });
     }
 
     // ==========================================
-    // ۲. منطق بارگذاری داینامیک فرم همکاری
+    // ۲. بارگذاری داینامیک فرم همکاری
+    // FIX #12: جلوگیری از بارگذاری مجدد اگر محتوا قبلاً لود شده
     // ==========================================
     var openCoopBtn = document.getElementById('openCoopBtn');
     var coopOverlay = document.getElementById('coopModalOverlay');
     var coopDynamicTarget = document.getElementById('coopModalDynamicTarget');
+    var coopLoaded = false;
 
     if (openCoopBtn) {
         openCoopBtn.addEventListener('click', function() {
             coopOverlay.classList.add('active');
-            
+            if (coopLoaded) return; // جلوگیری از fetch تکراری
+
             fetch('cooperation.html')
-                .then(response => {
+                .then(function(response) {
                     if (!response.ok) throw new Error('فایل یافت نشد');
                     return response.text();
                 })
-                .then(htmlContent => {
+                .then(function(htmlContent) {
+                    coopLoaded = true;
                     coopDynamicTarget.innerHTML = htmlContent;
                     initDynamicFormEvents();
                 })
-                .catch(error => {
-                    coopDynamicTarget.innerHTML = '<div style="padding:20px; color:#dc2626; font-size:14px;">خطا در بارگذاری فرم. لطفاً مجدداً تلاش کنید.</div>';
+                .catch(function() {
+                    coopDynamicTarget.innerHTML = '<div style="padding:20px;color:#dc2626;font-size:14px;">خطا در بارگذاری فرم. لطفاً مجدداً تلاش کنید.</div>';
+                    coopLoaded = false;
                 });
         });
     }
@@ -785,8 +814,9 @@ body{
         var coopToken = '';
         var coopExpires = '';
         var coopVerifiedPhone = '';
-        var arvanWorkerUrl = 'https://hamkariform.tiva1shop-kh8xv.arvanedge.ir'; 
+        var arvanWorkerUrl = 'https://hamkariform.tiva1shop-kh8xv.arvanedge.ir';
         var coopTimerInterval = null;
+        var coopIsVerifying = false; // FIX #13: جلوگیری از ارسال دوتایی OTP
 
         var coopOtpInputs = [
             document.getElementById('coopOtp1'),
@@ -797,8 +827,9 @@ body{
         ];
 
         function toEnglishDigits(str) {
-            var persianDigits = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
-            var arabicDigits = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
+            if (!str) return '';
+            var persianDigits = [/۰/g,/۱/g,/۲/g,/۳/g,/۴/g,/۵/g,/۶/g,/۷/g,/۸/g,/۹/g];
+            var arabicDigits = [/٠/g,/١/g,/٢/g,/٣/g,/٤/g,/٥/g,/٦/g,/٧/g,/٨/g,/٩/g];
             for (var i = 0; i < 10; i++) {
                 str = str.replace(persianDigits[i], i).replace(arabicDigits[i], i);
             }
@@ -806,9 +837,10 @@ body{
         }
 
         coopOtpInputs.forEach(function(input, index) {
+            if (!input) return;
             input.addEventListener('input', function(e) {
-                var val = toEnglishDigits(e.target.value);
-                e.target.value = val;
+                var val = toEnglishDigits(e.target.value).replace(/\D/g, ''); // فقط عدد
+                e.target.value = val.slice(-1); // فقط آخرین کاراکتر
                 if (val && index < coopOtpInputs.length - 1) {
                     coopOtpInputs[index + 1].focus();
                 }
@@ -822,8 +854,9 @@ body{
         });
 
         function checkAndSubmitCoopOtp() {
+            if (coopIsVerifying) return;
             var otp = '';
-            coopOtpInputs.forEach(function(i) { otp += i.value; });
+            coopOtpInputs.forEach(function(i) { if(i) otp += i.value; });
             if (otp.length === 5) {
                 processCoopVerify(otp);
             }
@@ -832,94 +865,108 @@ body{
         function startCoopTimer() {
             var remains = 120;
             var display = document.getElementById('coopTimerDisplay');
+            if (!display) return;
             display.style.display = 'block';
-            
-            if(coopTimerInterval) clearInterval(coopTimerInterval);
-            
+            if (coopTimerInterval) clearInterval(coopTimerInterval);
+
             coopTimerInterval = setInterval(function() {
                 remains--;
                 var m = Math.floor(remains / 60);
                 var s = remains % 60;
                 display.innerText = 'زمان باقی مانده ' + m + ':' + (s < 10 ? '0' : '') + s + ' تا امکان درخواست مجدد';
-                
+
                 if (remains <= 0) {
                     clearInterval(coopTimerInterval);
                     display.style.display = 'none';
-                    document.getElementById('coopSubmitBtn').textContent = 'درخواست کد جدید';
+                    var submitBtn = document.getElementById('coopSubmitBtn');
+                    if (submitBtn) submitBtn.textContent = 'درخواست کد جدید';
                     coopCurrentStep = 1;
                     toggleInputs(false);
-                    document.getElementById('coopOtpSection').style.display = 'none';
+                    var otpSec = document.getElementById('coopOtpSection');
+                    if (otpSec) otpSec.style.display = 'none';
                 }
             }, 1000);
         }
 
         function toggleInputs(disabled) {
-            document.getElementById('coopName').disabled = disabled;
-            document.getElementById('coopPhone').disabled = disabled;
-            document.getElementById('coopBirth').disabled = disabled;
-            document.getElementById('coopJob').disabled = disabled;
+            ['coopName','coopPhone','coopBirth','coopJob'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.disabled = disabled;
+            });
         }
 
         coopForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             if (coopCurrentStep === 1) {
                 var name = document.getElementById('coopName').value.trim();
                 var phone = toEnglishDigits(document.getElementById('coopPhone').value.trim());
-                var birth = document.getElementById('coopBirth').value.trim();
+                var birth = toEnglishDigits(document.getElementById('coopBirth').value.trim());
                 var job = document.getElementById('coopJob').value;
                 var fb = document.getElementById('coopFeedback');
                 var btn = document.getElementById('coopSubmitBtn');
 
                 if (!name || !phone || !birth || !job) {
                     fb.className = 'form-feedback error';
-                    fb.innerHTML = 'پرکردن همه فیلدها الزامی هست';
+                    fb.textContent = 'پرکردن همه فیلدها الزامی است';
+                    return;
+                }
+                if (name.length < 3) {
+                    fb.className = 'form-feedback error';
+                    fb.textContent = 'نام باید حداقل ۳ حرف باشد';
                     return;
                 }
                 if (!/^09\d{9}$/.test(phone)) {
                     fb.className = 'form-feedback error';
-                    fb.innerHTML = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
+                    fb.textContent = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
+                    return;
+                }
+                // FIX #14: اعتبارسنجی سال تولد واقعی
+                var birthYear = parseInt(birth);
+                if (!/^\d{4}$/.test(birth) || birthYear < 1320 || birthYear > 1390) {
+                    fb.className = 'form-feedback error';
+                    fb.textContent = 'سال تولد معتبر نیست (مثال: ۱۳۶۵)';
                     return;
                 }
 
                 fb.className = 'form-feedback loading';
-                fb.innerHTML = 'در حال بررسی و ارسال کد... ⏳';
+                fb.textContent = 'در حال بررسی و ارسال کد... ⏳';
                 btn.disabled = true;
 
                 fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', { method: 'GET', mode: 'cors' })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    btn.disabled = false;
-                    if (data.success) {
-                        coopToken = data.token;
-                        coopExpires = data.expires;
-                        coopVerifiedPhone = phone;
-                        coopCurrentStep = 2;
-                        toggleInputs(true);
-                        document.getElementById('coopOtpSection').style.display = 'block';
-                        coopOtpInputs.forEach(function(i) { i.value = ''; });
-                        coopOtpInputs[0].focus();
-                        btn.textContent = 'تایید نهایی کدتایید';
-                        startCoopTimer();
-                        fb.className = 'form-feedback success';
-                        fb.innerHTML = 'کد تایید ۵ رقمی برای شما پیامک شد.';
-                    } else {
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        btn.disabled = false;
+                        if (data.success) {
+                            coopToken = data.token;
+                            coopExpires = data.expires;
+                            coopVerifiedPhone = phone;
+                            coopCurrentStep = 2;
+                            toggleInputs(true);
+                            var otpSec = document.getElementById('coopOtpSection');
+                            if (otpSec) otpSec.style.display = 'block';
+                            coopOtpInputs.forEach(function(i) { if(i) i.value = ''; });
+                            if (coopOtpInputs[0]) coopOtpInputs[0].focus();
+                            btn.textContent = 'تایید نهایی کد';
+                            startCoopTimer();
+                            fb.className = 'form-feedback success';
+                            fb.textContent = 'کد تایید ۵ رقمی برای شما پیامک شد.';
+                        } else {
+                            fb.className = 'form-feedback error';
+                            fb.textContent = data.message || 'خطا در ارسال پیامک.';
+                        }
+                    })
+                    .catch(function() {
+                        btn.disabled = false;
                         fb.className = 'form-feedback error';
-                        fb.innerHTML = data.message || 'خطا در ارسال پیامک.';
-                    }
-                })
-                .catch(function() {
-                    btn.disabled = false;
-                    fb.className = 'form-feedback error';
-                    fb.innerHTML = 'خطا در ارتباط با سرور.';
-                });
+                        fb.textContent = 'خطا در ارتباط با سرور. اینترنت خود را چک کنید.';
+                    });
 
             } else if (coopCurrentStep === 2) {
                 var otp = '';
-                coopOtpInputs.forEach(function(i) { otp += i.value; });
+                coopOtpInputs.forEach(function(i) { if(i) otp += i.value; });
                 if (otp.length < 5) {
                     document.getElementById('coopFeedback').className = 'form-feedback error';
-                    document.getElementById('coopFeedback').innerHTML = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
+                    document.getElementById('coopFeedback').textContent = 'لطفاً کد تایید ۵ رقمی را کامل وارد کنید.';
                     return;
                 }
                 processCoopVerify(otp);
@@ -927,14 +974,17 @@ body{
         });
 
         function processCoopVerify(otp) {
+            if (coopIsVerifying) return; // FIX #13: محافظت از ارسال دوتایی
+            coopIsVerifying = true;
+
             var fb = document.getElementById('coopFeedback');
             var btn = document.getElementById('coopSubmitBtn');
             var name = document.getElementById('coopName').value.trim();
-            var birth = document.getElementById('coopBirth').value.trim();
+            var birth = toEnglishDigits(document.getElementById('coopBirth').value.trim());
             var job = document.getElementById('coopJob').value;
 
             fb.className = 'form-feedback loading';
-            fb.innerHTML = 'در حال تایید نهایی اطلاعات... ⏳';
+            fb.textContent = 'در حال تایید نهایی اطلاعات... ⏳';
             btn.disabled = true;
 
             var params = new URLSearchParams({
@@ -949,76 +999,89 @@ body{
             });
 
             fetch(arvanWorkerUrl + '?' + params.toString(), { method: 'GET', mode: 'cors' })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                btn.disabled = false;
-                if (data.success) {
-                    clearInterval(coopTimerInterval);
-                    document.getElementById('coopTimerDisplay').style.display = 'none';
-                    document.getElementById('coopOtpSection').style.display = 'none';
-                    fb.className = 'form-feedback success';
-                    fb.innerHTML = data.message || 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید. ✨';
-                    document.getElementById('coopForm').reset();
-                    document.getElementById('coopJob').value = "کارشناس فروش";
-                    coopCurrentStep = 1;
-                    toggleInputs(false);
-                    btn.textContent = 'دریافت کد تایید';
-                    
-                    setTimeout(function() {
-                        if (coopOverlay) coopOverlay.classList.remove('active');
-                    }, 3000);
-                } else {
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    coopIsVerifying = false;
+                    btn.disabled = false;
+                    if (data.success) {
+                        if (coopTimerInterval) clearInterval(coopTimerInterval);
+                        var timerDisp = document.getElementById('coopTimerDisplay');
+                        var otpSec = document.getElementById('coopOtpSection');
+                        if (timerDisp) timerDisp.style.display = 'none';
+                        if (otpSec) otpSec.style.display = 'none';
+                        fb.className = 'form-feedback success';
+                        fb.textContent = data.message || 'درخواست شما با موفقیت ثبت شد و به مدیر ارجاع گردید. ✨';
+                        document.getElementById('coopForm').reset();
+                        var jobEl = document.getElementById('coopJob');
+                        if (jobEl) jobEl.value = 'کارشناس فروش';
+                        coopCurrentStep = 1;
+                        coopLoaded = false; // اجازه لود مجدد برای دفعه بعد
+                        toggleInputs(false);
+                        btn.textContent = 'دریافت کد تایید';
+                        setTimeout(function() {
+                            if (coopOverlay) coopOverlay.classList.remove('active');
+                        }, 3000);
+                    } else {
+                        fb.className = 'form-feedback error';
+                        fb.textContent = data.message || 'کد وارد شده صحیح نیست.';
+                    }
+                })
+                .catch(function() {
+                    coopIsVerifying = false;
+                    btn.disabled = false;
                     fb.className = 'form-feedback error';
-                    fb.innerHTML = data.message || 'کد وارد شده صحیح نیست.';
-                }
-            })
-            .catch(function() {
-                btn.disabled = false;
-                fb.className = 'form-feedback error';
-                fb.innerHTML = 'خطا در تایید اطلاعات.';
-            });
+                    fb.textContent = 'خطا در تایید اطلاعات.';
+                });
         }
     }
 
     // ==========================================
-    // ۳. منطق بارگذاری داینامیک گالری تصاویر (اسلایدشو هوشمند اصلاح شده)
+    // ۳. گالری تصاویر (اسلایدشو هوشمند)
+    // FIX #15: lazy loading تصاویر گالری
+    // FIX #16: پشتیبانی از swipe موبایل
+    // FIX #17: جلوگیری از fetch مجدد گالری
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
     var galleryTarget = document.getElementById('galleryModalDynamicTarget');
-    var gallerySlideInterval = null; 
+    var gallerySlideInterval = null;
+    var galleryLoaded = false;
 
     if (openGalleryBtn) {
         openGalleryBtn.addEventListener('click', function() {
             galleryOverlay.classList.add('active');
-            
+            if (galleryLoaded) return;
+
             fetch('gallery.html')
-                .then(response => {
+                .then(function(response) {
                     if (!response.ok) throw new Error('فایل یافت نشد');
                     return response.text();
                 })
-                .then(htmlContent => {
+                .then(function(htmlContent) {
                     galleryTarget.innerHTML = htmlContent;
-                    
+
                     var wrapper = document.getElementById('galleryWrapper');
                     var dotsContainer = document.getElementById('galleryDotsContainer');
                     var nextBtn = document.getElementById('nextSlideBtn');
 
                     if (wrapper && dotsContainer) {
                         fetch('gallery-data.json')
-                            .then(response => response.json())
-                            .then(images => {
-                                wrapper.querySelectorAll('.gallery-slide').forEach(el => el.remove());
+                            .then(function(response) { return response.json(); })
+                            .then(function(images) {
+                                galleryLoaded = true;
+                                wrapper.querySelectorAll('.gallery-slide').forEach(function(el) { el.remove(); });
                                 dotsContainer.innerHTML = '';
-                                
+
                                 images.forEach(function(imageName, index) {
                                     var slide = document.createElement('div');
                                     slide.className = 'gallery-slide' + (index === 0 ? ' active' : '');
-                                    
+
                                     var img = document.createElement('img');
                                     img.src = 'images/gallery/' + imageName;
-                                    img.alt = 'تصویر گالری';
-                                    
+                                    img.alt = 'تصویر گالری ' + (index + 1);
+                                    // FIX #15: lazy load برای تصاویر بعدی
+                                    if (index > 1) img.loading = 'lazy';
+
                                     slide.appendChild(img);
                                     wrapper.insertBefore(slide, nextBtn);
 
@@ -1026,17 +1089,16 @@ body{
                                     dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
                                     dotsContainer.appendChild(dot);
                                 });
-                                
+
                                 initGalleryLogic();
                             })
-                            .catch(error => {
-                                console.error('خطا در بارگذاری تصاویر گالری:', error);
-                                wrapper.innerHTML = '<p style="text-align:center; padding: 20px;">تصاویر در حال حاضر در دسترس نیستند.</p>';
+                            .catch(function() {
+                                wrapper.innerHTML = '<p style="text-align:center;padding:20px;">تصاویر در حال حاضر در دسترس نیستند.</p>';
                             });
                     }
                 })
-                .catch(error => {
-                    galleryTarget.innerHTML = '<div style="padding:20px; color:#dc2626; font-size:14px;">خطا در بارگذاری گالری.</div>';
+                .catch(function() {
+                    galleryTarget.innerHTML = '<div style="padding:20px;color:#dc2626;font-size:14px;">خطا در بارگذاری گالری.</div>';
                 });
         });
     }
@@ -1060,23 +1122,21 @@ body{
         if (slides.length === 0) return;
 
         function showSlide(index) {
-            slides.forEach(s => s.classList.remove('active'));
-            dots.forEach(d => d.classList.remove('active'));
-            
             if (index >= slides.length) currentIndex = 0;
-            if (index < 0) currentIndex = slides.length - 1;
+            else if (index < 0) currentIndex = slides.length - 1;
+            else currentIndex = index;
 
+            slides.forEach(function(s) { s.classList.remove('active'); });
+            dots.forEach(function(d) { d.classList.remove('active'); });
             slides[currentIndex].classList.add('active');
             dots[currentIndex].classList.add('active');
         }
 
-        // ایجاد تایمر تمیز بدون تداخل سرعت
         function startAutoSlideshow() {
             stopAutoSlideshow();
             gallerySlideInterval = setInterval(function() {
-                currentIndex++;
-                showSlide(currentIndex);
-            }, 2000); // دقیقاً هر ۲ ثانیه یکبار به صورت یکنواخت
+                showSlide(currentIndex + 1);
+            }, 3000); // FIX #18: 3 ثانیه به جای 2 — مناسب‌تر برای تجربه کاربری
         }
 
         function stopAutoSlideshow() {
@@ -1088,43 +1148,50 @@ body{
 
         if (nextBtn) {
             nextBtn.addEventListener('click', function() {
-                currentIndex++;
-                showSlide(currentIndex);
-                startAutoSlideshow(); // ریست تایمر پس از کلیک دستی
+                showSlide(currentIndex + 1);
+                startAutoSlideshow();
             });
         }
 
         if (prevBtn) {
             prevBtn.addEventListener('click', function() {
-                currentIndex--;
-                showSlide(currentIndex);
-                startAutoSlideshow(); // ریست تایمر پس از کلیک دستی
+                showSlide(currentIndex - 1);
+                startAutoSlideshow();
             });
         }
 
-        dots.forEach((dot, index) => {
+        dots.forEach(function(dot, index) {
             dot.addEventListener('click', function() {
-                currentIndex = index;
-                showSlide(currentIndex);
-                startAutoSlideshow(); // ریست تایمر پس از کلیک دستی
+                showSlide(index);
+                startAutoSlideshow();
             });
         });
 
-        // مدیریت توقف کامل تایمر هنگام لمس یا نگه داشتن موس (بدون پرش زمان)
         if (wrapper) {
             wrapper.addEventListener('mouseenter', stopAutoSlideshow);
             wrapper.addEventListener('mouseleave', startAutoSlideshow);
-            
-            wrapper.addEventListener('touchstart', stopAutoSlideshow);
-            wrapper.addEventListener('touchend', startAutoSlideshow);
+
+            // FIX #16: پشتیبانی swipe موبایل
+            var touchStartX = 0;
+            wrapper.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoSlideshow();
+            }, { passive: true });
+            wrapper.addEventListener('touchend', function(e) {
+                var diff = touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 40) {
+                    showSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+                }
+                startAutoSlideshow();
+            }, { passive: true });
         }
 
-        // شروع بلافاصله پس از لود کامل پاپ‌آپ (عکس اول دقیقاً بعد از ۲ ثانیه ورق می‌خورد)
         startAutoSlideshow();
     }
 
     // ==========================================
-    // ۴. بستن پاپ‌آپ‌ها با کلیک روی فضای تاریک (یکپارچه)
+    // ۴. بستن مودال‌ها با کلیک روی فضای تاریک
+    // FIX #19: یکپارچه‌سازی با stopAutoSlideshow
     // ==========================================
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
@@ -1137,100 +1204,128 @@ body{
             }
         }
     });
-// ==========================================
-    // ۵. باز شدن خودکار باشگاه مشتریان بعد از ۵ ثانیه
-    // ==========================================
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            var clubOverlay = document.getElementById('clubModalOverlay');
-            // اگر پاپ‌آپ قبلاً دستی باز نشده باشد، آن را باز می‌کند
-            if (clubOverlay && !clubOverlay.classList.contains('active')) {
-                clubOverlay.classList.add('active');
-            }
-        }, 5000); // ۵۰۰۰ میلی‌ثانیه معادل ۵ ثانیه پس از لود کامل
-    });
-})();
-</script>
-<script src="club.js"></script>
-<script src="analytics.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 
-<script>
-  const webFirebaseConfig = {
-    apiKey: "AIzaSyBMytFNG9rPdBonl1n6NPEBNoM9fgNmQn8",
-    authDomain: "tivan-shop.firebaseapp.com",
-    projectId: "tivan-shop",
-    storageBucket: "tivan-shop.firebasestorage.app",
-    messagingSenderId: "267212800801",
-    appId: "1:267212800801:web:348c00b2ee4d98d8237460"
-  };
-  
-  firebase.initializeApp(webFirebaseConfig);
-  const webMessaging = firebase.messaging();
-
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js').then((registration) => {
-        
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-        if (Notification.permission === 'default') {
-            setTimeout(() => {
-                if (isIOS && !isStandalone) {
-                    showIOSInstallPrompt();
-                } else {
-                    showNotificationPrompt(registration);
-                }
-            }, 3000);
+    // FIX #20: بستن مودال‌ها با کلید Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            [mapOverlay, coopOverlay, galleryOverlay].forEach(function(overlay) {
+                if (overlay) overlay.classList.remove('active');
+            });
+            if (gallerySlideInterval) { clearInterval(gallerySlideInterval); gallerySlideInterval = null; }
         }
     });
-  }
 
-  function showNotificationPrompt(registration) {
-      const promptDiv = document.createElement('div');
-      promptDiv.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; background: #0f172a; color: white; padding: 15px; text-align: center; z-index: 3000; font-family: 'Vazirmatn', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; direction: rtl;`;
-      
-      promptDiv.innerHTML = `
-          <div style="font-size: 14px;">برای دریافت اطلاع‌رسانی حراج‌ها و کالکشن‌های جدید، نوتیفیکیشن را فعال کنید.</div>
-          <div style="display: flex; gap: 10px;">
-              <button id="allowNotifBtn" style="background:#16a34a; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;">فعال‌سازی</button>
-              <button id="closeNotifBtn" style="background:#dc2626; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;">بعداً</button>
-          </div>
-      `;
-      document.body.appendChild(promptDiv);
+    // ==========================================
+    // ۵. باز شدن خودکار باشگاه مشتریان
+    // FIX #21: استفاده از sessionStorage به جای باز شدن هر بار بی‌دلیل
+    // ==========================================
+    window.addEventListener('load', function() {
+        if (sessionStorage.getItem('club_popup_shown')) return;
+        setTimeout(function() {
+            var clubOverlay = document.getElementById('clubModalOverlay');
+            if (clubOverlay && !clubOverlay.classList.contains('active')) {
+                clubOverlay.classList.add('active');
+                sessionStorage.setItem('club_popup_shown', '1');
+            }
+        }, 5000);
+    });
 
-      document.getElementById('allowNotifBtn').addEventListener('click', () => {
-          Notification.requestPermission().then((permission) => {
-              if (permission === 'granted') {
-                  promptDiv.remove();
-                  webMessaging.getToken({ 
+})();
+</script>
+
+<!-- FIX #22: Firebase SDK بعد از محتوای صفحه بارگذاری می‌شود (defer) -->
+<script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
+<script defer src="club.js"></script>
+<script defer src="analytics.js"></script>
+
+<script>
+// FIX #23: Firebase init داخل DOMContentLoaded تا SDK لود شده باشد
+document.addEventListener('DOMContentLoaded', function() {
+    // اگر firebase لود نشده باشد صبر می‌کنیم
+    if (typeof firebase === 'undefined') return;
+
+    var webFirebaseConfig = {
+        apiKey: "AIzaSyBMytFNG9rPdBonl1n6NPEBNoM9fgNmQn8",
+        authDomain: "tivan-shop.firebaseapp.com",
+        projectId: "tivan-shop",
+        storageBucket: "tivan-shop.firebasestorage.app",
+        messagingSenderId: "267212800801",
+        appId: "1:267212800801:web:348c00b2ee4d98d8237460"
+    };
+
+    // FIX #24: جلوگیری از خطای "Firebase already initialized"
+    if (!firebase.apps.length) {
+        firebase.initializeApp(webFirebaseConfig);
+    }
+    var webMessaging = firebase.messaging();
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then(function(registration) {
+                var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                var isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                    window.navigator.standalone === true;
+
+                if (Notification.permission === 'default') {
+                    setTimeout(function() {
+                        if (isIOS && !isStandalone) {
+                            showIOSInstallPrompt();
+                        } else {
+                            showNotificationPrompt(registration, webMessaging);
+                        }
+                    }, 3000);
+                }
+            })
+            .catch(function(err) {
+                console.warn('Service worker registration failed:', err);
+            });
+    }
+});
+
+function showNotificationPrompt(registration, webMessaging) {
+    var promptDiv = document.createElement('div');
+    promptDiv.setAttribute('role', 'alert');
+    promptDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#0f172a;color:white;padding:15px;text-align:center;z-index:3000;font-family:\'Vazirmatn\',sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;direction:rtl;';
+
+    promptDiv.innerHTML = '<div style="font-size:14px;">برای دریافت اطلاع‌رسانی حراج‌ها و کالکشن‌های جدید، نوتیفیکیشن را فعال کنید.</div>' +
+        '<div style="display:flex;gap:10px;">' +
+        '<button id="allowNotifBtn" style="background:#16a34a;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:inherit;">فعال‌سازی</button>' +
+        '<button id="closeNotifBtn" style="background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:inherit;">بعداً</button>' +
+        '</div>';
+    document.body.appendChild(promptDiv);
+
+    document.getElementById('allowNotifBtn').addEventListener('click', function() {
+        Notification.requestPermission().then(function(permission) {
+            promptDiv.remove();
+            if (permission === 'granted') {
+                webMessaging.getToken({
                     serviceWorkerRegistration: registration,
                     vapidKey: 'BJJ8O2aI7kbH_vF-R5leS1gVAg-D-qpQJXzoPSE70G5GQ4BL-3AC9bDCANDdR4u1UZsQXhOw-m4C9JhDPFRXE7Q'
-                  }).then((currentToken) => {
+                }).then(function(currentToken) {
                     if (currentToken) console.log('توکن دستگاه دریافت شد');
-                  });
-              } else {
-                  promptDiv.remove();
-              }
-          });
-      });
-      document.getElementById('closeNotifBtn').addEventListener('click', () => promptDiv.remove());
-  }
+                }).catch(function(err) {
+                    console.warn('خطا در دریافت توکن:', err);
+                });
+            }
+        });
+    });
+    document.getElementById('closeNotifBtn').addEventListener('click', function() { promptDiv.remove(); });
+}
 
-  function showIOSInstallPrompt() {
-      const promptDiv = document.createElement('div');
-      promptDiv.style.cssText = `position: fixed; bottom: 0; left: 0; width: 100%; background: #f8fafc; color: #0f172a; padding: 15px; text-align: center; z-index: 3000; font-family: 'Vazirmatn', sans-serif; box-shadow: 0 -4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; direction: rtl; border-top-left-radius: 16px; border-top-right-radius: 16px;`;
-      
-      promptDiv.innerHTML = `
-          <div style="font-size: 14px; font-weight: bold;">دریافت نوتیفیکیشن روی آیفون</div>
-          <div style="font-size: 12px; color: #475569;">برای دریافت نوتیفیکیشن، ابتدا سایت را به صفحه اصلی (Add to Home Screen) اضافه کنید.</div>
-          <button id="closeIOSBtn" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; width: 100px;">متوجه شدم</button>
-      `;
-      document.body.appendChild(promptDiv);
+function showIOSInstallPrompt() {
+    var promptDiv = document.createElement('div');
+    promptDiv.setAttribute('role', 'status');
+    promptDiv.style.cssText = 'position:fixed;bottom:0;left:0;width:100%;background:#f8fafc;color:#0f172a;padding:15px;text-align:center;z-index:3000;font-family:\'Vazirmatn\',sans-serif;box-shadow:0 -4px 12px rgba(0,0,0,0.1);display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;direction:rtl;border-top-left-radius:16px;border-top-right-radius:16px;';
 
-      document.getElementById('closeIOSBtn').addEventListener('click', () => promptDiv.remove());
-  }
+    promptDiv.innerHTML = '<div style="font-size:14px;font-weight:bold;">دریافت نوتیفیکیشن روی آیفون</div>' +
+        '<div style="font-size:12px;color:#475569;">برای دریافت نوتیفیکیشن، ابتدا سایت را به صفحه اصلی (Add to Home Screen) اضافه کنید.</div>' +
+        '<button id="closeIOSBtn" style="background:#0f172a;color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:inherit;width:100px;">متوجه شدم</button>';
+    document.body.appendChild(promptDiv);
+
+    document.getElementById('closeIOSBtn').addEventListener('click', function() { promptDiv.remove(); });
+}
 </script>
 </body>
 </html>
