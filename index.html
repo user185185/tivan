@@ -532,20 +532,20 @@ body{
 }
 
 @keyframes fadeIn{ to{ opacity:1; } }
-
-/* استایل‌های گالری */
+/* ==================== استایل‌های گالری اصلاح شده ==================== */
 .gallery-modal-content {
-    max-height: 85vh;
-    overflow: hidden; /* حذف اسکرول اضافی */
+    max-height: 90vh;
+    overflow: hidden;
 }
 
 .gallery-wrapper {
     position: relative;
     width: 100%;
-    height: 420px; /* ارتفاع ثابت برای جلوگیری از تغییر سایز */
+    height: 420px;
     overflow: hidden;
     border-radius: 16px;
     margin-bottom: 16px;
+    background: #f8f9fa;
 }
 
 .gallery-slide {
@@ -555,22 +555,60 @@ body{
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transform: translateX(100%);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f8f9fa;
 }
 
 .gallery-slide.active {
     opacity: 1;
+    transform: translateX(0);
     z-index: 2;
+}
+
+.gallery-slide.prev {
+    transform: translateX(-100%);
 }
 
 .gallery-slide img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+}
+
+/* دکمه‌های ناوبری داخل گالری */
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.95);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.2s;
+}
+
+.gallery-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.08);
+}
+
+#prevSlideBtn { left: 12px; }
+#nextSlideBtn { right: 12px; }
+
+.gallery-nav svg {
+    width: 26px;
+    height: 26px;
+    fill: #0f172a;
 }
 
 .gallery-dots {
@@ -591,44 +629,16 @@ body{
 
 .gallery-dot.active {
     background: #0f172a;
-    transform: scale(1.3);
+    transform: scale(1.4);
 }
-
-.gallery-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,255,255,0.9);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-#prevSlideBtn { left: 12px; }
-#nextSlideBtn { right: 12px; }
 
 @media(max-width:480px){
-    .logo-wrapper{ width:100px; }
-    .logo-section{ height:150px; }
-    .branch-address{ font-size:14px; }
-    .branch-link{ font-size:14px; }
-    .club-btn{ padding:9px 16px;font-size:12px;max-width:200px;animation:none; }
-    .club-btn svg{ width:16px;height:16px; }
-    .button-group{ gap:8px; }
-    .btn{ padding:10px 4px;font-size:11px;border-radius:10px;gap:4px; }
-    .btn svg{ width:12px;height:12px; }
-    .otp-input{ width:40px;height:40px;font-size:18px; }
-    .otp-inputs-container{ gap:6px; }
     .gallery-wrapper { height: 360px; }
+    .gallery-nav { width: 42px; height: 42px; }
+    .gallery-nav svg { width: 22px; height: 22px; }
     .gallery-dot { width: 7px; height: 7px; }
 }
+
 </style>
 </head>
 
@@ -1104,7 +1114,7 @@ body{
     }
 
     // ==========================================
-    // ۳. گالری تصاویر (اصلاح شده)
+    // ۳. گالری تصاویر — اصلاح شده نهایی
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
@@ -1127,15 +1137,13 @@ body{
 
                     var wrapper = document.getElementById('galleryWrapper');
                     var dotsContainer = document.getElementById('galleryDotsContainer');
-                    var nextBtn = document.getElementById('nextSlideBtn');
 
                     if (wrapper && dotsContainer) {
                         fetch('gallery-data.json')
                             .then(function(response) { return response.json(); })
                             .then(function(images) {
                                 galleryLoaded = true;
-                                wrapper.querySelectorAll('.gallery-slide').forEach(function(el) { el.remove(); });
-                                dotsContainer.innerHTML = '';
+                                wrapper.innerHTML = '';
 
                                 images.forEach(function(imageName, index) {
                                     var slide = document.createElement('div');
@@ -1147,7 +1155,7 @@ body{
                                     if (index > 1) img.loading = 'lazy';
 
                                     slide.appendChild(img);
-                                    wrapper.insertBefore(slide, nextBtn);
+                                    wrapper.appendChild(slide);
 
                                     var dot = document.createElement('div');
                                     dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
@@ -1168,86 +1176,90 @@ body{
     }
 
     function initGalleryLogic() {
-        var closeGalleryBtn = document.getElementById('closeGalleryModalBtn');
         var wrapper = document.getElementById('galleryWrapper');
         var slides = document.querySelectorAll('.gallery-slide');
         var dots = document.querySelectorAll('.gallery-dot');
-        var nextBtn = document.getElementById('nextSlideBtn');
         var prevBtn = document.getElementById('prevSlideBtn');
+        var nextBtn = document.getElementById('nextSlideBtn');
         var currentIndex = 0;
-
-        if (closeGalleryBtn) {
-            closeGalleryBtn.addEventListener('click', function() {
-                if (galleryOverlay) galleryOverlay.classList.remove('active');
-                stopAutoSlideshow();
-            });
-        }
 
         if (slides.length === 0) return;
 
-        function showSlide(index) {
-            if (index >= slides.length) currentIndex = 0;
-            else if (index < 0) currentIndex = slides.length - 1;
-            else currentIndex = index;
+        function showSlide(newIndex, direction = 'next') {
+            if (newIndex < 0) newIndex = slides.length - 1;
+            if (newIndex >= slides.length) newIndex = 0;
 
-            slides.forEach(function(s) { s.classList.remove('active'); });
-            dots.forEach(function(d) { d.classList.remove('active'); });
-            slides[currentIndex].classList.add('active');
-            dots[currentIndex].classList.add('active');
-        }
+            slides.forEach(function(s) { s.classList.remove('active', 'prev'); });
 
-        function startAutoSlideshow() {
-            stopAutoSlideshow();
-            gallerySlideInterval = setInterval(function() {
-                showSlide(currentIndex + 1);
-            }, 3000);
-        }
-
-        function stopAutoSlideshow() {
-            if (gallerySlideInterval) {
-                clearInterval(gallerySlideInterval);
-                gallerySlideInterval = null;
+            if (direction === 'next') {
+                slides[currentIndex].style.transform = 'translateX(-100%)';
+            } else {
+                slides[currentIndex].style.transform = 'translateX(100%)';
             }
+
+            setTimeout(function() {
+                currentIndex = newIndex;
+                slides[currentIndex].classList.add('active');
+                slides[currentIndex].style.transform = 'translateX(0)';
+                dots.forEach(function(d, i) {
+                    d.classList.toggle('active', i === currentIndex);
+                });
+            }, 30);
         }
 
-        // دکمه‌های ناوبری — اصلاح جهت (چپ/راست)
         if (nextBtn) {
             nextBtn.addEventListener('click', function() {
-                showSlide(currentIndex + 1); // next = جلو (راست)
-                startAutoSlideshow();
+                showSlide(currentIndex + 1, 'next');
+                resetAutoSlideshow();
             });
         }
 
         if (prevBtn) {
             prevBtn.addEventListener('click', function() {
-                showSlide(currentIndex - 1); // prev = عقب (چپ)
-                startAutoSlideshow();
+                showSlide(currentIndex - 1, 'prev');
+                resetAutoSlideshow();
             });
         }
 
         dots.forEach(function(dot, index) {
             dot.addEventListener('click', function() {
-                showSlide(index);
-                startAutoSlideshow();
+                var dir = index > currentIndex ? 'next' : 'prev';
+                showSlide(index, dir);
+                resetAutoSlideshow();
             });
         });
 
-        if (wrapper) {
-            wrapper.addEventListener('mouseenter', stopAutoSlideshow);
-            wrapper.addEventListener('mouseleave', startAutoSlideshow);
+        function startAutoSlideshow() {
+            if (gallerySlideInterval) clearInterval(gallerySlideInterval);
+            gallerySlideInterval = setInterval(function() {
+                showSlide(currentIndex + 1, 'next');
+            }, 3500);
+        }
 
-            // swipe
-            var touchStartX = 0;
+        function stopAutoSlideshow() {
+            if (gallerySlideInterval) clearInterval(gallerySlideInterval);
+        }
+
+        function resetAutoSlideshow() {
+            stopAutoSlideshow();
+            startAutoSlideshow();
+        }
+
+        // Swipe
+        var touchStartX = 0;
+        if (wrapper) {
             wrapper.addEventListener('touchstart', function(e) {
                 touchStartX = e.changedTouches[0].screenX;
                 stopAutoSlideshow();
             }, { passive: true });
+
             wrapper.addEventListener('touchend', function(e) {
                 var diff = touchStartX - e.changedTouches[0].screenX;
-                if (Math.abs(diff) > 40) {
-                    showSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) showSlide(currentIndex + 1, 'next');
+                    else showSlide(currentIndex - 1, 'prev');
                 }
-                startAutoSlideshow();
+                resetAutoSlideshow();
             }, { passive: true });
         }
 
