@@ -29,7 +29,6 @@
     padding: 0 4px;
     line-height: 1;
     transition: color 0.2s ease;
-    /* FIX #1: اضافه کردن min-width برای لمس راحت‌تر در موبایل */
     min-width: 44px;
     min-height: 44px;
     display: flex;
@@ -48,7 +47,6 @@
     overflow: hidden;
     background: #f8fafc;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    /* FIX #2: بهینه‌سازی رندر */
     will-change: transform;
 }
 .gallery-slide {
@@ -72,7 +70,6 @@
     height: 100%;
     object-fit: cover;
     border-radius: 16px;
-    /* FIX #3: جلوگیری از drag تصویر */
     user-select: none;
     -webkit-user-drag: none;
 }
@@ -83,7 +80,7 @@
     background: rgba(255, 255, 255, 0.85);
     color: #0f172a;
     border: none;
-    width: 40px;  /* FIX #4: بزرگ‌تر برای لمس راحت */
+    width: 40px;
     height: 40px;
     border-radius: 50%;
     display: flex;
@@ -98,8 +95,11 @@
     background: #fff;
     transform: translateY(-50%) scale(1.1);
 }
-.gallery-prev { right: 12px; }
-.gallery-next { left: 12px; }
+
+/* جای دکمه‌ها اصلاح شد */
+.gallery-prev { left: 12px; }
+.gallery-next { right: 12px; }
+
 .gallery-nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
 .gallery-dots {
@@ -108,8 +108,10 @@
     gap: 6px;
     margin-top: 16px;
     direction: ltr;
-    flex-wrap: wrap; /* FIX #5: wrap برای گالری‌های بزرگ */
+    flex-wrap: wrap; 
 }
+
+/* پدینگ اضافی حذف شد تا دکمه‌ها تناسب داشته باشند */
 .gallery-dot {
     width: 8px;
     height: 8px;
@@ -117,9 +119,6 @@
     background: #cbd5e1;
     cursor: pointer;
     transition: all 0.3s ease;
-    /* FIX #6: سطح لمس بزرگ‌تر */
-    padding: 4px;
-    box-sizing: content-box;
 }
 .gallery-dot.active {
     background: #0f172a;
@@ -130,17 +129,15 @@
 
 <div class="gallery-header">
     <div class="gallery-title">گالری تصاویر</div>
-    <!-- FIX #7: aria-label برای دسترس‌پذیری -->
     <button class="close-gallery-top" id="closeGalleryModalBtn" type="button" aria-label="بستن گالری">×</button>
 </div>
 
-<!-- FIX #8: aria-label و role برای wrapper -->
 <div class="gallery-wrapper" id="galleryWrapper" role="region" aria-label="اسلایدشو تصاویر">
     <button class="gallery-nav-btn gallery-next" id="nextSlideBtn" type="button" aria-label="تصویر بعدی">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </button>
     <button class="gallery-nav-btn gallery-prev" id="prevSlideBtn" type="button" aria-label="تصویر قبلی">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
     </button>
 </div>
 
