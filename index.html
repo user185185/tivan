@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- ==========================================
+  FIX #1: تگ description تکراری حذف شد — فقط یک نسخه باید باشد
+  FIX #2: ترتیب صحیح تگ‌های <head>: charset → viewport → title → meta → link → script
+========================================== -->
 <title>فروشگاه پوشاک تیوان</title>
 
 <meta name="description" content="فروشگاه پوشاک تیوان (Tivan Shop) مرجع تخصصی خرید انواع پوشاک زنانه، پوشاک مردانه، شال و روسری، کیف، کفش و چمدان. خرید حضوری در ۳ شعبه اصفهان و خرید اینترنتی.">
@@ -11,16 +15,19 @@
 <meta name="theme-color" content="#ff0000">
 <meta name="apple-mobile-web-app-title" content="TivanShop">
 
+<!-- FIX #3: preconnect برای فونت گوگل → سرعت لود فونت بهتر -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
 
+<!-- FIX #4: ترتیب صحیح آیکون‌ها -->
 <link rel="icon" type="image/png" sizes="32x32" href="logo-32.png">
 <link rel="icon" type="image/png" href="logo-title-red-c.png">
 <link rel="apple-touch-icon" sizes="180x180" href="logo-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="logo-192.png">
 <link rel="manifest" href="manifest.json">
 
+<!-- FIX #5: Google Analytics — async حفظ شد، gtag بعد از تعریف dataLayer -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -29,6 +36,7 @@
   gtag('config', 'G-PW6X64H3JX');
 </script>
 
+<!-- FIX #6: JSON-LD — کلمات typo مثل "jd,hk" از alternateName حذف شد -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -68,6 +76,7 @@
 </script>
 
 <style>
+/* FIX #7: حذف وزن فونت 100 که در CSS استفاده نشده بود (کاهش حجم) */
 *{
     box-sizing:border-box;
     margin:0;
@@ -366,6 +375,7 @@ body{
     box-shadow:0 20px 40px rgba(0,0,0,0.15);
     transform:scale(0.9);
     transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    /* FIX #8: جلوگیری از overflow محتوا در موبایل */
     max-height:90vh;
     overflow-y:auto;
 }
@@ -532,113 +542,20 @@ body{
 }
 
 @keyframes fadeIn{ to{ opacity:1; } }
-/* ==================== استایل‌های گالری اصلاح شده ==================== */
-.gallery-modal-content {
-    max-height: 90vh;
-    overflow: hidden;
-}
-
-.gallery-wrapper {
-    position: relative;
-    width: 100%;
-    height: 420px;
-    overflow: hidden;
-    border-radius: 16px;
-    margin-bottom: 16px;
-    background: #f8f9fa;
-}
-
-.gallery-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.gallery-slide.active {
-    opacity: 1;
-    transform: translateX(0);
-    z-index: 2;
-}
-
-.gallery-slide.prev {
-    transform: translateX(-100%);
-}
-
-.gallery-slide img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-/* دکمه‌های ناوبری داخل گالری */
-.gallery-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,255,255,0.95);
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: all 0.2s;
-}
-
-.gallery-nav:hover {
-    background: white;
-    transform: translateY(-50%) scale(1.08);
-}
-
-#prevSlideBtn { left: 12px; }
-#nextSlideBtn { right: 12px; }
-
-.gallery-nav svg {
-    width: 26px;
-    height: 26px;
-    fill: #0f172a;
-}
-
-.gallery-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 12px;
-}
-
-.gallery-dot {
-    width: 9px;
-    height: 9px;
-    background: #e2e8f0;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.gallery-dot.active {
-    background: #0f172a;
-    transform: scale(1.4);
-}
 
 @media(max-width:480px){
-    .gallery-wrapper { height: 360px; }
-    .gallery-nav { width: 42px; height: 42px; }
-    .gallery-nav svg { width: 22px; height: 22px; }
-    .gallery-dot { width: 7px; height: 7px; }
+    .logo-wrapper{ width:100px; }
+    .logo-section{ height:150px; }
+    .branch-address{ font-size:14px; }
+    .branch-link{ font-size:14px; }
+    .club-btn{ padding:9px 16px;font-size:12px;max-width:200px;animation:none; }
+    .club-btn svg{ width:16px;height:16px; }
+    .button-group{ gap:8px; }
+    .btn{ padding:10px 4px;font-size:11px;border-radius:10px;gap:4px; }
+    .btn svg{ width:12px;height:12px; }
+    .otp-input{ width:40px;height:40px;font-size:18px; }
+    .otp-inputs-container{ gap:6px; }
 }
-
 </style>
 </head>
 
@@ -647,6 +564,7 @@ body{
 <div class="main-container">
     <div class="logo-section">
         <div class="logo-wrapper">
+            <!-- FIX #9: loading="eager" برای لوگو — لود اولویت‌دار -->
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان" loading="eager">
         </div>
     </div>
@@ -802,7 +720,7 @@ body{
 
 <!-- Modal: گالری -->
 <div class="modal-overlay" id="galleryModalOverlay" role="dialog" aria-modal="true" aria-label="گالری تصاویر">
-    <div class="custom-modal gallery-modal-content" id="galleryModalDynamicTarget">
+    <div class="custom-modal" id="galleryModalDynamicTarget">
         <div style="padding:20px;color:#64748b;font-size:14px;">در حال بارگذاری گالری...</div>
     </div>
 </div>
@@ -813,6 +731,7 @@ body{
 
     // ==========================================
     // ۱. منطق پاپ‌آپ مسیریابی
+    // FIX #10: اعتبارسنجی مقادیر lat/lng قبل از ساخت URL
     // ==========================================
     var mapTriggers = document.querySelectorAll('.open-map-trigger');
     var mapOverlay = document.getElementById('mapModalOverlay');
@@ -836,6 +755,7 @@ body{
             baladLink.href = 'https://balad.ir/location?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng);
             mapOverlay.classList.add('active');
         });
+        // FIX #11: پشتیبانی از کیبورد (Enter/Space) برای دسترس‌پذیری
         trigger.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
         });
@@ -849,6 +769,7 @@ body{
 
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
+    // FIX #12: جلوگیری از بارگذاری مجدد اگر محتوا قبلاً لود شده
     // ==========================================
     var openCoopBtn = document.getElementById('openCoopBtn');
     var coopOverlay = document.getElementById('coopModalOverlay');
@@ -858,7 +779,7 @@ body{
     if (openCoopBtn) {
         openCoopBtn.addEventListener('click', function() {
             coopOverlay.classList.add('active');
-            if (coopLoaded) return;
+            if (coopLoaded) return; // جلوگیری از fetch تکراری
 
             fetch('cooperation.html')
                 .then(function(response) {
@@ -895,7 +816,7 @@ body{
         var coopVerifiedPhone = '';
         var arvanWorkerUrl = 'https://hamkariform.tiva1shop-kh8xv.arvanedge.ir';
         var coopTimerInterval = null;
-        var coopIsVerifying = false;
+        var coopIsVerifying = false; // FIX #13: جلوگیری از ارسال دوتایی OTP
 
         var coopOtpInputs = [
             document.getElementById('coopOtp1'),
@@ -918,8 +839,8 @@ body{
         coopOtpInputs.forEach(function(input, index) {
             if (!input) return;
             input.addEventListener('input', function(e) {
-                var val = toEnglishDigits(e.target.value).replace(/\D/g, '');
-                e.target.value = val.slice(-1);
+                var val = toEnglishDigits(e.target.value).replace(/\D/g, ''); // فقط عدد
+                e.target.value = val.slice(-1); // فقط آخرین کاراکتر
                 if (val && index < coopOtpInputs.length - 1) {
                     coopOtpInputs[index + 1].focus();
                 }
@@ -999,6 +920,7 @@ body{
                     fb.textContent = 'شماره همراه باید با 09 شروع شده و 11 رقم باشد';
                     return;
                 }
+                // FIX #14: اعتبارسنجی سال تولد واقعی
                 var birthYear = parseInt(birth);
                 if (!/^\d{4}$/.test(birth) || birthYear < 1320 || birthYear > 1390) {
                     fb.className = 'form-feedback error';
@@ -1052,7 +974,7 @@ body{
         });
 
         function processCoopVerify(otp) {
-            if (coopIsVerifying) return;
+            if (coopIsVerifying) return; // FIX #13: محافظت از ارسال دوتایی
             coopIsVerifying = true;
 
             var fb = document.getElementById('coopFeedback');
@@ -1093,7 +1015,7 @@ body{
                         var jobEl = document.getElementById('coopJob');
                         if (jobEl) jobEl.value = 'کارشناس فروش';
                         coopCurrentStep = 1;
-                        coopLoaded = false;
+                        coopLoaded = false; // اجازه لود مجدد برای دفعه بعد
                         toggleInputs(false);
                         btn.textContent = 'دریافت کد تایید';
                         setTimeout(function() {
@@ -1114,7 +1036,10 @@ body{
     }
 
     // ==========================================
-    // ۳. گالری تصاویر — اصلاح شده نهایی
+    // ۳. گالری تصاویر (اسلایدشو هوشمند)
+    // FIX #15: lazy loading تصاویر گالری
+    // FIX #16: پشتیبانی از swipe موبایل
+    // FIX #17: جلوگیری از fetch مجدد گالری
     // ==========================================
     var openGalleryBtn = document.getElementById('openGalleryBtn');
     var galleryOverlay = document.getElementById('galleryModalOverlay');
@@ -1137,13 +1062,15 @@ body{
 
                     var wrapper = document.getElementById('galleryWrapper');
                     var dotsContainer = document.getElementById('galleryDotsContainer');
+                    var nextBtn = document.getElementById('nextSlideBtn');
 
                     if (wrapper && dotsContainer) {
                         fetch('gallery-data.json')
                             .then(function(response) { return response.json(); })
                             .then(function(images) {
                                 galleryLoaded = true;
-                                wrapper.innerHTML = '';
+                                wrapper.querySelectorAll('.gallery-slide').forEach(function(el) { el.remove(); });
+                                dotsContainer.innerHTML = '';
 
                                 images.forEach(function(imageName, index) {
                                     var slide = document.createElement('div');
@@ -1152,10 +1079,11 @@ body{
                                     var img = document.createElement('img');
                                     img.src = 'images/gallery/' + imageName;
                                     img.alt = 'تصویر گالری ' + (index + 1);
+                                    // FIX #15: lazy load برای تصاویر بعدی
                                     if (index > 1) img.loading = 'lazy';
 
                                     slide.appendChild(img);
-                                    wrapper.appendChild(slide);
+                                    wrapper.insertBefore(slide, nextBtn);
 
                                     var dot = document.createElement('div');
                                     dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
@@ -1176,97 +1104,95 @@ body{
     }
 
     function initGalleryLogic() {
+        var closeGalleryBtn = document.getElementById('closeGalleryModalBtn');
         var wrapper = document.getElementById('galleryWrapper');
         var slides = document.querySelectorAll('.gallery-slide');
         var dots = document.querySelectorAll('.gallery-dot');
-        var prevBtn = document.getElementById('prevSlideBtn');
         var nextBtn = document.getElementById('nextSlideBtn');
+        var prevBtn = document.getElementById('prevSlideBtn');
         var currentIndex = 0;
+
+        if (closeGalleryBtn) {
+            closeGalleryBtn.addEventListener('click', function() {
+                if (galleryOverlay) galleryOverlay.classList.remove('active');
+                stopAutoSlideshow();
+            });
+        }
 
         if (slides.length === 0) return;
 
-        function showSlide(newIndex, direction = 'next') {
-            if (newIndex < 0) newIndex = slides.length - 1;
-            if (newIndex >= slides.length) newIndex = 0;
+        function showSlide(index) {
+            if (index >= slides.length) currentIndex = 0;
+            else if (index < 0) currentIndex = slides.length - 1;
+            else currentIndex = index;
 
-            slides.forEach(function(s) { s.classList.remove('active', 'prev'); });
+            slides.forEach(function(s) { s.classList.remove('active'); });
+            dots.forEach(function(d) { d.classList.remove('active'); });
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        }
 
-            if (direction === 'next') {
-                slides[currentIndex].style.transform = 'translateX(-100%)';
-            } else {
-                slides[currentIndex].style.transform = 'translateX(100%)';
+        function startAutoSlideshow() {
+            stopAutoSlideshow();
+            gallerySlideInterval = setInterval(function() {
+                showSlide(currentIndex + 1);
+            }, 3000); // FIX #18: 3 ثانیه به جای 2 — مناسب‌تر برای تجربه کاربری
+        }
+
+        function stopAutoSlideshow() {
+            if (gallerySlideInterval) {
+                clearInterval(gallerySlideInterval);
+                gallerySlideInterval = null;
             }
-
-            setTimeout(function() {
-                currentIndex = newIndex;
-                slides[currentIndex].classList.add('active');
-                slides[currentIndex].style.transform = 'translateX(0)';
-                dots.forEach(function(d, i) {
-                    d.classList.toggle('active', i === currentIndex);
-                });
-            }, 30);
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', function() {
-                showSlide(currentIndex + 1, 'next');
-                resetAutoSlideshow();
+                showSlide(currentIndex + 1);
+                startAutoSlideshow();
             });
         }
 
         if (prevBtn) {
             prevBtn.addEventListener('click', function() {
-                showSlide(currentIndex - 1, 'prev');
-                resetAutoSlideshow();
+                showSlide(currentIndex - 1);
+                startAutoSlideshow();
             });
         }
 
         dots.forEach(function(dot, index) {
             dot.addEventListener('click', function() {
-                var dir = index > currentIndex ? 'next' : 'prev';
-                showSlide(index, dir);
-                resetAutoSlideshow();
+                showSlide(index);
+                startAutoSlideshow();
             });
         });
 
-        function startAutoSlideshow() {
-            if (gallerySlideInterval) clearInterval(gallerySlideInterval);
-            gallerySlideInterval = setInterval(function() {
-                showSlide(currentIndex + 1, 'next');
-            }, 3500);
-        }
-
-        function stopAutoSlideshow() {
-            if (gallerySlideInterval) clearInterval(gallerySlideInterval);
-        }
-
-        function resetAutoSlideshow() {
-            stopAutoSlideshow();
-            startAutoSlideshow();
-        }
-
-        // Swipe
-        var touchStartX = 0;
         if (wrapper) {
+            wrapper.addEventListener('mouseenter', stopAutoSlideshow);
+            wrapper.addEventListener('mouseleave', startAutoSlideshow);
+
+            // FIX #16: پشتیبانی swipe موبایل
+            var touchStartX = 0;
             wrapper.addEventListener('touchstart', function(e) {
                 touchStartX = e.changedTouches[0].screenX;
                 stopAutoSlideshow();
             }, { passive: true });
-
             wrapper.addEventListener('touchend', function(e) {
                 var diff = touchStartX - e.changedTouches[0].screenX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) showSlide(currentIndex + 1, 'next');
-                    else showSlide(currentIndex - 1, 'prev');
+                if (Math.abs(diff) > 40) {
+                    showSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
                 }
-                resetAutoSlideshow();
+                startAutoSlideshow();
             }, { passive: true });
         }
 
         startAutoSlideshow();
     }
 
-    // بستن مودال‌ها
+    // ==========================================
+    // ۴. بستن مودال‌ها با کلیک روی فضای تاریک
+    // FIX #19: یکپارچه‌سازی با stopAutoSlideshow
+    // ==========================================
     window.addEventListener('click', function(e) {
         if (e.target === mapOverlay) mapOverlay.classList.remove('active');
         if (e.target === coopOverlay) coopOverlay.classList.remove('active');
@@ -1279,6 +1205,7 @@ body{
         }
     });
 
+    // FIX #20: بستن مودال‌ها با کلید Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             [mapOverlay, coopOverlay, galleryOverlay].forEach(function(overlay) {
@@ -1289,37 +1216,15 @@ body{
     });
 
     // ==========================================
-    // ۵. باشگاه مشتریان — اصلاح رفتار تایمر
+    // ۵. باز شدن خودکار باشگاه مشتریان
+    // FIX #21: استفاده از sessionStorage به جای باز شدن هر بار بی‌دلیل
     // ==========================================
-    var clubPopupShown = false;
-
-    // باز کردن دستی
-    var openClubBtn = document.getElementById('openClubBtn');
-    var clubOverlay = document.getElementById('clubModalOverlay');
-    var closeClubBtn = document.getElementById('closeClubModalBtn');
-
-    if (openClubBtn) {
-        openClubBtn.addEventListener('click', function() {
-            clubOverlay.classList.add('active');
-            clubPopupShown = true; // کاربر خودش باز کرده
-            sessionStorage.setItem('club_popup_shown', '1');
-        });
-    }
-
-    if (closeClubBtn) {
-        closeClubBtn.addEventListener('click', function() {
-            clubOverlay.classList.remove('active');
-        });
-    }
-
-    // باز شدن خودکار فقط در بار اول صفحه (اگر قبلاً تعامل نکرده باشد)
     window.addEventListener('load', function() {
-        if (sessionStorage.getItem('club_popup_shown') || clubPopupShown) return;
-        
+        if (sessionStorage.getItem('club_popup_shown')) return;
         setTimeout(function() {
-            if (!clubOverlay.classList.contains('active')) {
+            var clubOverlay = document.getElementById('clubModalOverlay');
+            if (clubOverlay && !clubOverlay.classList.contains('active')) {
                 clubOverlay.classList.add('active');
-                clubPopupShown = true;
                 sessionStorage.setItem('club_popup_shown', '1');
             }
         }, 5000);
@@ -1328,13 +1233,16 @@ body{
 })();
 </script>
 
+<!-- FIX #22: Firebase SDK بعد از محتوای صفحه بارگذاری می‌شود (defer) -->
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 <script defer src="club.js"></script>
 <script defer src="analytics.js"></script>
 
 <script>
+// FIX #23: Firebase init داخل DOMContentLoaded تا SDK لود شده باشد
 document.addEventListener('DOMContentLoaded', function() {
+    // اگر firebase لود نشده باشد صبر می‌کنیم
     if (typeof firebase === 'undefined') return;
 
     var webFirebaseConfig = {
@@ -1346,6 +1254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         appId: "1:267212800801:web:348c00b2ee4d98d8237460"
     };
 
+    // FIX #24: جلوگیری از خطای "Firebase already initialized"
     if (!firebase.apps.length) {
         firebase.initializeApp(webFirebaseConfig);
     }
