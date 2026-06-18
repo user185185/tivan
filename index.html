@@ -28,7 +28,6 @@
   gtag('js', new Date());
   gtag('config', 'G-PW6X64H3JX');
 </script>
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -554,6 +553,10 @@ body{
     .otp-inputs-container{ gap:6px; }
 }
 </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 </head>
 
 <body>
@@ -694,25 +697,14 @@ body{
     </div>
 </div>
 
-<div class="modal-overlay" id="mapModalOverlay" role="dialog" aria-modal="true" aria-label="انتخاب مسیریاب">
-    <div class="custom-modal">
-        <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
-        <div class="modal-subtitle">لطفاً نقشه مورد نظر خود را انتخاب کنید:</div>
-        <div class="apps-list">
-            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-google">
-                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
-                <span>گوگل مپ (Google Maps)</span>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-neshan">
-                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0084FF"/><path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/></svg>
-                <span>مسیریاب نشان</span>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-balad">
-                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/><path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/></svg>
-                <span>مسیریاب بلد</span>
-            </a>
+<!-- Modal نقشه -->
+<div class="modal-overlay" id="mapModalOverlay">
+    <div class="custom-modal" style="width:95%; max-width:520px; padding:10px;">
+        <div style="margin-bottom:10px; text-align:center;">
+            <strong>نقشه و مسیر فروشگاه</strong>
         </div>
-        <button class="close-modal-btn" id="closeMapModalBtn" type="button">انصراف</button>
+        <div id="mapContainer" style="height:420px; border-radius:12px; overflow:hidden;"></div>
+        <button class="close-modal-btn" id="closeMapBtn" style="margin-top:12px;">بستن</button>
     </div>
 </div>
 
@@ -726,40 +718,69 @@ body{
 (function() {
     'use strict';
 
-    // ==========================================
-    // ۱. منطق پاپ‌آپ مسیریابی
-    // ==========================================
-    var mapTriggers = document.querySelectorAll('.open-map-trigger');
-    var mapOverlay = document.getElementById('mapModalOverlay');
-    var closeMapBtn = document.getElementById('closeMapModalBtn');
-    var googleLink = document.getElementById('link-google');
-    var neshanLink = document.getElementById('link-neshan');
-    var baladLink = document.getElementById('link-balad');
-    function isValidCoord(lat, lng) {
-        var la = parseFloat(lat), lo = parseFloat(lng);
-        return !isNaN(la) && !isNaN(lo) && la >= -90 && la <= 90 && lo >= -180 && lo <= 180;
-    }
-
-    mapTriggers.forEach(function(trigger) {
-        trigger.addEventListener('click', function() {
-            var lat = this.getAttribute('data-lat');
-            var lng = this.getAttribute('data-lng');
-            if (!isValidCoord(lat, lng)) return;
-            googleLink.href = 'https://www.google.com/maps?q=' + encodeURIComponent(lat) + ',' + encodeURIComponent(lng);
-            neshanLink.href = 'https://neshan.org/maps/search/' + encodeURIComponent(lat) + ',' + encodeURIComponent(lng);
-            baladLink.href = 'https://balad.ir/location?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng);
-            mapOverlay.classList.add('active');
-        });
-        trigger.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
-        });
+// وقتی روی دکمه مسیریابی کلیک شد
+document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
+    trigger.addEventListener('click', function() {
+        var storeLat = parseFloat(this.getAttribute('data-lat'));
+        var storeLng = parseFloat(this.getAttribute('data-lng'));
+        
+        document.getElementById('mapModalOverlay').classList.add('active');
+        
+        setTimeout(() => {
+            initRouteMap(storeLat, storeLng);
+        }, 300);
     });
+});
 
-    if (closeMapBtn) {
-        closeMapBtn.addEventListener('click', function() {
-            mapOverlay.classList.remove('active');
+let currentMap = null;
+
+function initRouteMap(storeLat, storeLng) {
+    if (currentMap) currentMap.remove();
+
+    currentMap = L.map('mapContainer', { zoomControl: true }).setView([storeLat, storeLng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(currentMap);
+
+    // نشان فروشگاه
+    L.marker([storeLat, storeLng]).addTo(currentMap)
+        .bindPopup('فروشگاه تیوان').openPopup();
+
+    // گرفتن موقعیت کاربر و رسم مسیر
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var userLat = position.coords.latitude;
+            var userLng = position.coords.longitude;
+
+            // نشان کاربر
+            L.marker([userLat, userLng]).addTo(currentMap)
+                .bindPopup('موقعیت شما');
+
+            // رسم مسیر
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(userLat, userLng),
+                    L.latLng(storeLat, storeLng)
+                ],
+                routeWhileDragging: true,
+                language: 'fa',           // فارسی
+                showAlternatives: true,
+            }).addTo(currentMap);
+
+        }, function() {
+            alert('دسترسی به موقعیت مکانی شما امکان‌پذیر نبود. لطفاً مجوز لوکیشن را فعال کنید.');
         });
+    } else {
+        alert('مرورگر شما از قابلیت موقعیت مکانی پشتیبانی نمی‌کند.');
     }
+}
+
+// بستن مودال
+document.getElementById('closeMapBtn').addEventListener('click', function() {
+    document.getElementById('mapModalOverlay').classList.remove('active');
+    if (currentMap) currentMap.remove();
+});
 
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
