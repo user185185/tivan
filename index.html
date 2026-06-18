@@ -553,10 +553,9 @@ body{
     .otp-inputs-container{ gap:6px; }
 }
 </style>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<!-- Neshan Map -->
+<link rel="stylesheet" href="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.css" />
+<script src="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.js"></script>
 </head>
 
 <body>
@@ -718,63 +717,93 @@ body{
 (function() {
     'use strict';
 
-// وقتی روی دکمه مسیریابی کلیک شد
-document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
-    trigger.addEventListener('click', function() {
-        var storeLat = parseFloat(this.getAttribute('data-lat'));
-        var storeLng = parseFloat(this.getAttribute('data-lng'));
-        
-        document.getElementById('mapModalOverlay').classList.add('active');
-        
-        setTimeout(() => {
-            initRouteMap(storeLat, storeLng);
-        }, 300);
-    });
-});
+    // ==========================================
+    // ۱. نقشه ایرانی (نشان) با مسیر
+    // ==========================================
+    let currentMap = null;
 
-let currentMap = null;
+    function initNeshanMap(storeLat, storeLng) {
+        if (currentMap) currentMap.remove();
 
-function initRouteMap(storeLat, storeLng) {
-    if (currentMap) currentMap.remove();
+        currentMap = L.map('mapContainer', {
+            zoomControl: true,
+            attributionControl: false
+        }).setView([storeLat, storeLng], 15);
 
-    currentMap = L.map('mapContainer', { zoomControl: true }).setView([storeLat, storeLng], 13);
+        // لایه نقشه نشان
+        L.tileLayer('https://tile.neshan.org/tile/2.2.0/vector/{z}/{x}/{y}.png', {
+            attribution: '© نشان',
+            subdomains: '1234',
+            maxZoom: 19,
+        }).addTo(currentMap);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(currentMap);
+        // نشان فروشگاه
+        L.marker([storeLat, storeLng], {
+            icon: L.icon({
+                iconUrl: 'https://static.neshan.org/sdk/leaflet/1.4.0/images/marker-icon.png',
+                shadowUrl: 'https://static.neshan.org/sdk/leaflet/1.4.0/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41]
+            })
+        }).addTo(currentMap)
+          .bindPopup('<b>فروشگاه تیوان</b>')
+          .openPopup();
 
-    // نشان فروشگاه
-    L.marker([storeLat, storeLng]).addTo(currentMap)
-        .bindPopup('فروشگاه تیوان').openPopup();
+        // موقعیت کاربر + رسم مسیر
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const userLat = pos.coords.latitude;
+                const userLng = pos.coords.longitude;
 
-    // گرفتن موقعیت کاربر و رسم مسیر
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var userLat = position.coords.latitude;
-            var userLng = position.coords.longitude;
+                L.marker([userLat, userLng]).addTo(currentMap)
+                    .bindPopup('موقعیت شما');
 
-            // نشان کاربر
-            L.marker([userLat, userLng]).addTo(currentMap)
-                .bindPopup('موقعیت شما');
+                // رسم مسیر با Neshan Routing
+                L.Routing.control({
+                    waypoints: [
+                        L.latLng(userLat, userLng),
+                        L.latLng(storeLat, storeLng)
+                    ],
+                    router: L.Routing.neshan({
+                        serviceUrl: 'https://api.neshan.org/v4/direction',
+                        apiKey: 'YOUR_NESHAN_API_KEY'   // ← اگر API Key داری بذار، иначе خالی بذار
+                    }),
+                    lineOptions: {
+                        styles: [{ color: '#b20808', weight: 6, opacity: 0.9 }]
+                    },
+                    showAlternatives: false,
+                    language: 'fa'
+                }).addTo(currentMap);
 
-            // رسم مسیر
-            L.Routing.control({
-                waypoints: [
-                    L.latLng(userLat, userLng),
-                    L.latLng(storeLat, storeLng)
-                ],
-                routeWhileDragging: true,
-                language: 'fa',           // فارسی
-                showAlternatives: true,
-            }).addTo(currentMap);
-
-        }, function() {
-            alert('دسترسی به موقعیت مکانی شما امکان‌پذیر نبود. لطفاً مجوز لوکیشن را فعال کنید.');
-        });
-    } else {
-        alert('مرورگر شما از قابلیت موقعیت مکانی پشتیبانی نمی‌کند.');
+            }, function(err) {
+                console.log(err);
+                alert('لطفاً دسترسی به موقعیت مکانی را فعال کنید.');
+            });
+        }
     }
-}
+
+    // اتصال دکمه‌های مسیریابی
+    document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+            const lat = parseFloat(this.getAttribute('data-lat'));
+            const lng = parseFloat(this.getAttribute('data-lng'));
+
+            document.getElementById('mapModalOverlay').classList.add('active');
+
+            setTimeout(() => {
+                initNeshanMap(lat, lng);
+            }, 400);
+        });
+    });
+
+    // بستن مودال
+    document.getElementById('closeMapBtn').addEventListener('click', function() {
+        document.getElementById('mapModalOverlay').classList.remove('active');
+        if (currentMap) {
+            currentMap.remove();
+            currentMap = null;
+        }
+    });
 
 // بستن مودال
 document.getElementById('closeMapBtn').addEventListener('click', function() {
