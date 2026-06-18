@@ -716,84 +716,73 @@ body{
 <script>
 (function() {
     'use strict';
-
-      // ==========================================
-    // نقشه گوگل — نسخه پایدارتر
     // ==========================================
-    let googleMapInstance = null;
+    // نقشه گوگل — نسخه نهایی و تمیز
+    // ==========================================
+    let googleMap = null;
+    let directionsRenderer = null;
 
     function initGoogleMap(storeLat, storeLng) {
-        const container = document.getElementById('mapContainer');
+        const mapDiv = document.getElementById('mapContainer');
         
-        // اگر قبلاً نقشه ساخته شده، پاک کن
-        if (googleMapInstance) googleMapInstance = null;
-
-        googleMapInstance = new google.maps.Map(container, {
+        googleMap = new google.maps.Map(mapDiv, {
             center: { lat: storeLat, lng: storeLng },
             zoom: 15,
             mapTypeControl: false,
             streetViewControl: false,
-            fullscreenControl: false
+            fullscreenControl: true
         });
 
         // نشان فروشگاه
         new google.maps.Marker({
             position: { lat: storeLat, lng: storeLng },
-            map: googleMapInstance,
+            map: googleMap,
             title: "فروشگاه تیوان"
         });
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                const userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            navigator.geolocation.getCurrentPosition((position) => {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
 
+                // نشان کاربر
                 new google.maps.Marker({
-                    position: userPos,
-                    map: googleMapInstance,
+                    position: { lat: userLat, lng: userLng },
+                    map: googleMap,
                     title: "موقعیت شما"
                 });
 
+                // رسم مسیر
                 const directionsService = new google.maps.DirectionsService();
-                const directionsRenderer = new google.maps.DirectionsRenderer({
-                    map: googleMapInstance,
+                directionsRenderer = new google.maps.DirectionsRenderer({
+                    map: googleMap,
                     suppressMarkers: true,
-                    polylineOptions: { strokeColor: "#b20808", strokeWeight: 6 }
+                    polylineOptions: { 
+                        strokeColor: "#b20808", 
+                        strokeWeight: 6 
+                    }
                 });
 
                 directionsService.route({
-                    origin: userPos,
+                    origin: { lat: userLat, lng: userLng },
                     destination: { lat: storeLat, lng: storeLng },
                     travelMode: google.maps.TravelMode.DRIVING
-                }, (result, status) => {
+                }, (response, status) => {
                     if (status === "OK") {
-                        directionsRenderer.setDirections(result);
+                        directionsRenderer.setDirections(response);
                     } else {
-                        console.error("خطای Directions:", status);
-                        alert("نمایش مسیر با خطا مواجه شد.");
+                        console.error("Directions error:", status);
                     }
                 });
+
             }, () => {
-                alert("لطفاً مجوز دسترسی به موقعیت مکانی را بدهید.");
+                alert("لطفاً دسترسی به موقعیت مکانی را فعال کنید.");
             });
         }
     }
 
-    // اتصال دکمه‌ها
+    // فعال‌سازی دکمه‌های مسیریابی
     document.querySelectorAll('.open-map-trigger').forEach(trigger => {
-        trigger.addEventListener('click', function() {
-            const lat = parseFloat(this.dataset.lat);
-            const lng = parseFloat(this.dataset.lng);
-
-            document.getElementById('mapModalOverlay').classList.add('active');
-
-            setTimeout(() => {
-                initGoogleMap(lat, lng);
-            }, 600);
-        });
-    });
-
-    // اتصال دکمه‌های مسیریابی
-    document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
             const lng = parseFloat(this.getAttribute('data-lng'));
@@ -807,26 +796,10 @@ body{
     });
 
     // بستن مودال
-    document.getElementById('closeMapBtn').addEventListener('click', function() {
+    document.getElementById('closeMapBtn').addEventListener('click', () => {
         document.getElementById('mapModalOverlay').classList.remove('active');
         if (directionsRenderer) directionsRenderer.setMap(null);
     });
-
-    // بستن مودال
-    document.getElementById('closeMapBtn').addEventListener('click', function() {
-        document.getElementById('mapModalOverlay').classList.remove('active');
-        if (currentMap) {
-            currentMap.remove();
-            currentMap = null;
-        }
-    });
-
-// بستن مودال
-document.getElementById('closeMapBtn').addEventListener('click', function() {
-    document.getElementById('mapModalOverlay').classList.remove('active');
-    if (currentMap) currentMap.remove();
-});
-
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
     // ==========================================
