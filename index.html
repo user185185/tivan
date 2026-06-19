@@ -698,8 +698,8 @@ body{
     </div>
 </div>
 
-<!-- Modal: نقشه گوگل -->
-<div class="modal-overlay" id="mapModalOverlay" role="dialog" aria-modal="true">
+<!-- Modal نقشه -->
+<div class="modal-overlay" id="mapModalOverlay">
     <div class="custom-modal" style="width:95%; max-width:520px; padding:15px;">
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
         <div id="mapContainer" style="height:420px; border-radius:12px;"></div>
@@ -717,14 +717,15 @@ body{
 (function() {
     'use strict';
     // ==========================================
-    // نقشه گوگل — نسخه نهایی و تمیز
+    // نقشه گوگل — نسخه نهایی و بدون خطا
     // ==========================================
     let googleMap = null;
     let directionsRenderer = null;
 
     function initGoogleMap(storeLat, storeLng) {
         const mapDiv = document.getElementById('mapContainer');
-        
+        if (!mapDiv) return;
+
         googleMap = new google.maps.Map(mapDiv, {
             center: { lat: storeLat, lng: storeLng },
             zoom: 15,
@@ -742,64 +743,63 @@ body{
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
+                const userPos = { 
+                    lat: position.coords.latitude, 
+                    lng: position.coords.longitude 
+                };
 
-                // نشان کاربر
                 new google.maps.Marker({
-                    position: { lat: userLat, lng: userLng },
+                    position: userPos,
                     map: googleMap,
                     title: "موقعیت شما"
                 });
 
-                // رسم مسیر
                 const directionsService = new google.maps.DirectionsService();
                 directionsRenderer = new google.maps.DirectionsRenderer({
                     map: googleMap,
                     suppressMarkers: true,
-                    polylineOptions: { 
-                        strokeColor: "#b20808", 
-                        strokeWeight: 6 
-                    }
+                    polylineOptions: { strokeColor: "#b20808", strokeWeight: 6 }
                 });
 
                 directionsService.route({
-                    origin: { lat: userLat, lng: userLng },
+                    origin: userPos,
                     destination: { lat: storeLat, lng: storeLng },
                     travelMode: google.maps.TravelMode.DRIVING
                 }, (response, status) => {
                     if (status === "OK") {
                         directionsRenderer.setDirections(response);
-                    } else {
-                        console.error("Directions error:", status);
                     }
                 });
 
             }, () => {
-                alert("لطفاً دسترسی به موقعیت مکانی را فعال کنید.");
+                alert("لطفاً مجوز دسترسی به موقعیت مکانی را فعال کنید.");
             });
         }
     }
 
-    // فعال‌سازی دکمه‌های مسیریابی
-    document.querySelectorAll('.open-map-trigger').forEach(trigger => {
+    // فعال کردن دکمه‌های مسیریابی
+    document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
             const lng = parseFloat(this.getAttribute('data-lng'));
 
-            document.getElementById('mapModalOverlay').classList.add('active');
+            const overlay = document.getElementById('mapModalOverlay');
+            if (overlay) overlay.classList.add('active');
 
             setTimeout(() => {
                 initGoogleMap(lat, lng);
-            }, 500);
+            }, 600);
         });
     });
 
-    // بستن مودال
-    document.getElementById('closeMapBtn').addEventListener('click', () => {
-        document.getElementById('mapModalOverlay').classList.remove('active');
-        if (directionsRenderer) directionsRenderer.setMap(null);
-    });
+    // بستن نقشه
+    const closeBtn = document.getElementById('closeMapBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            document.getElementById('mapModalOverlay').classList.remove('active');
+            if (directionsRenderer) directionsRenderer.setMap(null);
+        });
+    }
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
     // ==========================================
