@@ -562,7 +562,6 @@ body{
     .otp-input{ width:40px;height:40px;font-size:18px; }
     .otp-inputs-container{ gap:6px; }
 }
-  /* تمام استایل‌های قبلی شما + استایل نقشه */
 #mapContainer {
     height: 380px;
     border-radius: 12px;
@@ -571,29 +570,31 @@ body{
     margin-bottom: 12px;
 }
 
-.apps-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.app-btn {
+/* دکمه بستن بالای نقشه */
+.close-map-top {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #64748b;
+    cursor: pointer;
+    z-index: 1000;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    text-decoration: none;
-    color: #334155;
-    font-weight: 500;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s;
 }
 
-.app-btn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
+.close-map-top:hover {
+    color: #ef4444;
+    background: white;
+    transform: scale(1.1);
 }
 </style>
 </head>
@@ -735,17 +736,22 @@ body{
 
 <!-- Modal نقشه -->
 <div class="modal-overlay" id="mapModalOverlay">
-    <div class="custom-modal" style="width:95%; max-width:520px; padding:15px;">
+    <div class="custom-modal" style="width:95%; max-width:520px; padding:15px; position:relative;">
+        
+        <!-- دکمه بستن بالای نقشه -->
+        <button class="close-map-top" id="closeMapTopBtn" type="button">×</button>
+        
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
         <div id="mapContainer"></div>
         
-        <!-- دکمه‌های مسیریابی خارجی -->
-        <div class="apps-list" id="externalApps"></div>
-        
-        <button class="close-modal-btn" id="closeMapBtn" style="margin-top:15px; width:100%;">بستن نقشه</button>
+        <!-- دکمه مسیریابی -->
+        <button id="openExternalRoutesBtn" style="width:100%; padding:14px; background:#0f172a; color:white; border:none; border-radius:12px; font-size:15px; font-weight:600; margin-top:12px; cursor:pointer;">
+            مسیریابی با اپلیکیشن
+        </button>
+
+        <button class="close-modal-btn" id="closeMapBtn" style="margin-top:10px; width:100%;">بستن</button>
     </div>
 </div>
-
 <div class="modal-overlay" id="galleryModalOverlay" role="dialog" aria-modal="true" aria-label="گالری تصاویر">
     <div class="custom-modal" id="galleryModalDynamicTarget">
         <div style="padding:20px;color:#64748b;font-size:14px;">در حال بارگذاری گالری...</div>
@@ -786,27 +792,9 @@ let osmMap = null;
                 }).addTo(osmMap);
             });
         }
-
-        // دکمه‌های خارجی
-        renderExternalLinks(storeLat, storeLng, branchName);
     }
 
-    function renderExternalLinks(lat, lng, branchName) {
-        const container = document.getElementById('externalApps');
-        container.innerHTML = `
-            <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" class="app-btn">
-                <span>گوگل مپ</span>
-            </a>
-            <a href="https://neshan.org/maps/search/${lat},${lng}" target="_blank" class="app-btn">
-                <span>مسیریاب نشان</span>
-            </a>
-            <a href="https://balad.ir/location?lat=${lat}&lng=${lng}" target="_blank" class="app-btn">
-                <span>مسیریاب بلد</span>
-            </a>
-        `;
-    }
-
-    // فعال کردن دکمه‌های مسیریابی
+    // باز کردن نقشه
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
@@ -821,14 +809,25 @@ let osmMap = null;
         });
     });
 
-    // بستن نقشه
-    document.getElementById('closeMapBtn').addEventListener('click', function() {
+    // بستن نقشه با دکمه بالا
+    document.getElementById('closeMapTopBtn').addEventListener('click', closeMapModal);
+    document.getElementById('closeMapBtn').addEventListener('click', closeMapModal);
+
+    function closeMapModal() {
         document.getElementById('mapModalOverlay').classList.remove('active');
         if (osmMap) {
             osmMap.remove();
             osmMap = null;
         }
+    }
+
+    // دکمه مسیریابی با اپلیکیشن
+    document.getElementById('openExternalRoutesBtn').addEventListener('click', function() {
+        // اینجا می‌توانید از کد قدیمی مودال مسیریابی استفاده کنید یا یک مودال جدید بسازید
+        alert('در حال حاضر گزینه‌های مسیریابی خارجی در حال توسعه هستند.\n\nلطفاً از دکمه‌های بالا استفاده کنید.');
     });
+
+})();
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
     // ==========================================
