@@ -553,11 +553,9 @@ body{
     .otp-inputs-container{ gap:6px; }
 }
 </style>
-<!-- Google Maps API -->
-<!-- Google Maps API -->
-<script async 
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-rlwRfg8ri3gJEUkKzdh4a_kEYP_kPi8&libraries=geometry,directions&language=fa&region=IR">
-</script>
+<!-- Neshan Map SDK -->
+<link rel="stylesheet" href="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.css" />
+<script src="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.js"></script>
 </head>
 
 <body>
@@ -717,89 +715,77 @@ body{
 (function() {
     'use strict';
     // ==========================================
-    // نقشه گوگل — نسخه نهایی و بدون خطا
+    // نقشه نشان (Neshan) — نسخه نهایی
     // ==========================================
-    let googleMap = null;
-    let directionsRenderer = null;
+    let neshanMap = null;
 
-    function initGoogleMap(storeLat, storeLng) {
-        const mapDiv = document.getElementById('mapContainer');
-        if (!mapDiv) return;
+    function initNeshanMap(storeLat, storeLng) {
+        if (neshanMap) neshanMap.remove();
 
-        googleMap = new google.maps.Map(mapDiv, {
-            center: { lat: storeLat, lng: storeLng },
-            zoom: 15,
-            mapTypeControl: false,
-            streetViewControl: false,
-            fullscreenControl: true
-        });
+        neshanMap = L.map('mapContainer', {
+            zoomControl: true,
+            attributionControl: true
+        }).setView([storeLat, storeLng], 15);
+
+        // لایه نقشه نشان
+        L.tileLayer('https://tile.neshan.org/tile/2.2.0/vector/{z}/{x}/{y}.png', {
+            attribution: '© نشان',
+            subdomains: '1234',
+            maxZoom: 19
+        }).addTo(neshanMap);
 
         // نشان فروشگاه
-        new google.maps.Marker({
-            position: { lat: storeLat, lng: storeLng },
-            map: googleMap,
-            title: "فروشگاه تیوان"
-        });
+        L.marker([storeLat, storeLng]).addTo(neshanMap)
+            .bindPopup('<b>فروشگاه تیوان</b>')
+            .openPopup();
 
+        // موقعیت کاربر و مسیر
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const userPos = { 
-                    lat: position.coords.latitude, 
-                    lng: position.coords.longitude 
-                };
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const userLat = pos.coords.latitude;
+                const userLng = pos.coords.longitude;
 
-                new google.maps.Marker({
-                    position: userPos,
-                    map: googleMap,
-                    title: "موقعیت شما"
-                });
+                L.marker([userLat, userLng]).addTo(neshanMap)
+                    .bindPopup('موقعیت شما');
 
-                const directionsService = new google.maps.DirectionsService();
-                directionsRenderer = new google.maps.DirectionsRenderer({
-                    map: googleMap,
-                    suppressMarkers: true,
-                    polylineOptions: { strokeColor: "#b20808", strokeWeight: 6 }
-                });
+                // رسم مسیر ساده (خط مستقیم)
+                L.polyline([
+                    [userLat, userLng],
+                    [storeLat, storeLng]
+                ], {
+                    color: '#b20808',
+                    weight: 6,
+                    opacity: 0.9
+                }).addTo(neshanMap);
 
-                directionsService.route({
-                    origin: userPos,
-                    destination: { lat: storeLat, lng: storeLng },
-                    travelMode: google.maps.TravelMode.DRIVING
-                }, (response, status) => {
-                    if (status === "OK") {
-                        directionsRenderer.setDirections(response);
-                    }
-                });
-
-            }, () => {
-                alert("لطفاً مجوز دسترسی به موقعیت مکانی را فعال کنید.");
+            }, function() {
+                alert('لطفاً دسترسی به موقعیت مکانی را فعال کنید.');
             });
         }
     }
 
-    // فعال کردن دکمه‌های مسیریابی
+    // فعال کردن دکمه مسیریابی
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
             const lng = parseFloat(this.getAttribute('data-lng'));
 
-            const overlay = document.getElementById('mapModalOverlay');
-            if (overlay) overlay.classList.add('active');
+            document.getElementById('mapModalOverlay').classList.add('active');
 
             setTimeout(() => {
-                initGoogleMap(lat, lng);
-            }, 600);
+                initNeshanMap(lat, lng);
+            }, 400);
         });
     });
 
-    // بستن نقشه
-    const closeBtn = document.getElementById('closeMapBtn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
-            document.getElementById('mapModalOverlay').classList.remove('active');
-            if (directionsRenderer) directionsRenderer.setMap(null);
-        });
-    }
+    // بستن مودال
+    document.getElementById('closeMapBtn').addEventListener('click', function() {
+        document.getElementById('mapModalOverlay').classList.remove('active');
+        if (neshanMap) {
+            neshanMap.remove();
+            neshanMap = null;
+        }
+    });
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
     // ==========================================
