@@ -553,9 +553,7 @@ body{
     .otp-inputs-container{ gap:6px; }
 }
 </style>
-<!-- Neshan Map SDK -->
-<link rel="stylesheet" href="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.css" />
-<script src="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.js"></script>
+
 </head>
 
 <body>
@@ -714,57 +712,51 @@ body{
 <script>
 (function() {
     'use strict';
+       // ==========================================
+    // نقشه OpenStreetMap — ساده و سریع
     // ==========================================
-    // نقشه نشان (Neshan) — نسخه نهایی
-    // ==========================================
-    let neshanMap = null;
+    let osmMap = null;
 
-    function initNeshanMap(storeLat, storeLng) {
-        if (neshanMap) neshanMap.remove();
+    function initOSMMap(storeLat, storeLng) {
+        if (osmMap) osmMap.remove();
 
-        neshanMap = L.map('mapContainer', {
-            zoomControl: true,
-            attributionControl: true
+        osmMap = L.map('mapContainer', {
+            zoomControl: true
         }).setView([storeLat, storeLng], 15);
 
-        // لایه نقشه نشان
-        L.tileLayer('https://tile.neshan.org/tile/2.2.0/vector/{z}/{x}/{y}.png', {
-            attribution: '© نشان',
-            subdomains: '1234',
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap',
             maxZoom: 19
-        }).addTo(neshanMap);
+        }).addTo(osmMap);
 
         // نشان فروشگاه
-        L.marker([storeLat, storeLng]).addTo(neshanMap)
+        L.marker([storeLat, storeLng]).addTo(osmMap)
             .bindPopup('<b>فروشگاه تیوان</b>')
             .openPopup();
 
-        // موقعیت کاربر و مسیر
+        // موقعیت کاربر + خط مسیر
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(pos) {
                 const userLat = pos.coords.latitude;
                 const userLng = pos.coords.longitude;
 
-                L.marker([userLat, userLng]).addTo(neshanMap)
+                L.marker([userLat, userLng]).addTo(osmMap)
                     .bindPopup('موقعیت شما');
 
-                // رسم مسیر ساده (خط مستقیم)
-                L.polyline([
-                    [userLat, userLng],
-                    [storeLat, storeLng]
-                ], {
+                // خط مسیر مستقیم
+                L.polyline([[userLat, userLng], [storeLat, storeLng]], {
                     color: '#b20808',
-                    weight: 6,
-                    opacity: 0.9
-                }).addTo(neshanMap);
+                    weight: 5,
+                    opacity: 0.85
+                }).addTo(osmMap);
 
             }, function() {
-                alert('لطفاً دسترسی به موقعیت مکانی را فعال کنید.');
+                alert('لطفاً مجوز موقعیت مکانی را فعال کنید.');
             });
         }
     }
 
-    // فعال کردن دکمه مسیریابی
+    // فعال کردن دکمه‌ها
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
@@ -773,17 +765,17 @@ body{
             document.getElementById('mapModalOverlay').classList.add('active');
 
             setTimeout(() => {
-                initNeshanMap(lat, lng);
+                initOSMMap(lat, lng);
             }, 400);
         });
     });
 
-    // بستن مودال
+    // بستن نقشه
     document.getElementById('closeMapBtn').addEventListener('click', function() {
         document.getElementById('mapModalOverlay').classList.remove('active');
-        if (neshanMap) {
-            neshanMap.remove();
-            neshanMap = null;
+        if (osmMap) {
+            osmMap.remove();
+            osmMap = null;
         }
     });
     // ==========================================
