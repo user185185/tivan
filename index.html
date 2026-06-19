@@ -679,7 +679,7 @@ body{
             <div class="branch-divider" style="margin-top:12px;"></div>
             
             <div style="text-align: center; margin-top: 15px; font-size: 11px; color: #94a3b8; direction: ltr; font-family: Tahoma, Arial, sans-serif;">
-                &copy; 2026 TivanShop. All rights reserved.
+                © 2026 TivanShop. All rights reserved.
             </div>
 
         </div>
@@ -724,7 +724,7 @@ body{
         <button class="close-modal-top" id="closeMapBtnTop" type="button" aria-label="بستن">×</button>
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
         <div id="mapContainer"></div>
-        <button class="club-submit-btn" id="openExternalMapsBtn" type="button" style="margin-top:15px; font-size:14px;">مسیریابی سایر مپ‌ها</button>
+        <button class="club-submit-btn" id="openExternalMapsBtn" type="button" style="margin: 15px auto 0 auto; font-size: 13px; width: fit-content; padding: 8px 16px; display: block; border-radius: 10px;">مسیریابی با سایر مپ ها</button>
     </div>
 </div>
 
@@ -799,13 +799,12 @@ body{
                 }).addTo(osmMap);
 
             }, function() {
-                // در صورت تمایل می‌توانید الرت را فعال کنید
-                // alert('لطفاً مجوز موقعیت مکانی را فعال کنید.');
+                // خطای دسترسی به لوکیشن در صورت تمایل هندل شود
             });
         }
     }
 
-    // فعال کردن دکمه‌های مسیریابی
+    // فعال کردن دکمه‌های مسیریابی شعبه‌ها
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             currentDestLat = parseFloat(this.getAttribute('data-lat'));
@@ -841,7 +840,7 @@ body{
                 document.getElementById('link-google').href = 'https://www.google.com/maps/dir/?api=1&destination=' + currentDestLat + ',' + currentDestLng;
                 document.getElementById('link-neshan').href = 'https://neshan.org/maps/routing?dest=' + currentDestLat + ',' + currentDestLng;
                 document.getElementById('link-balad').href = 'https://balad.ir/route?dest=' + currentDestLat + ',' + currentDestLng;
-                // لینک پیش‌فرض سیستم‌عامل (اپل مپس روی آیفون، انتخابگر روی اندروید)
+                // لینک برای باز شدن برنامه‌های محلی پیش‌فرض گوشی
                 document.getElementById('link-other').href = 'geo:' + currentDestLat + ',' + currentDestLng + '?q=' + currentDestLat + ',' + currentDestLng;
             }
         });
@@ -1267,7 +1266,7 @@ body{
     }
 
     // ==========================================
-    // ۴. بستن مودال‌ها با کلیک روی فضای تاریک
+    // ۴. بستن مودال‌ها با کلیک روی فضای تاریک و دکمه Esc
     // ==========================================
     window.addEventListener('click', function(e) {
         if (e.target === document.getElementById('mapModalOverlay')) {
@@ -1299,7 +1298,7 @@ body{
     });
 
     // ==========================================
-    // ۵. باشگاه مشتریان — اصلاح رفتار تایمر
+    // ۵. باشگاه مشتریان
     // ==========================================
     var clubPopupShown = false;
     var openClubBtn = document.getElementById('openClubBtn');
