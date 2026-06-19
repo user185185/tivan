@@ -562,6 +562,7 @@ body{
     .otp-input{ width:40px;height:40px;font-size:18px; }
     .otp-inputs-container{ gap:6px; }
 }
+/* تمام استایل‌های قبلی شما + این بخش */
 #mapContainer {
     height: 380px;
     border-radius: 12px;
@@ -570,12 +571,11 @@ body{
     margin-bottom: 12px;
 }
 
-/* دکمه بستن بالای نقشه */
 .close-map-top {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.95);
     border: none;
     width: 36px;
     height: 36px;
@@ -733,18 +733,15 @@ body{
         <button class="close-modal-btn" id="closeClubModalBtn" type="button">انصراف</button>
     </div>
 </div>
-
 <!-- Modal نقشه -->
 <div class="modal-overlay" id="mapModalOverlay">
     <div class="custom-modal" style="width:95%; max-width:520px; padding:15px; position:relative;">
-        
-        <!-- دکمه بستن بالای نقشه -->
+        <!-- دکمه بستن بالا -->
         <button class="close-map-top" id="closeMapTopBtn" type="button">×</button>
         
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
         <div id="mapContainer"></div>
         
-        <!-- دکمه مسیریابی -->
         <button id="openExternalRoutesBtn" style="width:100%; padding:14px; background:#0f172a; color:white; border:none; border-radius:12px; font-size:15px; font-weight:600; margin-top:12px; cursor:pointer;">
             مسیریابی با اپلیکیشن
         </button>
@@ -760,8 +757,9 @@ body{
 
 <script>
 (function() {
-    'use strict';
-let osmMap = null;
+'use strict';
+
+    let osmMap = null;
 
     function initOSMMap(storeLat, storeLng, branchName) {
         if (osmMap) osmMap.remove();
@@ -790,6 +788,8 @@ let osmMap = null;
                     weight: 5,
                     opacity: 0.9
                 }).addTo(osmMap);
+            }, function() {
+                alert('لطفاً مجوز موقعیت مکانی را فعال کنید.');
             });
         }
     }
@@ -809,10 +809,7 @@ let osmMap = null;
         });
     });
 
-    // بستن نقشه با دکمه بالا
-    document.getElementById('closeMapTopBtn').addEventListener('click', closeMapModal);
-    document.getElementById('closeMapBtn').addEventListener('click', closeMapModal);
-
+    // بستن نقشه
     function closeMapModal() {
         document.getElementById('mapModalOverlay').classList.remove('active');
         if (osmMap) {
@@ -821,11 +818,15 @@ let osmMap = null;
         }
     }
 
-    // دکمه مسیریابی با اپلیکیشن
+    document.getElementById('closeMapTopBtn').addEventListener('click', closeMapModal);
+    document.getElementById('closeMapBtn').addEventListener('click', closeMapModal);
+
+    // دکمه مسیریابی خارجی
     document.getElementById('openExternalRoutesBtn').addEventListener('click', function() {
-        // اینجا می‌توانید از کد قدیمی مودال مسیریابی استفاده کنید یا یک مودال جدید بسازید
-        alert('در حال حاضر گزینه‌های مسیریابی خارجی در حال توسعه هستند.\n\nلطفاً از دکمه‌های بالا استفاده کنید.');
+        alert('گزینه‌های مسیریابی خارجی (گوگل مپ، نشان، بلد) به زودی اضافه خواهد شد.');
     });
+
+    // بقیه کدهای شما (همکاری، گالری، باشگاه) بدون تغییر ...
 
 })();
     // ==========================================
