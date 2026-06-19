@@ -20,7 +20,17 @@
 <link rel="apple-touch-icon" sizes="180x180" href="logo-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="logo-192.png">
 <link rel="manifest" href="manifest.json">
+<!-- Leaflet برای نقشه -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PW6X64H3JX');
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -552,19 +562,22 @@ body{
     .otp-input{ width:40px;height:40px;font-size:18px; }
     .otp-inputs-container{ gap:6px; }
 }
+  /* تمام استایل‌های قبلی شما + استایل نقشه */
+#mapContainer {
+    height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f0f0f0;
+}
 </style>
-
 </head>
-
 <body>
-
 <div class="main-container">
     <div class="logo-section">
         <div class="logo-wrapper">
             <img src="logo-title-red-c.png" alt="فروشگاه تیوان" loading="eager">
         </div>
     </div>
-
     <div class="content-section">
         <div class="branch-item">
             <div class="branch-address">شعبه ۱ (مرکزی) : اصفهان - خیابان نظرغربی - سه راه نظر - جنب بانک ملی</div>
@@ -698,7 +711,7 @@ body{
 <div class="modal-overlay" id="mapModalOverlay">
     <div class="custom-modal" style="width:95%; max-width:520px; padding:15px;">
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
-        <div id="mapContainer" style="height:420px; border-radius:12px;"></div>
+        <div id="mapContainer"></div>
         <button class="close-modal-btn" id="closeMapBtn" style="margin-top:15px; width:100%;">بستن نقشه</button>
     </div>
 </div>
@@ -712,29 +725,25 @@ body{
 <script>
 (function() {
     'use strict';
-       // ==========================================
-    // نقشه OpenStreetMap — ساده و سریع
+// ==========================================
+    // نقشه OpenStreetMap — نسخه نهایی
     // ==========================================
     let osmMap = null;
 
     function initOSMMap(storeLat, storeLng) {
         if (osmMap) osmMap.remove();
 
-        osmMap = L.map('mapContainer', {
-            zoomControl: true
-        }).setView([storeLat, storeLng], 15);
+        osmMap = L.map('mapContainer', { zoomControl: true }).setView([storeLat, storeLng], 15);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap',
             maxZoom: 19
         }).addTo(osmMap);
 
-        // نشان فروشگاه
         L.marker([storeLat, storeLng]).addTo(osmMap)
             .bindPopup('<b>فروشگاه تیوان</b>')
             .openPopup();
 
-        // موقعیت کاربر + خط مسیر
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(pos) {
                 const userLat = pos.coords.latitude;
@@ -743,11 +752,10 @@ body{
                 L.marker([userLat, userLng]).addTo(osmMap)
                     .bindPopup('موقعیت شما');
 
-                // خط مسیر مستقیم
                 L.polyline([[userLat, userLng], [storeLat, storeLng]], {
                     color: '#b20808',
                     weight: 5,
-                    opacity: 0.85
+                    opacity: 0.9
                 }).addTo(osmMap);
 
             }, function() {
@@ -756,7 +764,7 @@ body{
         }
     }
 
-    // فعال کردن دکمه‌ها
+    // فعال کردن دکمه مسیریابی
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
