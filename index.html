@@ -20,7 +20,6 @@
 <link rel="apple-touch-icon" sizes="180x180" href="logo-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="logo-192.png">
 <link rel="manifest" href="manifest.json">
-<!-- Leaflet برای نقشه -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -31,13 +30,7 @@
   gtag('js', new Date());
   gtag('config', 'G-PW6X64H3JX');
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PW6X64H3JX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PW6X64H3JX');
-</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -377,7 +370,6 @@ body{
     transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
     max-height:90vh;
     overflow-y:auto;
-    /* کدهای جدید برای مخفی کردن کامل اسکرول‌بار */
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -401,6 +393,26 @@ body{
     font-size:13px;
     color:#64748b;
     margin-bottom:20px;
+}
+
+/* استایل دکمه ضربدر بالای پاپ‌آپ */
+.close-modal-top {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 26px;
+    font-weight: 300;
+    color: #64748b;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+    z-index: 10;
+}
+
+.close-modal-top:hover {
+    color: #dc2626; /* قرمز هنگام هاور */
 }
 
 .club-form-group{
@@ -562,7 +574,7 @@ body{
     .otp-input{ width:40px;height:40px;font-size:18px; }
     .otp-inputs-container{ gap:6px; }
 }
-  /* تمام استایل‌های قبلی شما + استایل نقشه */
+
 #mapContainer {
     height: 420px;
     border-radius: 12px;
@@ -707,12 +719,38 @@ body{
     </div>
 </div>
 
-<!-- Modal نقشه -->
 <div class="modal-overlay" id="mapModalOverlay">
-    <div class="custom-modal" style="width:95%; max-width:520px; padding:15px;">
+    <div class="custom-modal" style="width:95%; max-width:520px; padding:15px; position:relative;">
+        <button class="close-modal-top" id="closeMapBtnTop" type="button" aria-label="بستن">×</button>
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
         <div id="mapContainer"></div>
-        <button class="close-modal-btn" id="closeMapBtn" style="margin-top:15px; width:100%;">بستن نقشه</button>
+        <button class="club-submit-btn" id="openExternalMapsBtn" type="button" style="margin-top:15px; font-size:14px;">مسیریابی سایر مپ‌ها</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="externalMapsModalOverlay" role="dialog" aria-modal="true" aria-label="انتخاب مسیریاب">
+    <div class="custom-modal" style="position: relative;">
+        <button class="close-modal-top" id="closeExternalMapsBtn" type="button" aria-label="بستن">×</button>
+        <div class="modal-title">انتخاب اپلیکیشن مسیریاب</div>
+        <div class="modal-subtitle">لطفاً مسیریاب مورد نظر خود را انتخاب کنید:</div>
+        <div class="apps-list">
+            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-google">
+                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                <span>گوگل مپ (Google Maps)</span>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-neshan">
+                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0084FF"/><path fill="#FFF" d="M12 6l-6 8h4v4h4v-4h4z"/></svg>
+                <span>مسیریاب نشان</span>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="app-btn" id="link-balad">
+                <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" fill="#00B159"/><path fill="#FFF" d="M12 5l7 7-2 2-5-5-5 5-2-2z"/></svg>
+                <span>مسیریاب بلد</span>
+            </a>
+            <a href="#" class="app-btn" id="link-other" style="background:#f1f5f9; border-color:#cbd5e1;">
+                <svg class="app-icon" viewBox="0 0 24 24" fill="#64748b"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                <span>سایر برنامه‌ها (پیش‌فرض گوشی)</span>
+            </a>
+        </div>
     </div>
 </div>
 
@@ -725,14 +763,17 @@ body{
 <script>
 (function() {
     'use strict';
-// ==========================================
-    // نقشه OpenStreetMap — نسخه نهایی
-    // ==========================================
+
+    // متغیرهای ذخیره موقعیت برای استفاده در سایر مپ‌ها
+    let currentDestLat = null;
+    let currentDestLng = null;
     let osmMap = null;
 
+    // ==========================================
+    // ۱. نقشه OpenStreetMap — نسخه نهایی
+    // ==========================================
     function initOSMMap(storeLat, storeLng) {
         if (osmMap) osmMap.remove();
-
         osmMap = L.map('mapContainer', { zoomControl: true }).setView([storeLat, storeLng], 15);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -749,8 +790,7 @@ body{
                 const userLat = pos.coords.latitude;
                 const userLng = pos.coords.longitude;
 
-                L.marker([userLat, userLng]).addTo(osmMap)
-                    .bindPopup('موقعیت شما');
+                L.marker([userLat, userLng]).addTo(osmMap).bindPopup('موقعیت شما');
 
                 L.polyline([[userLat, userLng], [storeLat, storeLng]], {
                     color: '#b20808',
@@ -759,33 +799,62 @@ body{
                 }).addTo(osmMap);
 
             }, function() {
-                alert('لطفاً مجوز موقعیت مکانی را فعال کنید.');
+                // در صورت تمایل می‌توانید الرت را فعال کنید
+                // alert('لطفاً مجوز موقعیت مکانی را فعال کنید.');
             });
         }
     }
 
-    // فعال کردن دکمه مسیریابی
+    // فعال کردن دکمه‌های مسیریابی
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
-            const lat = parseFloat(this.getAttribute('data-lat'));
-            const lng = parseFloat(this.getAttribute('data-lng'));
+            currentDestLat = parseFloat(this.getAttribute('data-lat'));
+            currentDestLng = parseFloat(this.getAttribute('data-lng'));
 
             document.getElementById('mapModalOverlay').classList.add('active');
 
             setTimeout(() => {
-                initOSMMap(lat, lng);
+                initOSMMap(currentDestLat, currentDestLng);
             }, 400);
         });
     });
 
-    // بستن نقشه
-    document.getElementById('closeMapBtn').addEventListener('click', function() {
-        document.getElementById('mapModalOverlay').classList.remove('active');
-        if (osmMap) {
-            osmMap.remove();
-            osmMap = null;
-        }
-    });
+    // بستن نقشه با دکمه ضربدر بالا سمت راست
+    const closeMapBtnTop = document.getElementById('closeMapBtnTop');
+    if (closeMapBtnTop) {
+        closeMapBtnTop.addEventListener('click', function() {
+            document.getElementById('mapModalOverlay').classList.remove('active');
+            if (osmMap) {
+                osmMap.remove();
+                osmMap = null;
+            }
+        });
+    }
+
+    // باز کردن پاپ‌آپ سایر مپ‌ها از داخل نقشه
+    const openExternalMapsBtn = document.getElementById('openExternalMapsBtn');
+    if (openExternalMapsBtn) {
+        openExternalMapsBtn.addEventListener('click', function() {
+            document.getElementById('externalMapsModalOverlay').classList.add('active');
+
+            if (currentDestLat && currentDestLng) {
+                document.getElementById('link-google').href = 'https://www.google.com/maps/dir/?api=1&destination=' + currentDestLat + ',' + currentDestLng;
+                document.getElementById('link-neshan').href = 'https://neshan.org/maps/routing?dest=' + currentDestLat + ',' + currentDestLng;
+                document.getElementById('link-balad').href = 'https://balad.ir/route?dest=' + currentDestLat + ',' + currentDestLng;
+                // لینک پیش‌فرض سیستم‌عامل (اپل مپس روی آیفون، انتخابگر روی اندروید)
+                document.getElementById('link-other').href = 'geo:' + currentDestLat + ',' + currentDestLng + '?q=' + currentDestLat + ',' + currentDestLng;
+            }
+        });
+    }
+
+    // بستن پاپ‌آپ سایر مپ‌ها
+    const closeExternalMapsBtn = document.getElementById('closeExternalMapsBtn');
+    if (closeExternalMapsBtn) {
+        closeExternalMapsBtn.addEventListener('click', function() {
+            document.getElementById('externalMapsModalOverlay').classList.remove('active');
+        });
+    }
+
     // ==========================================
     // ۲. بارگذاری داینامیک فرم همکاری
     // ==========================================
@@ -793,6 +862,7 @@ body{
     var coopOverlay = document.getElementById('coopModalOverlay');
     var coopDynamicTarget = document.getElementById('coopModalDynamicTarget');
     var coopLoaded = false;
+    
     if (openCoopBtn) {
         openCoopBtn.addEventListener('click', function() {
             coopOverlay.classList.add('active');
@@ -811,7 +881,7 @@ body{
                 .catch(function() {
                     coopDynamicTarget.innerHTML = '<div style="padding:20px;color:#dc2626;font-size:14px;">خطا در بارگذاری فرم. لطفاً مجدداً تلاش کنید.</div>';
                     coopLoaded = false;
-                });
+                 });
         });
     }
 
@@ -834,7 +904,7 @@ body{
         var arvanWorkerUrl = 'https://hamkariform.tiva1shop-kh8xv.arvanedge.ir';
         var coopTimerInterval = null;
         var coopIsVerifying = false;
-
+        
         var coopOtpInputs = [
             document.getElementById('coopOtp1'),
             document.getElementById('coopOtp2'),
@@ -842,6 +912,7 @@ body{
             document.getElementById('coopOtp4'),
             document.getElementById('coopOtp5')
         ];
+
         function toEnglishDigits(str) {
             if (!str) return '';
             var persianDigits = [/۰/g,/۱/g,/۲/g,/۳/g,/۴/g,/۵/g,/۶/g,/۷/g,/۸/g,/۹/g];
@@ -868,6 +939,7 @@ body{
                 }
             });
         });
+
         function checkAndSubmitCoopOtp() {
             if (coopIsVerifying) return;
             var otp = '';
@@ -883,6 +955,7 @@ body{
             if (!display) return;
             display.style.display = 'block';
             if (coopTimerInterval) clearInterval(coopTimerInterval);
+            
             coopTimerInterval = setInterval(function() {
                 remains--;
                 var m = Math.floor(remains / 60);
@@ -944,6 +1017,7 @@ body{
                 fb.className = 'form-feedback loading';
                 fb.textContent = 'در حال بررسی و ارسال کد... ⏳';
                 btn.disabled = true;
+                
                 fetch(arvanWorkerUrl + '?phone=' + encodeURIComponent(phone) + '&action=send', { method: 'GET', mode: 'cors' })
                     .then(function(res) { return res.json(); })
                     .then(function(data) {
@@ -958,6 +1032,7 @@ body{
                             if (otpSec) otpSec.style.display = 'block';
                             coopOtpInputs.forEach(function(i) { if(i) i.value = ''; });
                             if (coopOtpInputs[0]) coopOtpInputs[0].focus();
+                            
                             btn.textContent = 'تایید نهایی کد';
                             startCoopTimer();
                             fb.className = 'form-feedback success';
@@ -995,6 +1070,7 @@ body{
             fb.className = 'form-feedback loading';
             fb.textContent = 'در حال تایید نهایی اطلاعات... ⏳';
             btn.disabled = true;
+            
             var params = new URLSearchParams({
                 phone: coopVerifiedPhone,
                 action: 'verify',
@@ -1005,6 +1081,7 @@ body{
                 birth: birth,
                 job: job
             });
+            
             fetch(arvanWorkerUrl + '?' + params.toString(), { method: 'GET', mode: 'cors' })
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
@@ -1050,6 +1127,7 @@ body{
     var galleryTarget = document.getElementById('galleryModalDynamicTarget');
     var gallerySlideInterval = null;
     var galleryLoaded = false;
+    
     if (openGalleryBtn) {
         openGalleryBtn.addEventListener('click', function() {
             galleryOverlay.classList.add('active');
@@ -1121,6 +1199,7 @@ body{
         }
 
         if (slides.length === 0) return;
+        
         function showSlide(index) {
             if (index >= slides.length) currentIndex = 0;
             else if (index < 0) currentIndex = slides.length - 1;
@@ -1166,6 +1245,7 @@ body{
                 startAutoSlideshow();
             });
         });
+        
         if (wrapper) {
             wrapper.addEventListener('mouseenter', stopAutoSlideshow);
             wrapper.addEventListener('mouseleave', startAutoSlideshow);
@@ -1190,7 +1270,13 @@ body{
     // ۴. بستن مودال‌ها با کلیک روی فضای تاریک
     // ==========================================
     window.addEventListener('click', function(e) {
-        if (e.target === mapOverlay) mapOverlay.classList.remove('active');
+        if (e.target === document.getElementById('mapModalOverlay')) {
+            document.getElementById('mapModalOverlay').classList.remove('active');
+            if (osmMap) { osmMap.remove(); osmMap = null; }
+        }
+        if (e.target === document.getElementById('externalMapsModalOverlay')) {
+            document.getElementById('externalMapsModalOverlay').classList.remove('active');
+        }
         if (e.target === coopOverlay) coopOverlay.classList.remove('active');
         if (e.target === galleryOverlay) {
             galleryOverlay.classList.remove('active');
@@ -1200,28 +1286,30 @@ body{
             }
         }
     });
+    
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            [mapOverlay, coopOverlay, galleryOverlay].forEach(function(overlay) {
+            ['mapModalOverlay', 'externalMapsModalOverlay', 'coopModalOverlay', 'galleryModalOverlay'].forEach(function(id) {
+                var overlay = document.getElementById(id);
                 if (overlay) overlay.classList.remove('active');
             });
+            if (osmMap) { osmMap.remove(); osmMap = null; }
             if (gallerySlideInterval) { clearInterval(gallerySlideInterval); gallerySlideInterval = null; }
         }
     });
-// ==========================================
+
+    // ==========================================
     // ۵. باشگاه مشتریان — اصلاح رفتار تایمر
     // ==========================================
     var clubPopupShown = false;
-
-    // باز کردن دستی
     var openClubBtn = document.getElementById('openClubBtn');
     var clubOverlay = document.getElementById('clubModalOverlay');
     var closeClubBtn = document.getElementById('closeClubModalBtn');
-
+    
     if (openClubBtn) {
         openClubBtn.addEventListener('click', function() {
             clubOverlay.classList.add('active');
-            clubPopupShown = true; // کاربر خودش باز کرده
+            clubPopupShown = true; 
             sessionStorage.setItem('club_popup_shown', '1');
         });
     }
@@ -1232,7 +1320,6 @@ body{
         });
     }
 
-    // باز شدن خودکار فقط در بار اول صفحه (اگر قبلاً تعامل نکرده باشد)
     window.addEventListener('load', function() {
         if (sessionStorage.getItem('club_popup_shown') || clubPopupShown) return;
         
@@ -1244,9 +1331,9 @@ body{
             }
         }, 5000);
     });
-
 })();
 </script>
+
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
 <script defer src="club.js"></script>
