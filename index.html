@@ -564,10 +564,36 @@ body{
 }
   /* تمام استایل‌های قبلی شما + استایل نقشه */
 #mapContainer {
-    height: 420px;
+    height: 380px;
     border-radius: 12px;
     overflow: hidden;
     background: #f0f0f0;
+    margin-bottom: 12px;
+}
+
+.apps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.app-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #334155;
+    font-weight: 500;
+}
+
+.app-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
 }
 </style>
 </head>
@@ -712,6 +738,10 @@ body{
     <div class="custom-modal" style="width:95%; max-width:520px; padding:15px;">
         <div style="text-align:center; margin-bottom:12px; font-weight:700;">نقشه و مسیر به فروشگاه</div>
         <div id="mapContainer"></div>
+        
+        <!-- دکمه‌های مسیریابی خارجی -->
+        <div class="apps-list" id="externalApps"></div>
+        
         <button class="close-modal-btn" id="closeMapBtn" style="margin-top:15px; width:100%;">بستن نقشه</button>
     </div>
 </div>
@@ -725,12 +755,9 @@ body{
 <script>
 (function() {
     'use strict';
-// ==========================================
-    // نقشه OpenStreetMap — نسخه نهایی
-    // ==========================================
-    let osmMap = null;
+let osmMap = null;
 
-    function initOSMMap(storeLat, storeLng) {
+    function initOSMMap(storeLat, storeLng, branchName) {
         if (osmMap) osmMap.remove();
 
         osmMap = L.map('mapContainer', { zoomControl: true }).setView([storeLat, storeLng], 15);
@@ -741,7 +768,7 @@ body{
         }).addTo(osmMap);
 
         L.marker([storeLat, storeLng]).addTo(osmMap)
-            .bindPopup('<b>فروشگاه تیوان</b>')
+            .bindPopup(`<b>${branchName}</b>`)
             .openPopup();
 
         if (navigator.geolocation) {
@@ -757,23 +784,39 @@ body{
                     weight: 5,
                     opacity: 0.9
                 }).addTo(osmMap);
-
-            }, function() {
-                alert('لطفاً مجوز موقعیت مکانی را فعال کنید.');
             });
         }
+
+        // دکمه‌های خارجی
+        renderExternalLinks(storeLat, storeLng, branchName);
     }
 
-    // فعال کردن دکمه مسیریابی
+    function renderExternalLinks(lat, lng, branchName) {
+        const container = document.getElementById('externalApps');
+        container.innerHTML = `
+            <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" class="app-btn">
+                <span>گوگل مپ</span>
+            </a>
+            <a href="https://neshan.org/maps/search/${lat},${lng}" target="_blank" class="app-btn">
+                <span>مسیریاب نشان</span>
+            </a>
+            <a href="https://balad.ir/location?lat=${lat}&lng=${lng}" target="_blank" class="app-btn">
+                <span>مسیریاب بلد</span>
+            </a>
+        `;
+    }
+
+    // فعال کردن دکمه‌های مسیریابی
     document.querySelectorAll('.open-map-trigger').forEach(function(trigger) {
         trigger.addEventListener('click', function() {
             const lat = parseFloat(this.getAttribute('data-lat'));
             const lng = parseFloat(this.getAttribute('data-lng'));
+            const branchName = this.closest('.branch-item').querySelector('.branch-address').textContent.trim();
 
             document.getElementById('mapModalOverlay').classList.add('active');
 
             setTimeout(() => {
-                initOSMMap(lat, lng);
+                initOSMMap(lat, lng, branchName);
             }, 400);
         });
     });
