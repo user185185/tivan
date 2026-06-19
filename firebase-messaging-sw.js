@@ -1,21 +1,28 @@
-// firebase-messaging-sw.js — Service Worker اختصاصی فروشگاه تیوان
+// firebase-messaging-sw.js — نسخه کاملاً بهینه‌شده فروشگاه تیوان
 
-// ====================================================================
-// ترفند هوشمندانه: شنود پیام در سطح شبکه برای تزریق آیکون و حذف نوتیفیکیشن تکراری
-// ====================================================================
+// ۱. مجبور کردن مرورگر به فعال‌سازی فوری و بدون معطلی نسخه جدید
+self.addEventListener('install', function(event) {
+    self.skipWaiting(); // سرویس‌ورکر قبلی را فوراً متوقف می‌کند
+});
+
+self.addEventListener('activate', function(event) {
+    event.waitUntil(clients.claim()); // کنترل تمام تب‌ها را فوراً به دست می‌گیرد
+});
+
+// ۲. شنود و قاپیدن پیام در شبکه قبل از فعال شدن خودکار فایربیس
 self.addEventListener('push', function(event) {
     if (!event.data) return;
 
     try {
         var payload = event.data.json();
-        console.log('[SW Native] پیام خام دریافت شد:', payload);
+        console.log('[SW Native] پیام دریافت شد:', payload);
 
         var title = '';
         var body = '';
         var imageUrl = '';
         var customData = {};
 
-        // استخراج اطلاعات نوتیفیکیشن بر اساس ساختارهای مختلف فایربیس
+        // استخراج اطلاعات نوتیفیکیشن از ساختارهای مختلف فایربیس
         if (payload.notification) {
             title = payload.notification.title;
             body = payload.notification.body;
@@ -31,20 +38,18 @@ self.addEventListener('push', function(event) {
             }
         }
 
-        // اگر پیامی از پنل فایربیس آمده باشد که عنوان یا متن دارد
         if (title || body) {
-            // مهم‌ترین خط: جلوی فایربیس را می‌گیریم تا نسخه بدون لوگو را خودکار نشان ندهد و دوتایی نشود
+            // جلوگیری از اجرای کد داخلی فایربیس برای حذف نوتیفیکیشن تکراری (بدون لوگو)
             event.stopImmediatePropagation();
 
             var options = {
                 body: body || '',
-                icon: '/logo-192.png', // اجبار کردن نمایش لوگوی تیوان
-                badge: '/logo-32.png', // آیکون کوچک نوار وضعیت گوشی‌ها
+                icon: '/logo-192.png', // تزریق قطعی لوگوی تیوان
+                badge: '/logo-32.png', // آیکون کوچک نوار وضعیت
                 data: customData,
                 vibrate: [100, 50, 100]
             };
 
-            // اگر در پنل فایربیس عکس بزرگ (Notification image) ست کرده بودید
             if (imageUrl) {
                 options.image = imageUrl;
             }
@@ -54,13 +59,11 @@ self.addEventListener('push', function(event) {
             );
         }
     } catch (e) {
-        console.error('[SW Native] خطا در پردازش و تزریق آیکون:', e);
+        console.error('[SW] خطا در پردازش پیام:', e);
     }
 });
 
-// ====================================================================
-// لود کردن کتابخانه‌های استاندارد فایربیس
-// ====================================================================
+// ۳. لود کردن کتابخانه‌های فایربیس برای حفظ ارتباط فرانت‌اند
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
 
@@ -81,20 +84,15 @@ try {
 
 var messaging = firebase.messaging();
 
-// این بخش کماکان برای پیام‌های فقط دیتا (Data-only) که در آینده ممکن است از بک‌اِند بفرستید فعال می‌ماند
 messaging.onBackgroundMessage(function(payload) {
-    console.log('[SW Firebase] پیام پس‌زمینه دریافت شد (فقط دیتای خالص):', payload);
+    // این بخش برای مسیج‌های دیتای خالص رزرو می‌ماند
 });
 
-// ====================================================================
-// مدیریت هوشمند کلیک روی نوتیفیکیشن و باز کردن سایت
-// ====================================================================
+// ۴. مدیریت کلیک روی نوتیفیکیشن
 self.addEventListener('notificationclick', function(event) {
     event.notification.close();
+    var url = '/';
     
-    var url = '/'; // آدرس پیش‌فرض صفحه اصلی سایت
-    
-    // پیدا کردن لینک مقصد (اگر در بخش Custom data پنل کلید url یا link گذاشته باشید)
     if (event.notification.data) {
         if (event.notification.data.url) {
             url = event.notification.data.url;
@@ -105,12 +103,10 @@ self.addEventListener('notificationclick', function(event) {
     
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
-            // اگر تب سایت از قبل باز است، روی همان فوکوس کن
             for (var i = 0; i < clientList.length; i++) {
                 var client = clientList[i];
                 if (client.url === url && 'focus' in client) return client.focus();
             }
-            // در غیر این صورت یک تب جدید باز کن
             if (clients.openWindow) return clients.openWindow(url);
         })
     );
