@@ -244,7 +244,7 @@ body{
     background:linear-gradient(135deg,#b20808 0%,#8b0606 100%);
     border:none;
     border-radius:12px;
-    padding:10px 18px;
+    padding:12px 18px;
     font-size:13px;
     font-weight:700;
     font-family:inherit;
@@ -287,6 +287,130 @@ body{
     height:1px;
     background:#d6d6d6;
     margin:12px auto 0 auto;
+}
+
+
+/* ================================
+   خرید قسطی با اسنپ‌پی
+   ================================ */
+.installment-section{
+    margin-top:18px;
+    margin-bottom:18px;
+}
+
+.installment-btn-wrapper{
+    display:flex;
+    justify-content:center;
+    margin-bottom:12px;
+}
+
+.installment-btn{
+    flex:1;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+    color:#fff;
+    background:#0f172a;
+    border:1px solid #0f172a;
+    border-radius:12px;
+    padding:12px 6px;
+    font-size:12px;
+    font-weight:600;
+    transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
+    box-shadow:0 1px 3px rgba(0,0,0,0.02);
+    cursor:pointer;
+    font-family:inherit;
+    width:100%;
+    max-width:220px;
+}
+
+.installment-btn svg{
+    width:17px;
+    height:17px;
+    fill:currentColor;
+    flex-shrink:0;
+}
+
+.installment-btn:hover{
+    background:#1e293b;
+    color:#fff;
+    border-color:#1e293b;
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(15,23,42,0.12);
+}
+
+.installment-divider{
+    width:90%;
+    max-width:420px;
+    height:1px;
+    background:#d6d6d6;
+    margin:12px auto 0 auto;
+}
+
+.installment-btn svg{
+    width:15px;
+    height:15px;
+    fill:currentColor;
+    flex-shrink:0;
+}
+
+.snapppay-modal-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.snapppay-modal-content .modal-title{
+    margin-bottom:8px;
+}
+
+.snapppay-modal-text{
+    font-size:13px;
+    color:#64748b;
+    line-height:1.9;
+    margin-bottom:16px;
+}
+
+.snapppay-logo-link{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    border-radius:14px;
+    padding:8px 14px;
+    transition:all 0.2s ease;
+}
+
+.snapppay-logo-link:hover{
+    background:#f8fafc;
+    transform:translateY(-2px);
+}
+
+.snapppay-logo{
+    width:120px;
+    max-width:100%;
+    height:auto;
+    display:block;
+}
+
+@media(max-width:480px){
+    .installment-btn{
+        padding:10px 4px;
+        font-size:11px;
+        border-radius:10px;
+        gap:4px;
+    }
+    .installment-btn svg{
+        width:12px;
+        height:12px;
+    }
+    .snapppay-logo{
+        width:110px;
+    }
 }
 
 .button-group{
@@ -567,10 +691,12 @@ body{
     .branch-address{ font-size:14px; }
     .branch-link{ font-size:14px; }
     .club-btn{ padding:9px 16px;font-size:12px;max-width:200px;animation:none; }
+    .installment-btn{ max-width:200px; }
     .club-btn svg{ width:16px;height:16px; }
     .button-group{ gap:8px; }
     .btn{ padding:10px 4px;font-size:11px;border-radius:10px;gap:4px; }
     .btn svg{ width:12px;height:12px; }
+    .installment-btn svg{ width:15px;height:15px; }
     .otp-input{ width:40px;height:40px;font-size:18px; }
     .otp-inputs-container{ gap:6px; }
 }
@@ -581,125 +707,6 @@ body{
     overflow: hidden;
     background: #f0f0f0;
 }
-
-.snappay-section{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    margin-top:12px;
-    margin-bottom:12px;
-}
-
-
-
-/* ==========================================
-   دکمه خرید قسطی Snapp! Pay
-   ========================================== */
-
-.installment-section{
-    margin-top:18px;
-    margin-bottom:18px;
-}
-
-.installment-btn-wrapper{
-    display:flex;
-    justify-content:center;
-    margin-bottom:12px;
-}
-
-.installment-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    text-decoration:none;
-    color:#fff;
-    background:linear-gradient(135deg,#0797ED 0%,#087FD0 100%);
-    border:none;
-    border-radius:12px;
-    padding:10px 18px;
-    font-size:13px;
-    font-weight:700;
-    font-family:inherit;
-    transition:all 0.2s ease;
-    box-shadow:0 2px 8px rgba(7,151,237,0.20);
-    cursor:pointer;
-    width:100%;
-    max-width:220px;
-
-    /* مهم: بدون انیمیشن */
-    animation:none;
-}
-
-.installment-btn:hover{
-    background:linear-gradient(135deg,#087FD0 0%,#066BAF 100%);
-    transform:translateY(-2px);
-    box-shadow:0 4px 12px rgba(7,151,237,0.30);
-}
-
-.installment-btn:active{
-    transform:translateY(0);
-    box-shadow:0 2px 6px rgba(7,151,237,0.20);
-}
-
-.installment-btn svg{
-    width:18px;
-    height:18px;
-    fill:currentColor;
-}
-
-
-/* ==========================================
-   پاپ‌آپ Snapp! Pay
-   ========================================== */
-
-.snappay-modal-logo-wrapper{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin:10px auto 18px auto;
-}
-
-.snappay-modal-logo{
-    display:block;
-    width:180px;
-    height:auto;
-    max-width:80%;
-    object-fit:contain;
-}
-
-.snappay-modal-text{
-    font-size:14px;
-    color:#475569;
-    line-height:2;
-    margin-bottom:8px;
-}
-
-.snappay-modal-link{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    margin-top:10px;
-    padding:10px 18px;
-    border-radius:10px;
-    background:#0797ED;
-    color:#fff;
-    text-decoration:none;
-    font-family:inherit;
-    font-size:13px;
-    font-weight:600;
-    transition:all 0.2s ease;
-}
-
-.snappay-modal-link:hover{
-    background:#087FD0;
-}
-
-
-
-
-
 </style>
 </head>
 <body>
@@ -757,7 +764,7 @@ body{
             </a>
         </div>
         <div class="branch-divider"></div>
-<div class="branch-divider"></div>
+
         <div class="club-section">
             <div class="club-btn-wrapper">
                 <button class="club-btn" id="openClubBtn" type="button" aria-label="باز کردن باشگاه مشتریان">
@@ -768,42 +775,14 @@ body{
             <div class="club-divider"></div>
         </div>
 
-<!-- ==========================================
-     دکمه خرید قسطی
-     ========================================== -->
-
-<div class="installment-section">
-
-    <div class="installment-btn-wrapper">
-
-        <button
-            class="installment-btn"
-            id="openInstallmentBtn"
-            type="button"
-            aria-label="خرید قسطی با اسنپ‌پی"
-        >
-
-            <!-- آیکون ساده قسطی -->
-            <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-            >
-                <path d="M20 4H4C2.89 4 2 4.89 2 6V18C2 19.1 2.89 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.89 21.1 4 20 4ZM20 18H4V8H20V18ZM7 12H9V14H7V12ZM11 12H13V14H11V12ZM15 12H17V14H15V12ZM7 15H9V17H7V15ZM11 15H13V17H11V15Z"/>
-            </svg>
-
-            <span>قسطی خرید کن!</span>
-
-        </button>
-
-    </div>
-
-    <!-- خط جداکننده -->
-    <div class="club-divider"></div>
-
-</div>
-
-
-
+        <div class="installment-section">
+            <div class="installment-btn-wrapper">
+                <button class="installment-btn" id="openInstallmentBtn" type="button" aria-label="خرید قسطی با اسنپ‌پی">
+                    <span>قسطی خرید کنید!</span>
+                </button>
+            </div>
+            <div class="installment-divider"></div>
+        </div>
 
         <div class="footer-section">
             <div class="button-group">
@@ -859,6 +838,19 @@ body{
     </div>
 </div>
 
+<div class="modal-overlay" id="installmentModalOverlay" role="dialog" aria-modal="true" aria-label="خرید قسطی">
+    <div class="custom-modal" style="position:relative; max-width:340px; padding:24px 20px;">
+        <button class="close-modal-top" id="closeInstallmentModalBtn" type="button" aria-label="بستن">×</button>
+        <div class="snapppay-modal-content">
+            <div class="modal-title">خرید قسطی</div>
+            <div class="snapppay-modal-text">خرید خود را با اسنپ‌پی به صورت قسطی انجام دهید.</div>
+            <a class="snapppay-logo-link" href="https://social.snapppay.site/rgjzg" target="_blank" rel="noopener noreferrer" aria-label="ورود به اسنپ‌پی">
+                <img class="snapppay-logo" src="snapppay-logo.png" alt="اسنپ‌پی">
+            </a>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="mapModalOverlay">
     <div class="custom-modal" style="width:95%; max-width:520px; padding:15px; position:relative;">
         <button class="close-modal-top" id="closeMapBtnTop" type="button" aria-label="بستن">×</button>
@@ -867,91 +859,6 @@ body{
         <button class="club-submit-btn" id="openExternalMapsBtn" type="button" style="margin: 15px auto 0 auto; font-size: 13px; width: fit-content; padding: 8px 16px; display: block; border-radius: 10px;">مسیریابی با سایر مپ ها</button>
     </div>
 </div>
-
-
-<!-- ==========================================
-     پاپ‌آپ خرید قسطی Snapp! Pay
-     ========================================== -->
-
-<div
-    class="modal-overlay"
-    id="installmentModalOverlay"
-    role="dialog"
-    aria-modal="true"
-    aria-label="خرید قسطی با اسنپ‌پی"
->
-
-    <div
-        class="custom-modal"
-        style="position:relative;"
-    >
-
-        <!-- دکمه بستن -->
-        <button
-            class="close-modal-top"
-            id="closeInstallmentModalBtn"
-            type="button"
-            aria-label="بستن"
-        >
-            ×
-        </button>
-
-
-        <!-- عنوان -->
-        <div class="modal-title">
-            خرید قسطی
-        </div>
-
-        <div class="modal-subtitle">
-            خرید خود را با اسنپ‌پی به صورت قسطی انجام دهید.
-        </div>
-
-
-        <!-- لوگوی اسنپ‌پی -->
-        <div class="snappay-modal-logo-wrapper">
-
-            <img
-                src="snapppay-logo.png"
-                alt="Snapp! Pay"
-                class="snappay-modal-logo"
-                loading="lazy"
-            >
-
-        </div>
-
-
-        <!-- توضیح -->
-        <div class="snappay-modal-text">
-            برای مشاهده شرایط و شروع خرید قسطی، روی دکمه زیر بزنید.
-        </div>
-
-
-        <!-- لینک اسنپ‌پی -->
-        <a
-            href="https://social.snapppay.site/rgjzg"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="snappay-modal-link"
-        >
-            ورود به اسنپ‌پی
-        </a>
-
-
-        <!-- بستن -->
-        <button
-            class="close-modal-btn"
-            id="closeInstallmentModalBtnBottom"
-            type="button"
-        >
-            بستن
-        </button>
-
-    </div>
-
-</div>
-
-
-
 
 <div class="modal-overlay" id="externalMapsModalOverlay" role="dialog" aria-modal="true" aria-label="انتخاب مسیریاب">
     <div class="custom-modal" style="position: relative;">
@@ -1493,74 +1400,54 @@ body{
     // ==========================================
     // ۴. بستن مودال‌ها با کلیک روی فضای تاریک و دکمه Esc
     // ==========================================
-window.addEventListener('click', function(e) {
-
-    if (e.target === document.getElementById('mapModalOverlay')) {
-        document.getElementById('mapModalOverlay').classList.remove('active');
-
-        if (osmMap) {
-            osmMap.remove();
-            osmMap = null;
+    window.addEventListener('click', function(e) {
+        if (e.target === document.getElementById('mapModalOverlay')) {
+            document.getElementById('mapModalOverlay').classList.remove('active');
+            if (osmMap) { osmMap.remove(); osmMap = null; }
         }
-    }
-
-    if (e.target === document.getElementById('externalMapsModalOverlay')) {
-        document.getElementById('externalMapsModalOverlay').classList.remove('active');
-    }
-
-    if (e.target === coopOverlay) {
-        coopOverlay.classList.remove('active');
-    }
-
-    if (e.target === galleryOverlay) {
-        galleryOverlay.classList.remove('active');
-
-        if (gallerySlideInterval) {
-            clearInterval(gallerySlideInterval);
-            gallerySlideInterval = null;
+        if (e.target === document.getElementById('externalMapsModalOverlay')) {
+            document.getElementById('externalMapsModalOverlay').classList.remove('active');
         }
-    }
-
-    // بستن پاپ‌آپ اسنپ‌پی با کلیک روی فضای تاریک
-    if (e.target === installmentOverlay) {
-        installmentOverlay.classList.remove('active');
-    }
-
-});
-    
-document.addEventListener('keydown', function(e) {
-
-    if (e.key === 'Escape') {
-
-        [
-            'mapModalOverlay',
-            'externalMapsModalOverlay',
-            'coopModalOverlay',
-            'galleryModalOverlay',
-            'installmentModalOverlay'
-        ].forEach(function(id) {
-
-            var overlay = document.getElementById(id);
-
-            if (overlay) {
-                overlay.classList.remove('active');
+        if (e.target === installmentOverlay) installmentOverlay.classList.remove('active');
+        if (e.target === coopOverlay) coopOverlay.classList.remove('active');
+        if (e.target === galleryOverlay) {
+            galleryOverlay.classList.remove('active');
+            if (gallerySlideInterval) {
+                clearInterval(gallerySlideInterval);
+                gallerySlideInterval = null;
             }
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            ['mapModalOverlay', 'externalMapsModalOverlay', 'installmentModalOverlay', 'coopModalOverlay', 'galleryModalOverlay'].forEach(function(id) {
+                var overlay = document.getElementById(id);
+                if (overlay) overlay.classList.remove('active');
+            });
+            if (osmMap) { osmMap.remove(); osmMap = null; }
+            if (gallerySlideInterval) { clearInterval(gallerySlideInterval); gallerySlideInterval = null; }
+        }
+    });
 
+    // ==========================================
+    // خرید قسطی با اسنپ‌پی
+    // ==========================================
+    var openInstallmentBtn = document.getElementById('openInstallmentBtn');
+    var installmentOverlay = document.getElementById('installmentModalOverlay');
+    var closeInstallmentBtn = document.getElementById('closeInstallmentModalBtn');
+
+    if (openInstallmentBtn && installmentOverlay) {
+        openInstallmentBtn.addEventListener('click', function() {
+            installmentOverlay.classList.add('active');
         });
-
-        if (osmMap) {
-            osmMap.remove();
-            osmMap = null;
-        }
-
-        if (gallerySlideInterval) {
-            clearInterval(gallerySlideInterval);
-            gallerySlideInterval = null;
-        }
-
     }
 
-});
+    if (closeInstallmentBtn && installmentOverlay) {
+        closeInstallmentBtn.addEventListener('click', function() {
+            installmentOverlay.classList.remove('active');
+        });
+    }
 
     // ==========================================
     // ۵. باشگاه مشتریان
@@ -1583,53 +1470,6 @@ document.addEventListener('keydown', function(e) {
             clubOverlay.classList.remove('active');
         });
     }
-
-// ==========================================
-// خرید قسطی Snapp! Pay
-// ==========================================
-
-var openInstallmentBtn = document.getElementById('openInstallmentBtn');
-var installmentOverlay = document.getElementById('installmentModalOverlay');
-
-var closeInstallmentBtn = document.getElementById('closeInstallmentModalBtn');
-var closeInstallmentBtnBottom = document.getElementById('closeInstallmentModalBtnBottom');
-
-
-// باز کردن پاپ‌آپ
-if (openInstallmentBtn) {
-    openInstallmentBtn.addEventListener('click', function() {
-
-        if (installmentOverlay) {
-            installmentOverlay.classList.add('active');
-        }
-
-    });
-}
-
-
-// بستن با ضربدر
-if (closeInstallmentBtn) {
-    closeInstallmentBtn.addEventListener('click', function() {
-
-        if (installmentOverlay) {
-            installmentOverlay.classList.remove('active');
-        }
-
-    });
-}
-
-
-// بستن با دکمه پایین
-if (closeInstallmentBtnBottom) {
-    closeInstallmentBtnBottom.addEventListener('click', function() {
-
-        if (installmentOverlay) {
-            installmentOverlay.classList.remove('active');
-        }
-
-    });
-}
-
 
     window.addEventListener('load', function() {
         if (sessionStorage.getItem('club_popup_shown') || clubPopupShown) return;
