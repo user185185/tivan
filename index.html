@@ -581,6 +581,7 @@ body{
     overflow: hidden;
     background: #f0f0f0;
 }
+
 .snappay-section{
     display:flex;
     flex-direction:column;
@@ -598,9 +599,9 @@ body{
     gap:5px;
     text-decoration:none;
     color:#444;
+    transition:opacity 0.2s ease;
     padding:6px 14px;
     border-radius:10px;
-    transition:opacity 0.2s ease;
 }
 
 .snappay-link:hover{
@@ -608,8 +609,10 @@ body{
 }
 
 .snappay-logo{
-    width:82px;
+    width:75px;
     height:auto;
+    max-height:42px;
+    object-fit:contain;
     display:block;
 }
 
@@ -676,13 +679,9 @@ body{
             </a>
         </div>
         <div class="branch-divider"></div>
-<!-- خط بعد از اینستاگرام -->
-<div class="branch-divider"></div>
 
 
-<!-- Snapp! Pay -->
 <div class="snappay-section">
-
     <a
         href="https://social.snapppay.site/rgjzg"
         target="_blank"
@@ -690,28 +689,19 @@ body{
         class="snappay-link"
         aria-label="خرید قسطی با اسنپ‌پی"
     >
-
-        <svg
+        <img
+            src="snapppay-logo.png"
+            alt="اسنپ‌پی"
             class="snappay-logo"
-            viewBox="0 0 320 160"
-            xmlns="http://www.w3.org/2000/svg"
-            role="img"
-            aria-label="Snapp Pay"
+            loading="lazy"
         >
-
-            ...
-
-        </svg>
-
         <span class="snappay-title">خرید قسطی</span>
-
     </a>
-
 </div>
 
-
-<!-- خط بعد از اسنپ‌پی -->
 <div class="branch-divider"></div>
+
+
 
         <div class="club-section">
             <div class="club-btn-wrapper">
