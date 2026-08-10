@@ -1545,102 +1545,257 @@ body{
 <script defer src="analytics.js"></script>
 
 <script>
-(function() {
+(function () {
     'use strict';
 
     var ONLINE_ELEMENT_ID = 'onlineUserCount';
-    var PRESENCE_PATH = 'presence';
 
-    function startOnlinePresence() {
-        var el = document.getElementById(ONLINE_ELEMENT_ID);
-        if (!el || typeof firebase === 'undefined') return;
+    var ONLINE_API =
+        'https://tivan-online.tiva1shop-kh8xv.arvanedge.ir';
 
-        var config = {
-            apiKey: "AIzaSyBMytFNG9rPdBonl1n6NPEBNoM9fgNmQn8",
-            authDomain: "tivan-shop.firebaseapp.com",
-            projectId: "tivan-shop",
-            storageBucket: "tivan-shop.firebasestorage.app",
-            messagingSenderId: "267212800801",
-            appId: "1:267212800801:web:348c00b2ee4d98d8237460",
-            databaseURL: "https://tivan-shop-default-rtdb.firebaseio.com"
-        };
+    var el = document.getElementById(ONLINE_ELEMENT_ID);
 
-        try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(config);
+    if (!el) return;
+
+
+    // =====================================================
+    // ساخت Session اختصاصی برای همین تب
+    // =====================================================
+
+    var sessionId =
+        sessionStorage.getItem('tivan_online_session');
+
+    if (!sessionId) {
+
+        if (window.crypto && crypto.randomUUID) {
+
+            sessionId = crypto.randomUUID();
+
+        } else {
+
+            sessionId =
+                'tivan-' +
+                Date.now().toString(36) +
+                '-' +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 14);
+        }
+
+        sessionStorage.setItem(
+            'tivan_online_session',
+            sessionId
+        );
+    }
+
+
+    // =====================================================
+    // ارتباط با Edge Function
+    // =====================================================
+
+    function callOnlineAPI(action) {
+
+        var url =
+            ONLINE_API +
+            '?action=' +
+            encodeURIComponent(action) +
+            '&session=' +
+            encodeURIComponent(sessionId) +
+            '&t=' +
+            Date.now();
+
+        return fetch(url, {
+            method: 'GET',
+            cache: 'no-store'
+        })
+        .then(function (response) {
+
+            if (!response.ok) {
+                throw new Error(
+                    'HTTP ' + response.status
+                );
             }
 
-            if (!firebase.auth || !firebase.database) {
-                console.error('[Tivan Online] Firebase Auth/Database SDK is not loaded.');
-                return;
-            }
+            return response.json();
+        });
+    }
 
-            firebase.auth().signInAnonymously()
-                .then(function(userCredential) {
-                    var uid = userCredential.user.uid;
-                    var sessionId = uid + '_' + Math.random().toString(36).slice(2, 12);
-                    var sessionRef = firebase.database().ref(PRESENCE_PATH + '/' + uid + '/' + sessionId);
-                    var connectedRef = firebase.database().ref('.info/connected');
-                    var presenceRoot = firebase.database().ref(PRESENCE_PATH);
 
-                    sessionRef.onDisconnect().remove()
-                        .then(function() {
-                            return sessionRef.set({
-                                online: true,
-                                startedAt: firebase.database.ServerValue.TIMESTAMP
-                            });
-                        })
-                        .catch(function(error) {
-                            console.error('[Tivan Online] Presence setup failed:', error);
-                        });
+    // =====================================================
+    // نمایش تعداد
+    // =====================================================
 
-                    connectedRef.on('value', function(snapshot) {
-                        if (snapshot.val() === true) {
-                            sessionRef.onDisconnect().remove()
-                                .then(function() {
-                                    return sessionRef.set({
-                                        online: true,
-                                        startedAt: firebase.database.ServerValue.TIMESTAMP
-                                    });
-                                })
-                                .catch(function(error) {
-                                    console.error('[Tivan Online] Reconnect presence failed:', error);
-                                });
-                        }
-                    });
+    function updateCount(data) {
 
-                    presenceRoot.on('value', function(snapshot) {
-                        var count = 0;
+        if (
+            data &&
+            data.success === true &&
+            typeof data.online === 'number'
+        ) {
 
-                        snapshot.forEach(function(userSnapshot) {
-                            userSnapshot.forEach(function(sessionSnapshot) {
-                                if (sessionSnapshot.val() && sessionSnapshot.val().online === true) {
-                                    count++;
-                                }
-                            });
-                        });
-
-                        el.textContent = String(count);
-                    }, function(error) {
-                        console.error('[Tivan Online] Cannot read presence:', error);
-                        el.textContent = '0';
-                    });
-                })
-                .catch(function(error) {
-                    console.error('[Tivan Online] Anonymous authentication failed:', error);
-                    el.textContent = '0';
-                });
-
-        } catch (error) {
-            console.error('[Tivan Online] Initialization failed:', error);
+            el.textContent =
+                String(data.online);
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', startOnlinePresence);
-    } else {
-        startOnlinePresence();
+
+    // =====================================================
+    // ورود به لیست Online
+    // =====================================================
+
+    function join() {
+
+        callOnlineAPI('join')
+            .then(function (data) {
+
+                updateCount(data);
+
+            })
+            .catch(function (error) {
+
+                console.warn(
+                    '[Tivan Online] Join failed:',
+                    error
+                );
+
+            });
     }
+
+
+    // =====================================================
+    // تمدید حضور
+    // =====================================================
+
+    function heartbeat() {
+
+        callOnlineAPI('heartbeat')
+            .then(function (data) {
+
+                updateCount(data);
+
+            })
+            .catch(function (error) {
+
+                console.warn(
+                    '[Tivan Online] Heartbeat failed:',
+                    error
+                );
+
+            });
+    }
+
+
+    // =====================================================
+    // دریافت تعداد واقعی کاربران
+    // =====================================================
+
+    function getCount() {
+
+        callOnlineAPI('count')
+            .then(function (data) {
+
+                updateCount(data);
+
+            })
+            .catch(function (error) {
+
+                console.warn(
+                    '[Tivan Online] Count failed:',
+                    error
+                );
+
+            });
+    }
+
+
+    // =====================================================
+    // خروج
+    // =====================================================
+
+    function leave() {
+
+        var url =
+            ONLINE_API +
+            '?action=leave' +
+            '&session=' +
+            encodeURIComponent(sessionId);
+
+        try {
+
+            if (navigator.sendBeacon) {
+
+                navigator.sendBeacon(
+                    url,
+                    new Blob([], {
+                        type: 'text/plain'
+                    })
+                );
+
+            } else {
+
+                fetch(url, {
+                    method: 'GET',
+                    keepalive: true,
+                    cache: 'no-store'
+                }).catch(function () {});
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                '[Tivan Online] Leave failed:',
+                error
+            );
+        }
+    }
+
+
+    // =====================================================
+    // شروع
+    // =====================================================
+
+    join();
+
+
+    // هر 5 ثانیه حضور خودمان تمدید می‌شود
+    setInterval(
+        heartbeat,
+        5000
+    );
+
+
+    // هر 5 ثانیه تعداد کل کاربران گرفته می‌شود
+    // بنابراین کاربران قبلی بدون Refresh
+    // عدد جدید را می‌بینند.
+    setInterval(
+        getCount,
+        5000
+    );
+
+
+    // اگر اینترنت قطع و وصل شد
+    window.addEventListener(
+        'online',
+        function () {
+
+            join();
+            getCount();
+
+        }
+    );
+
+
+    // خروج از صفحه
+    window.addEventListener(
+        'pagehide',
+        function () {
+
+            leave();
+
+        }
+    );
+
 })();
 </script>
 
