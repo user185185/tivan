@@ -212,9 +212,9 @@ body{
     flex-shrink:0;
 }
 
+/* آنلاین بودن کاربران */
 .online-users{
     display:flex;
-    flex-direction:row;
     align-items:center;
     justify-content:center;
     gap:7px;
@@ -238,16 +238,14 @@ body{
 }
 
 @keyframes onlinePulse{
-    0%,100%{
-        opacity:.45;
-        transform:scale(.9);
-        box-shadow:0 0 0 0 rgba(34,197,94,.35);
-    }
-    50%{
-        opacity:1;
-        transform:scale(1.12);
-        box-shadow:0 0 0 5px rgba(34,197,94,0);
-    }
+    0%,100%{ opacity:.45; transform:scale(.9); box-shadow:0 0 0 0 rgba(34,197,94,.35); }
+    50%{ opacity:1; transform:scale(1.12); box-shadow:0 0 0 5px rgba(34,197,94,0); }
+}
+
+.online-count{
+    font-weight:700;
+    color:#334155;
+    margin:0 2px;
 }
 
 .footer-section{
@@ -328,6 +326,8 @@ body{
     background:#d6d6d6;
     margin:12px auto 0 auto;
 }
+
+
 /* ================================
    خرید قسطی با اسنپ‌پی
    ================================ */
@@ -843,14 +843,11 @@ body{
             </div>
             <div class="branch-divider" style="margin-top:12px;"></div>
 
-
-<div class="online-users" aria-live="polite" aria-label="Online users">
-    <span class="online-dot" aria-hidden="true"></span>
-    <span>Online</span>
-    <span class="online-count" id="onlineUserCount">1</span>
-</div>
-
-
+            <div class="online-users" dir="ltr" aria-live="polite" aria-label="Online users">
+                <span class="online-dot" aria-hidden="true"></span>
+                <span>Online</span>
+                <span class="online-count" id="onlineUserCount">0</span>
+            </div>
             
             <div style="text-align: center; margin-top: 15px; font-size: 11px; color: #94a3b8; direction: ltr; font-family: Tahoma, Arial, sans-serif;">
                 © 2026 TivanShop. All rights reserved.
@@ -1542,16 +1539,108 @@ body{
 
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 <script defer src="club.js"></script>
 <script defer src="analytics.js"></script>
 
 <script>
-(function(){
-    // نمایش تعداد تقریبی کاربران آنلاین صفحه؛ با هر بازدید مقدار پویا می‌شود.
-    var el=document.getElementById('onlineUserCount');
-    if(!el) return;
-    var base=1 + Math.floor(Math.random()*5);
-    el.textContent=base;
+(function() {
+    'use strict';
+
+    var ONLINE_ELEMENT_ID = 'onlineUserCount';
+    var PRESENCE_PATH = 'presence';
+
+    function startOnlinePresence() {
+        var el = document.getElementById(ONLINE_ELEMENT_ID);
+        if (!el || typeof firebase === 'undefined') return;
+
+        var config = {
+            apiKey: "AIzaSyBMytFNG9rPdBonl1n6NPEBNoM9fgNmQn8",
+            authDomain: "tivan-shop.firebaseapp.com",
+            projectId: "tivan-shop",
+            storageBucket: "tivan-shop.firebasestorage.app",
+            messagingSenderId: "267212800801",
+            appId: "1:267212800801:web:348c00b2ee4d98d8237460",
+            databaseURL: "https://tivan-shop-default-rtdb.firebaseio.com"
+        };
+
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(config);
+            }
+
+            if (!firebase.auth || !firebase.database) {
+                console.error('[Tivan Online] Firebase Auth/Database SDK is not loaded.');
+                return;
+            }
+
+            firebase.auth().signInAnonymously()
+                .then(function(userCredential) {
+                    var uid = userCredential.user.uid;
+                    var sessionId = uid + '_' + Math.random().toString(36).slice(2, 12);
+                    var sessionRef = firebase.database().ref(PRESENCE_PATH + '/' + uid + '/' + sessionId);
+                    var connectedRef = firebase.database().ref('.info/connected');
+                    var presenceRoot = firebase.database().ref(PRESENCE_PATH);
+
+                    sessionRef.onDisconnect().remove()
+                        .then(function() {
+                            return sessionRef.set({
+                                online: true,
+                                startedAt: firebase.database.ServerValue.TIMESTAMP
+                            });
+                        })
+                        .catch(function(error) {
+                            console.error('[Tivan Online] Presence setup failed:', error);
+                        });
+
+                    connectedRef.on('value', function(snapshot) {
+                        if (snapshot.val() === true) {
+                            sessionRef.onDisconnect().remove()
+                                .then(function() {
+                                    return sessionRef.set({
+                                        online: true,
+                                        startedAt: firebase.database.ServerValue.TIMESTAMP
+                                    });
+                                })
+                                .catch(function(error) {
+                                    console.error('[Tivan Online] Reconnect presence failed:', error);
+                                });
+                        }
+                    });
+
+                    presenceRoot.on('value', function(snapshot) {
+                        var count = 0;
+
+                        snapshot.forEach(function(userSnapshot) {
+                            userSnapshot.forEach(function(sessionSnapshot) {
+                                if (sessionSnapshot.val() && sessionSnapshot.val().online === true) {
+                                    count++;
+                                }
+                            });
+                        });
+
+                        el.textContent = String(count);
+                    }, function(error) {
+                        console.error('[Tivan Online] Cannot read presence:', error);
+                        el.textContent = '0';
+                    });
+                })
+                .catch(function(error) {
+                    console.error('[Tivan Online] Anonymous authentication failed:', error);
+                    el.textContent = '0';
+                });
+
+        } catch (error) {
+            console.error('[Tivan Online] Initialization failed:', error);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startOnlinePresence);
+    } else {
+        startOnlinePresence();
+    }
 })();
 </script>
 
@@ -1565,7 +1654,8 @@ document.addEventListener('DOMContentLoaded', function() {
         projectId: "tivan-shop",
         storageBucket: "tivan-shop.firebasestorage.app",
         messagingSenderId: "267212800801",
-        appId: "1:267212800801:web:348c00b2ee4d98d8237460"
+        appId: "1:267212800801:web:348c00b2ee4d98d8237460",
+        databaseURL: "https://tivan-shop-default-rtdb.firebaseio.com"
     };
 
     if (!firebase.apps.length) {
