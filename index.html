@@ -1629,22 +1629,25 @@ body{
     }
 
 
-    // =====================================================
-    // نمایش تعداد
-    // =====================================================
+// =====================================================
+// نمایش تعداد
+// =====================================================
 
-    function updateCount(data) {
+function updateCount(data) {
 
-        if (
-            data &&
-            data.success === true &&
-            typeof data.online === 'number'
-        ) {
+    if (
+        data &&
+        data.success === true &&
+        typeof data.online === 'number'
+    ) {
 
-            el.textContent =
-                String(data.online);
-        }
+        // حداقل تعداد آنلاین همیشه 1 باشد
+        var onlineCount = Math.max(1, data.online);
+
+        el.textContent =
+            String(onlineCount);
     }
+}
 
 
     // =====================================================
@@ -1670,59 +1673,66 @@ body{
     }
 
 // =====================================================
-    // تمدید حضور و دریافت همزمان تعداد واقعی
-    // =====================================================
+// تمدید حضور و دریافت همزمان تعداد واقعی
+// =====================================================
 
-    function heartbeat() {
-        callOnlineAPI('heartbeat')
-            .then(function (data) {
-                updateCount(data);
-            })
-            .catch(function (error) {
-                console.warn('[Tivan Online] Heartbeat failed:', error);
-            });
-    }
+function heartbeat() {
+    callOnlineAPI('heartbeat')
+        .then(function (data) {
+            updateCount(data);
+        })
+        .catch(function (error) {
+            console.warn('[Tivan Online] Heartbeat failed:', error);
 
-    // =====================================================
-    // خروج
-    // =====================================================
+            // در صورت خطا، حداقل خود کاربر آنلاین محسوب شود
+            el.textContent = '1';
+        });
+}
 
-    function leave() {
-        var url = ONLINE_API + '?action=leave&session=' + encodeURIComponent(sessionId);
-        try {
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(url, new Blob([], { type: 'text/plain' }));
-            } else {
-                fetch(url, { method: 'GET', keepalive: true, cache: 'no-store' }).catch(function () {});
-            }
-        } catch (error) {
-            console.warn('[Tivan Online] Leave failed:', error);
+// =====================================================
+// خروج
+// =====================================================
+
+function leave() {
+    var url = ONLINE_API + '?action=leave&session=' + encodeURIComponent(sessionId);
+    try {
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(url, new Blob([], { type: 'text/plain' }));
+        } else {
+            fetch(url, {
+                method: 'GET',
+                keepalive: true,
+                cache: 'no-store'
+            }).catch(function () {});
         }
+    } catch (error) {
+        console.warn('[Tivan Online] Leave failed:', error);
     }
+}
 
-    // =====================================================
-    // شروع و تنظیم رویدادها
-    // =====================================================
+// =====================================================
+// شروع و تنظیم رویدادها
+// =====================================================
 
+join();
+
+// فقط یک اینتروال برای آپدیت کافی است
+setInterval(heartbeat, 5000);
+
+// حل مشکل آپدیت نشدن عدد در گوشی‌ها و تب‌های پس‌زمینه
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === "visible") {
+        heartbeat();
+    }
+});
+
+window.addEventListener('online', function () {
     join();
+});
 
-    // فقط یک اینتروال برای آپدیت کافی است
-    setInterval(heartbeat, 5000);
-
-    // حل مشکل آپدیت نشدن عدد در گوشی‌ها و تب‌های پس‌زمینه
-    document.addEventListener("visibilitychange", function() {
-        if (document.visibilityState === "visible") {
-            heartbeat();
-        }
-    });
-
-    window.addEventListener('online', function () {
-        join();
-    });
-
-    window.addEventListener('pagehide', function () {
-        leave();
-    });
+window.addEventListener('pagehide', function () {
+    leave();
+});
 
 })();
 </script>
