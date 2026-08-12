@@ -413,8 +413,10 @@ body{
     color:#64748b;
     line-height:1.9;
     margin-bottom:16px;
-    text-align: right;
-    direction: rtl;
+    text-align:right !important;
+    direction:rtl !important;
+    width:100%;
+    display:block;
 }
 
 .snapppay-logo-link{
@@ -891,9 +893,17 @@ body{
         <button class="close-modal-top" id="closeInstallmentModalBtn" type="button" aria-label="بستن">×</button>
         <div class="snapppay-modal-content">
             <div class="modal-title">خرید اعتباری</div>
-            <div class="snapppay-modal-text">خرید خود را می‌توانید به دو روش با اسنپ‌پی پرداخت کنید:</div>
-           <div class="snapppay-modal-text">- خرید حضوری : در زمان خرید از فروشگاه                     </div>
-            <div class="snapppay-modal-text">- خرید آنلاین: از طریق لینک زیر، مبلغ خرید را ثبت و مراحل پرداخت را تکمیل نمایید</div>
+         <div class="snapppay-modal-text">
+          خرید خود را می‌توانید به دو روش با اسنپ‌پی پرداخت کنید:
+          </div>
+
+         <div class="snapppay-modal-text snapppay-option">
+      • خرید حضوری: در زمان خرید از فروشگاه
+         </div>
+
+        <div class="snapppay-modal-text snapppay-option">
+     • خرید آنلاین: از طریق لینک زیر، مبلغ خرید را ثبت و مراحل پرداخت را تکمیل نمایید
+         </div>
             <a class="snapppay-logo-link" href="https://social.snapppay.site/rgjzg" target="_blank" rel="noopener noreferrer" aria-label="ورود به اسنپ‌پی">
                 <img class="snapppay-logo" src="snapppay-logo.png" alt="اسنپ‌پی">
             </a>
