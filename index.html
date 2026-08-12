@@ -844,7 +844,7 @@ body{
             <div class="online-users" dir="ltr" aria-live="polite" aria-label="Online users">
                 <span class="online-dot" aria-hidden="true"></span>
                 <span>Online</span>
-                <span class="online-count" id="onlineUserCount">0</span>
+                <span class="online-count" id="onlineUserCount">1</span>
             </div>
             
             <div style="text-align: center; margin-top: 15px; font-size: 11px; color: #94a3b8; direction: ltr; font-family: Tahoma, Arial, sans-serif;">
@@ -1654,23 +1654,28 @@ function updateCount(data) {
     // ورود به لیست Online
     // =====================================================
 
-    function join() {
+function join() {
 
-        callOnlineAPI('join')
-            .then(function (data) {
+    // کاربر فعلی حداقل یک نفر است
+    el.textContent = '1';
 
-                updateCount(data);
+    callOnlineAPI('join')
+        .then(function (data) {
 
-            })
-            .catch(function (error) {
+            updateCount(data);
 
-                console.warn(
-                    '[Tivan Online] Join failed:',
-                    error
-                );
+        })
+        .catch(function (error) {
 
-            });
-    }
+            console.warn(
+                '[Tivan Online] Join failed:',
+                error
+            );
+
+            // اگر API در دسترس نبود، عدد کمتر از 1 نشود
+            el.textContent = '1';
+        });
+}
 
 // =====================================================
 // تمدید حضور و دریافت همزمان تعداد واقعی
